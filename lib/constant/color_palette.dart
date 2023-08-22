@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 
-class CustomColor {
+class ColorPalette {
   static ColorScheme colorScheme = const ColorScheme.light(
-      primary: primary, onPrimary: lightestGrey, surface: lightestGrey);
+    primary: primary,
+    secondary: secondary,
+    onPrimary: lightestGrey,
+    surface: lightestGrey,
+  );
   static const Color primary = Color(0xff546E7A);
+  static const Color secondary = Color(0xff546E7A);
   static const Color lightestGrey = Color(0xffFAFAFA);
 }
