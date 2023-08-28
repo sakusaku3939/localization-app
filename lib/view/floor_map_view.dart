@@ -3,8 +3,8 @@ import 'package:localization/constant/color_palette.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
-class FloorMap extends StatelessWidget {
-  const FloorMap({super.key});
+class FloorMapView extends StatelessWidget {
+  const FloorMapView({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:localization/view/floor_map.dart';
+import 'package:localization/view/floor_map_view.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -21,7 +21,7 @@ class Home extends StatelessWidget {
           const SizedBox(width: 4),
         ],
       ),
-      body: const FloorMap(),
+      body: const FloorMapView(),
     );
   }
 }
