@@ -35,42 +35,59 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
           defaultImageScale = event.scale!;
           initialized = true;
         }
+
         const pinX = 6000.0;
         const pinY = 5400.0;
-        const defaultPinSize = 20.0;
-
-        // 拡大率を考慮した画像のサイズ
-        final virtualImageWidth = imageWidth * event.scale!;
-        final virtualImageHeight = imageHeight * event.scale!;
-
-        // 画面からはみ出したマップサイズを計算
-        final overWidth = (virtualImageWidth - screenWidth) / 2;
-        final overHeight = (virtualImageHeight - screenHeight) / 2;
-
-        // 拡大率からピンの大きさを調整
-        final diffScale = event.scale! / defaultImageScale;
-        final pinSize = defaultPinSize * diffScale.ceil();
-
-        // マップ画像上のピンの位置を計算
-        final absolutePinX = pinX * event.scale! - pinSize / 2;
-        final absolutePinY = pinY * event.scale! - pinSize;
-
-        // 画面上のピンの位置を計算
-        final pinLeft = event.position.dx - overWidth + absolutePinX;
-        final pinTop = event.position.dy - overHeight + absolutePinY;
+        final pinData = _movePin(
+          event,
+          pinX: pinX,
+          pinY: pinY,
+          defaultImageScale: defaultImageScale,
+        );
 
         state = state.copyWith(locationPins: [
           LocationPin(
             id: 0,
             x: pinX,
             y: pinY,
-            pinLeft: pinLeft,
-            pinTop: pinTop,
-            size: pinSize,
+            pinLeft: pinData[0],
+            pinTop: pinData[1],
+            size: pinData[2],
           ),
         ]);
       },
     );
+  }
+
+  List<double> _movePin(
+    PhotoViewControllerValue event, {
+    required pinX,
+    required pinY,
+    required defaultImageScale,
+  }) {
+    const defaultPinSize = 20.0;
+
+    // 拡大率を考慮した画像のサイズ
+    final virtualImageWidth = imageWidth * event.scale!;
+    final virtualImageHeight = imageHeight * event.scale!;
+
+    // 画面からはみ出したマップサイズを計算
+    final overWidth = (virtualImageWidth - screenWidth) / 2;
+    final overHeight = (virtualImageHeight - screenHeight) / 2;
+
+    // 拡大率から0.5刻みにピンの大きさを調整
+    final diffScale = (event.scale! / defaultImageScale * 2).ceil() / 2;
+    final pinSize = defaultPinSize * diffScale;
+
+    // マップ画像上のピンの位置を計算
+    final absolutePinX = pinX * event.scale! - pinSize / 2;
+    final absolutePinY = pinY * event.scale! - pinSize;
+
+    // 画面上のピンの位置を計算
+    final pinLeft = event.position.dx - overWidth + absolutePinX;
+    final pinTop = event.position.dy - overHeight + absolutePinY;
+
+    return [pinLeft, pinTop, pinSize];
   }
 
   void resolveImageProvider(BuildContext context) {
