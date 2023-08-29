@@ -25,6 +25,7 @@ mixin _$LocationPin {
   double get y => throw _privateConstructorUsedError;
   double get pinLeft => throw _privateConstructorUsedError;
   double get pinTop => throw _privateConstructorUsedError;
+  double get size => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -38,7 +39,8 @@ abstract class $LocationPinCopyWith<$Res> {
           LocationPin value, $Res Function(LocationPin) then) =
       _$LocationPinCopyWithImpl<$Res, LocationPin>;
   @useResult
-  $Res call({int id, double x, double y, double pinLeft, double pinTop});
+  $Res call(
+      {int id, double x, double y, double pinLeft, double pinTop, double size});
 }
 
 /// @nodoc
@@ -59,6 +61,7 @@ class _$LocationPinCopyWithImpl<$Res, $Val extends LocationPin>
     Object? y = null,
     Object? pinLeft = null,
     Object? pinTop = null,
+    Object? size = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -81,6 +84,10 @@ class _$LocationPinCopyWithImpl<$Res, $Val extends LocationPin>
           ? _value.pinTop
           : pinTop // ignore: cast_nullable_to_non_nullable
               as double,
+      size: null == size
+          ? _value.size
+          : size // ignore: cast_nullable_to_non_nullable
+              as double,
     ) as $Val);
   }
 }
@@ -93,7 +100,8 @@ abstract class _$$_LocationPinCopyWith<$Res>
       __$$_LocationPinCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int id, double x, double y, double pinLeft, double pinTop});
+  $Res call(
+      {int id, double x, double y, double pinLeft, double pinTop, double size});
 }
 
 /// @nodoc
@@ -112,6 +120,7 @@ class __$$_LocationPinCopyWithImpl<$Res>
     Object? y = null,
     Object? pinLeft = null,
     Object? pinTop = null,
+    Object? size = null,
   }) {
     return _then(_$_LocationPin(
       id: null == id
@@ -134,6 +143,10 @@ class __$$_LocationPinCopyWithImpl<$Res>
           ? _value.pinTop
           : pinTop // ignore: cast_nullable_to_non_nullable
               as double,
+      size: null == size
+          ? _value.size
+          : size // ignore: cast_nullable_to_non_nullable
+              as double,
     ));
   }
 }
@@ -146,7 +159,8 @@ class _$_LocationPin implements _LocationPin {
       required this.x,
       required this.y,
       required this.pinLeft,
-      required this.pinTop});
+      required this.pinTop,
+      required this.size});
 
   factory _$_LocationPin.fromJson(Map<String, dynamic> json) =>
       _$$_LocationPinFromJson(json);
@@ -161,10 +175,12 @@ class _$_LocationPin implements _LocationPin {
   final double pinLeft;
   @override
   final double pinTop;
+  @override
+  final double size;
 
   @override
   String toString() {
-    return 'LocationPin(id: $id, x: $x, y: $y, pinLeft: $pinLeft, pinTop: $pinTop)';
+    return 'LocationPin(id: $id, x: $x, y: $y, pinLeft: $pinLeft, pinTop: $pinTop, size: $size)';
   }
 
   @override
@@ -176,12 +192,13 @@ class _$_LocationPin implements _LocationPin {
             (identical(other.x, x) || other.x == x) &&
             (identical(other.y, y) || other.y == y) &&
             (identical(other.pinLeft, pinLeft) || other.pinLeft == pinLeft) &&
-            (identical(other.pinTop, pinTop) || other.pinTop == pinTop));
+            (identical(other.pinTop, pinTop) || other.pinTop == pinTop) &&
+            (identical(other.size, size) || other.size == size));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, x, y, pinLeft, pinTop);
+  int get hashCode => Object.hash(runtimeType, id, x, y, pinLeft, pinTop, size);
 
   @JsonKey(ignore: true)
   @override
@@ -203,7 +220,8 @@ abstract class _LocationPin implements LocationPin {
       required final double x,
       required final double y,
       required final double pinLeft,
-      required final double pinTop}) = _$_LocationPin;
+      required final double pinTop,
+      required final double size}) = _$_LocationPin;
 
   factory _LocationPin.fromJson(Map<String, dynamic> json) =
       _$_LocationPin.fromJson;
@@ -218,6 +236,8 @@ abstract class _LocationPin implements LocationPin {
   double get pinLeft;
   @override
   double get pinTop;
+  @override
+  double get size;
   @override
   @JsonKey(ignore: true)
   _$$_LocationPinCopyWith<_$_LocationPin> get copyWith =>

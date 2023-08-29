@@ -12,6 +12,7 @@ class LocationPin with _$LocationPin {
     required double y,
     required double pinLeft,
     required double pinTop,
+    required double size,
   }) = _LocationPin;
 
   factory LocationPin.fromJson(Map<String, Object?> json) =>

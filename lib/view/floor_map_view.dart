@@ -10,38 +10,41 @@ class FloorMapView extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Stack(
-      children: [
-        PhotoView(
-          imageProvider:
-              const AssetImage("assets/images/shonandai_floor_map.png"),
-          backgroundDecoration: const BoxDecoration(color: Colors.white),
-        ),
-        PhotoViewGallery.builder(
-          scrollPhysics: const BouncingScrollPhysics(),
-          builder: (BuildContext context, int index) {
-            return PhotoViewGalleryPageOptions(
-              imageProvider: const AssetImage(
-                "assets/images/shonandai_floor_map.png",
-              ),
-              initialScale: PhotoViewComputedScale.contained * 3.0,
-              minScale: PhotoViewComputedScale.contained * 1.5,
-              controller: ref.read(floorMapProvider).photoController,
-            );
-          },
-          itemCount: 1,
-          backgroundDecoration: const BoxDecoration(color: Colors.white),
-        ),
-        for (var location in ref.watch(floorMapProvider).locationPins)
-          Positioned(
-            left: location.pinLeft,
-            top: location.pinTop,
-            child: const Icon(
-              Icons.location_pin,
-              color: ColorPalette.red,
+    final floorMapNotifier = ref.read(floorMapProvider.notifier);
+    floorMapNotifier.resolveImageProvider(context);
+
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        floorMapNotifier.screenWidth = constraints.maxWidth;
+        floorMapNotifier.screenHeight = constraints.maxHeight;
+        return Stack(
+          children: [
+            PhotoViewGallery.builder(
+              scrollPhysics: const BouncingScrollPhysics(),
+              builder: (BuildContext context, int index) {
+                return PhotoViewGalleryPageOptions(
+                  imageProvider: floorMapNotifier.image,
+                  initialScale: PhotoViewComputedScale.contained * 3.0,
+                  minScale: PhotoViewComputedScale.contained * 1.5,
+                  controller: ref.read(floorMapProvider).photoController,
+                );
+              },
+              itemCount: 1,
+              backgroundDecoration: const BoxDecoration(color: Colors.white),
             ),
-          ),
-      ],
+            for (var location in ref.watch(floorMapProvider).locationPins)
+              Positioned(
+                left: location.pinLeft,
+                top: location.pinTop,
+                child: Icon(
+                  Icons.location_pin,
+                  color: ColorPalette.red,
+                  size: location.size,
+                ),
+              ),
+          ],
+        );
+      },
     );
   }
 }

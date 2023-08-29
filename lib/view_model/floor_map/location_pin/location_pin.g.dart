@@ -13,6 +13,7 @@ _$_LocationPin _$$_LocationPinFromJson(Map<String, dynamic> json) =>
       y: (json['y'] as num).toDouble(),
       pinLeft: (json['pinLeft'] as num).toDouble(),
       pinTop: (json['pinTop'] as num).toDouble(),
+      size: (json['size'] as num).toDouble(),
     );
 
 Map<String, dynamic> _$$_LocationPinToJson(_$_LocationPin instance) =>
@@ -22,4 +23,5 @@ Map<String, dynamic> _$$_LocationPinToJson(_$_LocationPin instance) =>
       'y': instance.y,
       'pinLeft': instance.pinLeft,
       'pinTop': instance.pinTop,
+      'size': instance.size,
     };
