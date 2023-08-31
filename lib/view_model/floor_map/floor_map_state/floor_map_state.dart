@@ -9,5 +9,6 @@ class FloorMapState with _$FloorMapState {
   const factory FloorMapState({
     required List<LocationPin> locationPins,
     required PhotoViewController photoController,
+    required bool isEditMode,
   }) = _FloorMapState;
 }

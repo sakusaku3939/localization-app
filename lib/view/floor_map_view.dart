@@ -14,6 +14,14 @@ class FloorMapView extends HookConsumerWidget {
     floorMapNotifier.resolveImageProvider(context);
 
     return GestureDetector(
+      onTapUp: (tapDetails) {
+        final mapPosition =
+            ref.read(floorMapProvider.notifier).convertToMapPosition(
+                  pinLeft: tapDetails.localPosition.dx,
+                  pinTop: tapDetails.localPosition.dy,
+                );
+        print(mapPosition);
+      },
       child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           floorMapNotifier.screenWidth = constraints.maxWidth;
@@ -33,26 +41,42 @@ class FloorMapView extends HookConsumerWidget {
                 itemCount: 1,
                 backgroundDecoration: const BoxDecoration(color: Colors.white),
               ),
-              for (var location in ref.watch(floorMapProvider).locationPins)
-                Positioned(
-                  left: location.pinLeft,
-                  top: location.pinTop,
-                  child: Icon(
-                    Icons.location_pin,
-                    color: ColorPalette.red,
-                    size: location.size,
-                  ),
-                ),
+              const LocationPins(),
             ],
           );
         },
       ),
-      onTapDown: (tapDownDetails) {
-        final offset = tapDownDetails.localPosition;
-        print(ref
-            .read(floorMapProvider.notifier)
-            .convertToMapPosition(pinLeft: offset.dx, pinTop: offset.dy));
-      },
     );
+  }
+}
+
+class LocationPins extends HookConsumerWidget {
+  const LocationPins({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    if (!ref.watch(floorMapProvider).isEditMode) {
+      return Stack(
+        children: [
+          for (var location in ref.watch(floorMapProvider).locationPins)
+            Positioned(
+              left: location.pinLeft,
+              top: location.pinTop,
+              child: GestureDetector(
+                onTap: () {
+                  print("tapped pin");
+                },
+                child: Icon(
+                  Icons.location_pin,
+                  color: ColorPalette.red,
+                  size: location.size,
+                ),
+              ),
+            ),
+        ],
+      );
+    } else {
+      return const SizedBox.shrink();
+    }
   }
 }

@@ -30,6 +30,7 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
       : super(FloorMapState(
           locationPins: [],
           photoController: PhotoViewController(),
+          isEditMode: false,
         )) {
     init();
   }
@@ -104,6 +105,10 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
     final pinY = absolutePinTop / photoViewState.scale;
 
     return [pinX, pinY];
+  }
+
+  void toggleEditMode(bool mode) {
+    state = state.copyWith(isEditMode: mode);
   }
 
   void resolveImageProvider(BuildContext context) {
