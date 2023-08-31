@@ -68,17 +68,17 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
   }
 
   List<double> _movePin({required pinX, required pinY}) {
-    // 拡大率を考慮した画像のサイズ
-    final virtualImageWidth = photoViewState.width * photoViewState.scale;
-    final virtualImageHeight = photoViewState.height * photoViewState.scale;
-
-    // 画面からはみ出したマップサイズを計算
-    final overWidth = (virtualImageWidth - screenWidth) / 2;
-    final overHeight = (virtualImageHeight - screenHeight) / 2;
-
     // 拡大率から0.5刻みにピンの大きさを調整
     final diffScale = photoViewState.scale / photoViewState.defaultImageScale;
     final pinSize = defaultPinSize * (diffScale * 2).ceil() / 2;
+
+    // 拡大率を考慮した画像のサイズを計算
+    final virtualImageWidth = photoViewState.width * photoViewState.scale;
+    final virtualImageHeight = photoViewState.height * photoViewState.scale;
+
+    // 画面からはみ出ているマップのサイズを計算
+    final overWidth = (virtualImageWidth - screenWidth) / 2;
+    final overHeight = (virtualImageHeight - screenHeight) / 2;
 
     // マップ画像上のピンの位置を計算
     final absolutePinLeft = pinX * photoViewState.scale - pinSize / 2;
