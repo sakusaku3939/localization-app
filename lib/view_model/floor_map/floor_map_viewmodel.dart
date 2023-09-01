@@ -50,7 +50,7 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
           initialized = true;
         }
 
-        const pinX = 6000.0;
+        const pinX = 4000.0;
         const pinY = 5400.0;
         final pinData = _movePin(pinX: pinX, pinY: pinY);
 
