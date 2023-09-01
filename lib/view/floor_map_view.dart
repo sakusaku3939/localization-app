@@ -33,7 +33,7 @@ class FloorMapView extends HookConsumerWidget {
                 builder: (BuildContext context, int index) {
                   return PhotoViewGalleryPageOptions(
                     imageProvider: floorMapNotifier.image,
-                    initialScale: PhotoViewComputedScale.contained * 3.0,
+                    initialScale: PhotoViewComputedScale.contained * 2.0,
                     minScale: PhotoViewComputedScale.contained * 1.0,
                     controller: ref.read(floorMapProvider).photoController,
                   );
