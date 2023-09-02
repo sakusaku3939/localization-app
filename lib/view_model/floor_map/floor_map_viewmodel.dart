@@ -64,16 +64,19 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
         if (state.isEditMode) {
           _updateEditPin();
         } else {
-          _updatePins(pinX: 4000.0, pinY: 5400.0);
+          _updatePins();
         }
       },
     );
   }
 
-  void _updatePins({required pinX, required pinY}) {
+  void _updatePins() {
     // 拡大率から0.5刻みにピンの大きさを調整
     final diffScale = photoViewState.scale / photoViewState.defaultImageScale;
     final pinSize = defaultPinSize * (diffScale * 2).ceil() / 2;
+
+    const pinX = 4000.0;
+    const pinY = 5400.0;
 
     final (pinLeft, pinTop) = _calcPinCoordinate(
       pinX: pinX,
@@ -99,7 +102,7 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
     final (pinLeft, pinTop) = _calcPinCoordinate(
       pinX: state.editPin.x,
       pinY: state.editPin.y,
-      pinSize: _calcPinSize(),
+      pinSize: pinSize,
     );
 
     state = state.copyWith(
@@ -161,9 +164,10 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
 
   void addEditPin({required x, required y}) {
     final pinSize = _calcPinSize();
-    final pinLeft = x - pinSize / 2;
-    final pinTop = y - pinSize / 2;
-    final (pinX, pinY) = convertToMapPosition(pinLeft: pinLeft, pinTop: pinTop);
+    final (pinX, pinY) = convertToMapPosition(
+      pinLeft: x,
+      pinTop: y + pinSize / 2,
+    );
 
     state = state.copyWith(
       editPin: state.editPin.copyWith(
@@ -175,17 +179,22 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
   }
 
   void toggleEditMode(bool mode) {
-    state = state.copyWith(
-      isEditMode: mode,
-      editPin: const LocationPin(
-        id: 0,
-        x: 0,
-        y: 0,
-        pinLeft: 0,
-        pinTop: 0,
-        size: 0,
-      ),
-    );
+    if (mode) {
+      state = state.copyWith(
+        isEditMode: mode,
+        editPin: const LocationPin(
+          id: 0,
+          x: 0,
+          y: 0,
+          pinLeft: 0,
+          pinTop: 0,
+          size: 0,
+        ),
+      );
+    } else {
+      state = state.copyWith(isEditMode: mode);
+      _updatePins();
+    }
   }
 
   void resolveImageProvider(BuildContext context) {

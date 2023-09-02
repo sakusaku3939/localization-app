@@ -14,7 +14,7 @@ class FloorMapView extends HookConsumerWidget {
     floorMapNotifier.resolveImageProvider(context);
 
     return GestureDetector(
-      onTapUp: (tapDetails) => onTapEditMode(ref, tapDetails),
+      onTapUp: (tapDetails) => onTapInEditMode(ref, tapDetails),
       child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           floorMapNotifier.screenWidth = constraints.maxWidth;
@@ -42,7 +42,7 @@ class FloorMapView extends HookConsumerWidget {
     );
   }
 
-  void onTapEditMode(WidgetRef ref, TapUpDetails tapDetails) {
+  void onTapInEditMode(WidgetRef ref, TapUpDetails tapDetails) {
     if (!ref.read(floorMapProvider).isEditMode) {
       return;
     }
