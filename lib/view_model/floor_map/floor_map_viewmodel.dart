@@ -13,7 +13,7 @@ final floorMapProvider =
 class FloorMapViewModel extends StateNotifier<FloorMapState> {
   final Ref ref;
   final image = Image.asset("assets/images/shonandai_floor_map.png").image;
-  final defaultPinSize = 20.0;
+  final defaultPinSize = 16.0;
 
   PhotoViewState photoViewState = const PhotoViewState(
     dx: 0,
@@ -75,26 +75,28 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
     final diffScale = photoViewState.scale / photoViewState.defaultImageScale;
     final pinSize = defaultPinSize * (diffScale * 2).ceil() / 2;
 
-    const pinX = 4000.0;
-    const pinY = 5400.0;
+    const pinX = [4000.0, 5000.0];
+    const pinY = [5400.0, 5200.0];
+    final locations = <LocationPin>[];
 
-    final (pinLeft, pinTop) = _calcPinCoordinate(
-      pinX: pinX,
-      pinY: pinY,
-      pinSize: pinSize,
-    );
-    state = state.copyWith(
-      locationPins: [
+    for (int i = 0; i < 2; i++) {
+      final (pinLeft, pinTop) = _calcPinCoordinate(
+        pinX: pinX[i],
+        pinY: pinY[i],
+        pinSize: pinSize,
+      );
+      locations.add(
         LocationPin(
           id: 0,
-          x: pinX,
-          y: pinY,
+          x: pinX[i],
+          y: pinY[i],
           pinLeft: pinLeft,
           pinTop: pinTop,
           size: pinSize,
         ),
-      ],
-    );
+      );
+    }
+    state = state.copyWith(locationPins: locations);
   }
 
   void _updateEditPin() {
@@ -115,9 +117,9 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
   }
 
   (double, double) _calcPinCoordinate({
-    required pinX,
-    required pinY,
-    required pinSize,
+    required double pinX,
+    required double pinY,
+    required double pinSize,
   }) {
     // マップ画像上のピンの座標を計算
     final mapPinLeft = pinX * photoViewState.scale - pinSize / 2;
@@ -149,7 +151,10 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
     return pinSize;
   }
 
-  (double, double) convertToMapPosition({required pinLeft, required pinTop}) {
+  (double, double) convertToMapPosition({
+    required double pinLeft,
+    required double pinTop,
+  }) {
     // マップ画像上のピンの座標を計算
     final (overWidth, overHeight) = _calcOverSize();
     final mapPinLeft = pinLeft - photoViewState.dx + overWidth;
@@ -162,7 +167,7 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
     return (pinX, pinY);
   }
 
-  void addEditPin({required x, required y}) {
+  void addEditPin({required double x, required double y}) {
     final pinSize = _calcPinSize();
     final adjust = pinSize / 10;
 
