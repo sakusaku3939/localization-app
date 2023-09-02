@@ -8,6 +8,7 @@ part 'floor_map_state.freezed.dart';
 class FloorMapState with _$FloorMapState {
   const factory FloorMapState({
     required List<LocationPin> locationPins,
+    required LocationPin editPin,
     required PhotoViewController photoController,
     required bool isEditMode,
   }) = _FloorMapState;

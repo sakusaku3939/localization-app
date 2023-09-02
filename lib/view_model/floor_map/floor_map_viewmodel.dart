@@ -29,6 +29,14 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
   FloorMapViewModel(this.ref)
       : super(FloorMapState(
           locationPins: [],
+          editPin: const LocationPin(
+            id: 0,
+            x: 0,
+            y: 0,
+            pinLeft: 0,
+            pinTop: 0,
+            size: 0,
+          ),
           photoController: PhotoViewController(),
           isEditMode: false,
         )) {
@@ -53,26 +61,34 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
         const pinX = 4000.0;
         const pinY = 5400.0;
         final pinData = _movePin(pinX: pinX, pinY: pinY);
+        // TODO マップ移動拡大時のバグ修正
+        final editPinData = _movePin(
+          pinX: state.editPin.x,
+          pinY: state.editPin.y,
+        );
 
-        state = state.copyWith(locationPins: [
-          LocationPin(
-            id: 0,
-            x: pinX,
-            y: pinY,
-            pinLeft: pinData[0],
-            pinTop: pinData[1],
-            size: pinData[2],
+        state = state.copyWith(
+          locationPins: [
+            LocationPin(
+              id: 0,
+              x: pinX,
+              y: pinY,
+              pinLeft: pinData[0],
+              pinTop: pinData[1],
+              size: pinData[2],
+            ),
+          ],
+          editPin: state.editPin.copyWith(
+            pinLeft: editPinData[0],
+            pinTop: editPinData[1],
+            size: editPinData[2],
           ),
-        ]);
+        );
       },
     );
   }
 
   List<double> _movePin({required pinX, required pinY}) {
-    // 拡大率から0.5刻みにピンの大きさを調整
-    final diffScale = photoViewState.scale / photoViewState.defaultImageScale;
-    final pinSize = defaultPinSize * (diffScale * 2).ceil() / 2;
-
     // 拡大率を考慮した画像のサイズを計算
     final virtualImageWidth = photoViewState.width * photoViewState.scale;
     final virtualImageHeight = photoViewState.height * photoViewState.scale;
@@ -82,6 +98,7 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
     final overHeight = (virtualImageHeight - screenHeight) / 2;
 
     // マップ画像上のピンの位置を計算
+    final pinSize = calculatePinSize();
     final absolutePinLeft = pinX * photoViewState.scale - pinSize / 2;
     final absolutePinTop = pinY * photoViewState.scale - pinSize;
 
@@ -107,8 +124,29 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
     return [pinX, pinY];
   }
 
+  double calculatePinSize() {
+    final diffScale = photoViewState.scale / photoViewState.defaultImageScale;
+    // 拡大率から0.5刻みにピンの大きさを調整
+    final pinSize = defaultPinSize * (diffScale * 2).ceil() / 2;
+    return pinSize;
+  }
+
   void toggleEditMode(bool mode) {
-    state = state.copyWith(isEditMode: mode);
+    state = state.copyWith(
+      isEditMode: mode,
+      editPin: const LocationPin(
+        id: 0,
+        x: 0,
+        y: 0,
+        pinLeft: 0,
+        pinTop: 0,
+        size: 0,
+      ),
+    );
+  }
+
+  void updateEditPin(LocationPin pin) {
+    state = state.copyWith(editPin: pin);
   }
 
   void resolveImageProvider(BuildContext context) {

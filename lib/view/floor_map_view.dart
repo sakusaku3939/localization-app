@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:localization/constant/color_palette.dart';
 import 'package:localization/view_model/floor_map/floor_map_viewmodel.dart';
+import 'package:localization/view_model/floor_map/location_pin/location_pin.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
@@ -14,14 +15,7 @@ class FloorMapView extends HookConsumerWidget {
     floorMapNotifier.resolveImageProvider(context);
 
     return GestureDetector(
-      onTapUp: (tapDetails) {
-        final mapPosition =
-            ref.read(floorMapProvider.notifier).convertToMapPosition(
-                  pinLeft: tapDetails.localPosition.dx,
-                  pinTop: tapDetails.localPosition.dy,
-                );
-        print(mapPosition);
-      },
+      onTapUp: (tapDetails) => onTapEditMode(ref, tapDetails),
       child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           floorMapNotifier.screenWidth = constraints.maxWidth;
@@ -45,6 +39,31 @@ class FloorMapView extends HookConsumerWidget {
             ],
           );
         },
+      ),
+    );
+  }
+
+  void onTapEditMode(WidgetRef ref, TapUpDetails tapDetails) {
+    if (!ref.read(floorMapProvider).isEditMode) {
+      return;
+    }
+    final floorMapNotifier = ref.read(floorMapProvider.notifier);
+    final pinSize = floorMapNotifier.calculatePinSize();
+    final pinLeft = tapDetails.localPosition.dx - pinSize / 2;
+    final pinTop = tapDetails.localPosition.dy - pinSize / 2;
+
+    final mapPosition = floorMapNotifier.convertToMapPosition(
+      pinLeft: pinLeft,
+      pinTop: pinTop,
+    );
+    floorMapNotifier.updateEditPin(
+      LocationPin(
+        id: 0,
+        x: mapPosition[0],
+        y: mapPosition[1],
+        pinLeft: pinLeft,
+        pinTop: pinTop,
+        size: floorMapNotifier.calculatePinSize(),
       ),
     );
   }
@@ -76,7 +95,16 @@ class LocationPins extends HookConsumerWidget {
         ],
       );
     } else {
-      return const SizedBox.shrink();
+      final location = ref.watch(floorMapProvider).editPin;
+      return Positioned(
+        left: location.pinLeft,
+        top: location.pinTop,
+        child: Icon(
+          Icons.location_searching,
+          color: ColorPalette.red,
+          size: location.size,
+        ),
+      );
     }
   }
 }
