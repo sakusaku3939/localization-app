@@ -47,48 +47,88 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
     bool initialized = false;
     state.photoController.outputStateStream.listen(
       (event) {
+        if (!initialized) {
+          photoViewState =
+              photoViewState.copyWith(defaultImageScale: event.scale!);
+          initialized = true;
+        }
+
+        // マップの移動方向、拡大率をStateに保存
         photoViewState = photoViewState.copyWith(
           dx: event.position.dx,
           dy: event.position.dy,
           scale: event.scale!,
-          defaultImageScale:
-              !initialized ? event.scale! : photoViewState.defaultImageScale,
         );
-        if (!initialized) {
-          initialized = true;
+
+        // ピンの座標をマップ拡大に合わせて更新
+        if (state.isEditMode) {
+          _updateEditPin();
+        } else {
+          _updatePins(pinX: 4000.0, pinY: 5400.0);
         }
-
-        const pinX = 4000.0;
-        const pinY = 5400.0;
-        final pinData = _movePin(pinX: pinX, pinY: pinY);
-        // TODO マップ移動拡大時のバグ修正
-        final editPinData = _movePin(
-          pinX: state.editPin.x,
-          pinY: state.editPin.y,
-        );
-
-        state = state.copyWith(
-          locationPins: [
-            LocationPin(
-              id: 0,
-              x: pinX,
-              y: pinY,
-              pinLeft: pinData[0],
-              pinTop: pinData[1],
-              size: pinData[2],
-            ),
-          ],
-          editPin: state.editPin.copyWith(
-            pinLeft: editPinData[0],
-            pinTop: editPinData[1],
-            size: editPinData[2],
-          ),
-        );
       },
     );
   }
 
-  List<double> _movePin({required pinX, required pinY}) {
+  void _updatePins({required pinX, required pinY}) {
+    // 拡大率から0.5刻みにピンの大きさを調整
+    final diffScale = photoViewState.scale / photoViewState.defaultImageScale;
+    final pinSize = defaultPinSize * (diffScale * 2).ceil() / 2;
+
+    final (pinLeft, pinTop) = _calcPinCoordinate(
+      pinX: pinX,
+      pinY: pinY,
+      pinSize: pinSize,
+    );
+    state = state.copyWith(
+      locationPins: [
+        LocationPin(
+          id: 0,
+          x: pinX,
+          y: pinY,
+          pinLeft: pinLeft,
+          pinTop: pinTop,
+          size: pinSize,
+        ),
+      ],
+    );
+  }
+
+  void _updateEditPin() {
+    final pinSize = _calcPinSize();
+    final (pinLeft, pinTop) = _calcPinCoordinate(
+      pinX: state.editPin.x,
+      pinY: state.editPin.y,
+      pinSize: _calcPinSize(),
+    );
+
+    state = state.copyWith(
+      editPin: state.editPin.copyWith(
+        pinLeft: pinLeft,
+        pinTop: pinTop,
+        size: pinSize,
+      ),
+    );
+  }
+
+  (double, double) _calcPinCoordinate({
+    required pinX,
+    required pinY,
+    required pinSize,
+  }) {
+    // マップ画像上のピンの座標を計算
+    final mapPinLeft = pinX * photoViewState.scale - pinSize / 2;
+    final mapPinTop = pinY * photoViewState.scale - pinSize;
+
+    // 画面上のピンの座標を計算
+    final (overWidth, overHeight) = _calcOverSize();
+    final pinLeft = photoViewState.dx - overWidth + mapPinLeft;
+    final pinTop = photoViewState.dy - overHeight + mapPinTop;
+
+    return (pinLeft, pinTop);
+  }
+
+  (double, double) _calcOverSize() {
     // 拡大率を考慮した画像のサイズを計算
     final virtualImageWidth = photoViewState.width * photoViewState.scale;
     final virtualImageHeight = photoViewState.height * photoViewState.scale;
@@ -97,38 +137,41 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
     final overWidth = (virtualImageWidth - screenWidth) / 2;
     final overHeight = (virtualImageHeight - screenHeight) / 2;
 
-    // マップ画像上のピンの位置を計算
-    final pinSize = calculatePinSize();
-    final absolutePinLeft = pinX * photoViewState.scale - pinSize / 2;
-    final absolutePinTop = pinY * photoViewState.scale - pinSize;
-
-    // 画面上のピンの位置を計算
-    final pinLeft = photoViewState.dx - overWidth + absolutePinLeft;
-    final pinTop = photoViewState.dy - overHeight + absolutePinTop;
-
-    return [pinLeft, pinTop, pinSize];
+    return (overWidth, overHeight);
   }
 
-  List<double> convertToMapPosition({required pinLeft, required pinTop}) {
-    final virtualImageWidth = photoViewState.width * photoViewState.scale;
-    final virtualImageHeight = photoViewState.height * photoViewState.scale;
-    final overWidth = (virtualImageWidth - screenWidth) / 2;
-    final overHeight = (virtualImageHeight - screenHeight) / 2;
-
-    final absolutePinLeft = pinLeft - photoViewState.dx + overWidth;
-    final absolutePinTop = pinTop - photoViewState.dy + overHeight;
-
-    final pinX = absolutePinLeft / photoViewState.scale;
-    final pinY = absolutePinTop / photoViewState.scale;
-
-    return [pinX, pinY];
-  }
-
-  double calculatePinSize() {
+  double _calcPinSize() {
     final diffScale = photoViewState.scale / photoViewState.defaultImageScale;
-    // 拡大率から0.5刻みにピンの大きさを調整
-    final pinSize = defaultPinSize * (diffScale * 2).ceil() / 2;
+    final pinSize = defaultPinSize * diffScale;
     return pinSize;
+  }
+
+  (double, double) convertToMapPosition({required pinLeft, required pinTop}) {
+    // マップ画像上のピンの座標を計算
+    final (overWidth, overHeight) = _calcOverSize();
+    final mapPinLeft = pinLeft - photoViewState.dx + overWidth;
+    final mapPinTop = pinTop - photoViewState.dy + overHeight;
+
+    // ピンの絶対座標を計算
+    final pinX = mapPinLeft / photoViewState.scale;
+    final pinY = mapPinTop / photoViewState.scale;
+
+    return (pinX, pinY);
+  }
+
+  void addEditPin({required x, required y}) {
+    final pinSize = _calcPinSize();
+    final pinLeft = x - pinSize / 2;
+    final pinTop = y - pinSize / 2;
+    final (pinX, pinY) = convertToMapPosition(pinLeft: pinLeft, pinTop: pinTop);
+
+    state = state.copyWith(
+      editPin: state.editPin.copyWith(
+        x: pinX,
+        y: pinY,
+      ),
+    );
+    _updateEditPin();
   }
 
   void toggleEditMode(bool mode) {
@@ -143,10 +186,6 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
         size: 0,
       ),
     );
-  }
-
-  void updateEditPin(LocationPin pin) {
-    state = state.copyWith(editPin: pin);
   }
 
   void resolveImageProvider(BuildContext context) {
