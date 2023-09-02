@@ -164,11 +164,12 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
 
   void addEditPin({required x, required y}) {
     final pinSize = _calcPinSize();
+    final adjust = pinSize / 10;
+
     final (pinX, pinY) = convertToMapPosition(
       pinLeft: x,
-      pinTop: y + pinSize / 2,
+      pinTop: y + adjust,
     );
-
     state = state.copyWith(
       editPin: state.editPin.copyWith(
         x: pinX,

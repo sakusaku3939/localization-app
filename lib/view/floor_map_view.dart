@@ -84,7 +84,7 @@ class LocationPins extends HookConsumerWidget {
         left: location.pinLeft,
         top: location.pinTop,
         child: Icon(
-          Icons.location_searching,
+          Icons.pin_drop,
           color: ColorPalette.red,
           size: location.size,
         ),
