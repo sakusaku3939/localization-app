@@ -130,30 +130,34 @@ class EditPinSheet extends HookConsumerWidget {
                   )
                 ],
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    width: 32,
-                    height: 4,
-                    margin: const EdgeInsets.symmetric(vertical: 14),
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(4),
+              child: NotificationListener<OverscrollIndicatorNotification>(
+                onNotification: (OverscrollIndicatorNotification overscroll) {
+                  // スクロール時のエフェクトをoffにする
+                  overscroll.disallowIndicator();
+                  return true;
+                },
+                child: SingleChildScrollView(
+                  controller: scrollController,
+                  physics: const ClampingScrollPhysics(),
+                  child: Column(
+                    children: [
+                      Container(
+                        width: 32,
+                        height: 4,
+                        margin: const EdgeInsets.symmetric(vertical: 14),
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(4),
+                          ),
+                          color: ColorPalette.grey,
+                        ),
                       ),
-                      color: ColorPalette.grey,
-                    ),
+                      Container(
+                        height: 120,
+                      )
+                    ],
                   ),
-                  Expanded(
-                    child: ListView.builder(
-                      controller: scrollController,
-                      itemCount: 10,
-                      itemBuilder: (BuildContext context, int index) {
-                        return ListTile(title: Text('Item $index'));
-                      },
-                    ),
-                  ),
-                ],
+                ),
               ),
             );
           },
