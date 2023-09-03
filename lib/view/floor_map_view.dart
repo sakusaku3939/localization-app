@@ -35,57 +35,7 @@ class FloorMapView extends HookConsumerWidget {
                 backgroundDecoration: const BoxDecoration(color: Colors.white),
               ),
               const LocationPins(),
-              DraggableScrollableSheet(
-                initialChildSize: 0.12,
-                minChildSize: 0,
-                maxChildSize: 0.5,
-                snapSizes: const [0.12],
-                snap: true,
-                builder:
-                    (BuildContext context, ScrollController scrollController) {
-                  return Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(28),
-                        topRight: Radius.circular(28),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Color.fromRGBO(0, 0, 0, 0.3),
-                          offset: Offset(0, 1),
-                          blurRadius: 4,
-                        )
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          width: 32,
-                          height: 4,
-                          margin: const EdgeInsets.symmetric(vertical: 14),
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(4),
-                            ),
-                            color: ColorPalette.grey,
-                          ),
-                        ),
-                        Expanded(
-                          child: ListView.builder(
-                            controller: scrollController,
-                            itemCount: 10,
-                            itemBuilder: (BuildContext context, int index) {
-                              return ListTile(title: Text('Item $index'));
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
+              const EditPinSheet(),
             ],
           );
         },
@@ -140,6 +90,77 @@ class LocationPins extends HookConsumerWidget {
           size: location.size,
         ),
       );
+    }
+  }
+}
+
+class EditPinSheet extends HookConsumerWidget {
+  const EditPinSheet({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    if (ref.watch(floorMapProvider).editPin.x != 0) {
+      return NotificationListener<DraggableScrollableNotification>(
+        onNotification: (notification) {
+          // 一番下までドラッグされたらシートを閉じる
+          if (notification.extent < 0.04) {
+            ref.read(floorMapProvider.notifier).toggleEditMode(true);
+          }
+          return true;
+        },
+        child: DraggableScrollableSheet(
+          initialChildSize: 0.12,
+          minChildSize: 0,
+          maxChildSize: 0.5,
+          snapSizes: const [0.12],
+          snap: true,
+          builder: (BuildContext context, ScrollController scrollController) {
+            return Container(
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(28),
+                  topRight: Radius.circular(28),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Color.fromRGBO(0, 0, 0, 0.3),
+                    offset: Offset(0, 1),
+                    blurRadius: 4,
+                  )
+                ],
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 32,
+                    height: 4,
+                    margin: const EdgeInsets.symmetric(vertical: 14),
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(4),
+                      ),
+                      color: ColorPalette.grey,
+                    ),
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      controller: scrollController,
+                      itemCount: 10,
+                      itemBuilder: (BuildContext context, int index) {
+                        return ListTile(title: Text('Item $index'));
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      );
+    } else {
+      return const SizedBox.shrink();
     }
   }
 }

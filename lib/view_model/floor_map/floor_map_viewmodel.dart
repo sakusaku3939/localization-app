@@ -185,20 +185,18 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
   }
 
   void toggleEditMode(bool mode) {
-    if (mode) {
-      state = state.copyWith(
-        isEditMode: mode,
-        editPin: const LocationPin(
-          id: 0,
-          x: 0,
-          y: 0,
-          pinLeft: 0,
-          pinTop: 0,
-          size: 0,
-        ),
-      );
-    } else {
-      state = state.copyWith(isEditMode: mode);
+    state = state.copyWith(
+      isEditMode: mode,
+      editPin: const LocationPin(
+        id: 0,
+        x: 0,
+        y: 0,
+        pinLeft: 0,
+        pinTop: 0,
+        size: 0,
+      ),
+    );
+    if (!mode) {
       _updatePins();
     }
   }
