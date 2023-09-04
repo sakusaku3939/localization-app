@@ -100,6 +100,10 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
   }
 
   void _updateEditPin() {
+    // ピンが非表示の時は更新しない
+    if (state.editPin.x == 0 && state.editPin.y == 0) {
+      return;
+    }
     final pinSize = _calcPinSize();
     final (pinLeft, pinTop) = _calcPinCoordinate(
       pinX: state.editPin.x,
@@ -168,9 +172,8 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
   }
 
   void addEditPin({required double x, required double y}) {
-    final pinSize = _calcPinSize();
-    final adjust = pinSize / 10;
-
+    // マップ上にピンを配置
+    final adjust = _calcPinSize() / 10;
     final (pinX, pinY) = convertToMapPosition(
       pinLeft: x,
       pinTop: y + adjust,
@@ -182,6 +185,14 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
       ),
     );
     _updateEditPin();
+
+    // ピンの位置に合わせてマップを移動
+    state.photoController.updateMultiple(
+      position: Offset(
+        state.photoController.position.dx,
+        state.photoController.position.dy - (y + adjust) + screenHeight / 4.5,
+      ),
+    );
   }
 
   void toggleEditMode(bool mode) {
