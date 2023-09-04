@@ -189,11 +189,18 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
     );
     _updateEditPin();
 
-    // ピンの位置に合わせてマップを移動
+    // シートの位置に合わせてマップを移動
+    final isSheetSizeMiddle = sheetController.isAttached
+        ? sheetController.size.round() <= sheetSnaps[1]
+        : false;
+    final topMargin = isSheetSizeMiddle
+        ? screenHeight * (1 - sheetSnaps[1]) / 2
+        : screenHeight * (1 - sheetSnaps[2]) / 2;
+
     state.photoController.updateMultiple(
       position: Offset(
         state.photoController.position.dx,
-        state.photoController.position.dy - (y + adjust) + screenHeight / 4.5,
+        state.photoController.position.dy - (y + adjust) + topMargin + 20,
       ),
     );
   }
@@ -216,8 +223,8 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
   }
 
   void popSheet() {
-    final isSheetSizeMiddle = sheetController.size <= sheetSnaps[1];
-    final isSheetSizeMax = sheetController.size <= sheetSnaps[2];
+    final isSheetSizeMiddle = sheetController.size.round() <= sheetSnaps[1];
+    final isSheetSizeMax = sheetController.size.round() <= sheetSnaps[2];
 
     if (isSheetSizeMiddle) {
       sheetController.animateTo(
