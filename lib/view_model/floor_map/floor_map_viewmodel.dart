@@ -15,6 +15,9 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
   final image = Image.asset("assets/images/shonandai_floor_map.png").image;
   final defaultPinSize = 16.0;
 
+  final sheetController = DraggableScrollableController();
+  final sheetSnaps = <double>[0, 0.12, 0.6];
+
   PhotoViewState photoViewState = const PhotoViewState(
     dx: 0,
     dy: 0,
@@ -209,6 +212,25 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
     );
     if (!mode) {
       _updatePins();
+    }
+  }
+
+  void popSheet() {
+    final isSheetSizeMiddle = sheetController.size <= sheetSnaps[1];
+    final isSheetSizeMax = sheetController.size <= sheetSnaps[2];
+
+    if (isSheetSizeMiddle) {
+      sheetController.animateTo(
+        0,
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.ease,
+      );
+    } else if (isSheetSizeMax) {
+      sheetController.animateTo(
+        sheetSnaps[1],
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.ease,
+      );
     }
   }
 

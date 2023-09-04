@@ -13,32 +13,39 @@ class FloorMapView extends HookConsumerWidget {
     final floorMapNotifier = ref.read(floorMapProvider.notifier);
     floorMapNotifier.resolveImageProvider(context);
 
-    return GestureDetector(
-      onTapUp: (tapDetails) => onTapInEditMode(ref, tapDetails),
-      child: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          floorMapNotifier.screenWidth = constraints.maxWidth;
-          floorMapNotifier.screenHeight = constraints.maxHeight;
-          return Stack(
-            children: [
-              PhotoViewGallery.builder(
-                scrollPhysics: const BouncingScrollPhysics(),
-                builder: (BuildContext context, int index) {
-                  return PhotoViewGalleryPageOptions(
-                    imageProvider: floorMapNotifier.image,
-                    initialScale: PhotoViewComputedScale.contained * 2.0,
-                    minScale: PhotoViewComputedScale.contained * 1.0,
-                    controller: ref.read(floorMapProvider).photoController,
-                  );
-                },
-                itemCount: 1,
-                backgroundDecoration: const BoxDecoration(color: Colors.white),
-              ),
-              const LocationPins(),
-              const EditPinSheet(),
-            ],
-          );
-        },
+    return WillPopScope(
+      onWillPop: () async {
+        floorMapNotifier.popSheet();
+        return false;
+      },
+      child: GestureDetector(
+        onTapUp: (tapDetails) => onTapInEditMode(ref, tapDetails),
+        child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            floorMapNotifier.screenWidth = constraints.maxWidth;
+            floorMapNotifier.screenHeight = constraints.maxHeight;
+            return Stack(
+              children: [
+                PhotoViewGallery.builder(
+                  scrollPhysics: const BouncingScrollPhysics(),
+                  builder: (BuildContext context, int index) {
+                    return PhotoViewGalleryPageOptions(
+                      imageProvider: floorMapNotifier.image,
+                      initialScale: PhotoViewComputedScale.contained * 2.0,
+                      minScale: PhotoViewComputedScale.contained * 1.0,
+                      controller: ref.read(floorMapProvider).photoController,
+                    );
+                  },
+                  itemCount: 1,
+                  backgroundDecoration:
+                      const BoxDecoration(color: Colors.white),
+                ),
+                const LocationPins(),
+                const EditPinSheet(),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
@@ -100,20 +107,22 @@ class EditPinSheet extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (ref.watch(floorMapProvider).editPin.size != 0) {
+      final floorMapNotifier = ref.read(floorMapProvider.notifier);
       return NotificationListener<DraggableScrollableNotification>(
         onNotification: (notification) {
           // 一番下までドラッグされたらシートを閉じる
           if (notification.extent < 0.04) {
-            ref.read(floorMapProvider.notifier).toggleEditMode(true);
+            floorMapNotifier.toggleEditMode(true);
           }
           return true;
         },
         child: DraggableScrollableSheet(
-          initialChildSize: 0.6,
-          minChildSize: 0,
-          maxChildSize: 0.6,
-          snapSizes: const [0.12],
+          initialChildSize: floorMapNotifier.sheetSnaps.last,
+          minChildSize: floorMapNotifier.sheetSnaps.first,
+          maxChildSize: floorMapNotifier.sheetSnaps.last,
+          snapSizes: floorMapNotifier.sheetSnaps,
           snap: true,
+          controller: ref.read(floorMapProvider.notifier).sheetController,
           builder: (BuildContext context, ScrollController scrollController) {
             return Container(
               decoration: const BoxDecoration(
