@@ -224,7 +224,7 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
 
   void popSheet() {
     final isSheetSizeMiddle = sheetController.size.round() <= sheetSnaps[1];
-    final isSheetSizeMax = sheetController.size.round() <= sheetSnaps[2];
+    final isSheetSizeMax = sheetController.size <= sheetSnaps[2];
 
     if (isSheetSizeMiddle) {
       sheetController.animateTo(
