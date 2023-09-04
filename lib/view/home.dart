@@ -24,20 +24,22 @@ class Home extends HookConsumerWidget {
         ],
       ),
       body: const FloorMapView(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          ref
-              .read(floorMapProvider.notifier)
-              .toggleEditMode(!ref.read(floorMapProvider).isEditMode);
-        },
-        child: Consumer(
-          builder: (context, ref, _) {
-            return Icon(ref.watch(floorMapProvider).isEditMode
-                ? Icons.close
-                : Icons.edit);
-          },
-        ),
-      ),
+      floatingActionButton: ref.watch(floorMapProvider).editPin.size == 0
+          ? FloatingActionButton(
+              onPressed: () {
+                ref
+                    .read(floorMapProvider.notifier)
+                    .toggleEditMode(!ref.read(floorMapProvider).isEditMode);
+              },
+              child: Consumer(
+                builder: (context, ref, _) {
+                  return Icon(ref.watch(floorMapProvider).isEditMode
+                      ? Icons.close
+                      : Icons.edit);
+                },
+              ),
+            )
+          : null,
     );
   }
 }

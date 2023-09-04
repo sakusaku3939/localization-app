@@ -99,7 +99,7 @@ class EditPinSheet extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (ref.watch(floorMapProvider).editPin.x != 0) {
+    if (ref.watch(floorMapProvider).editPin.size != 0) {
       return NotificationListener<DraggableScrollableNotification>(
         onNotification: (notification) {
           // 一番下までドラッグされたらシートを閉じる
@@ -109,9 +109,9 @@ class EditPinSheet extends HookConsumerWidget {
           return true;
         },
         child: DraggableScrollableSheet(
-          initialChildSize: 0.12,
+          initialChildSize: 0.6,
           minChildSize: 0,
-          maxChildSize: 0.5,
+          maxChildSize: 0.6,
           snapSizes: const [0.12],
           snap: true,
           builder: (BuildContext context, ScrollController scrollController) {
@@ -138,7 +138,6 @@ class EditPinSheet extends HookConsumerWidget {
                 },
                 child: SingleChildScrollView(
                   controller: scrollController,
-                  physics: const ClampingScrollPhysics(),
                   child: Column(
                     children: [
                       Container(
