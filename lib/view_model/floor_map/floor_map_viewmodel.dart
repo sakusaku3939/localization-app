@@ -100,27 +100,6 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
     state = state.copyWith(locationPins: locations);
   }
 
-  void _updateEditablePin() {
-    // ピンが非表示の時は更新しない
-    if (state.editablePin.x == 0 && state.editablePin.y == 0) {
-      return;
-    }
-    final pinSize = _calcPinSize();
-    final (pinLeft, pinTop) = _calcPinCoordinate(
-      pinX: state.editablePin.x,
-      pinY: state.editablePin.y,
-      pinSize: pinSize,
-    );
-
-    state = state.copyWith(
-      editablePin: state.editablePin.copyWith(
-        pinLeft: pinLeft,
-        pinTop: pinTop,
-        size: pinSize,
-      ),
-    );
-  }
-
   (double, double) _calcPinCoordinate({
     required double pinX,
     required double pinY,
@@ -200,6 +179,27 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
       ),
     );
     ref.read(pinSheetProvider.notifier).showBottomSheet(true);
+  }
+
+  void _updateEditablePin() {
+    // ピンが非表示の時は更新しない
+    if (state.editablePin.x == 0 && state.editablePin.y == 0) {
+      return;
+    }
+    final pinSize = _calcPinSize();
+    final (pinLeft, pinTop) = _calcPinCoordinate(
+      pinX: state.editablePin.x,
+      pinY: state.editablePin.y,
+      pinSize: pinSize,
+    );
+
+    state = state.copyWith(
+      editablePin: state.editablePin.copyWith(
+        pinLeft: pinLeft,
+        pinTop: pinTop,
+        size: pinSize,
+      ),
+    );
   }
 
   void resetEditablePin() {
