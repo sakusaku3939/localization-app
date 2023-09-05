@@ -5,6 +5,6 @@ part 'pin_sheet_state.freezed.dart';
 @freezed
 class PinSheetState with _$PinSheetState {
   const factory PinSheetState({
-    required bool isFocusOnPin,
+    required bool isShow,
   }) = _PinSheetState;
 }

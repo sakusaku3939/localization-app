@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:localization/view_model/floor_map/floor_map_viewmodel.dart';
 import 'package:localization/view_model/pin_sheet/pin_sheet_state/pin_sheet_state.dart';
 
 final pinSheetProvider =
@@ -14,7 +15,7 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
 
   PinSheetViewModel(this.ref)
       : super(const PinSheetState(
-    isFocusOnPin: false,
+    isShow: false,
   ));
 
   bool get isSheetSizeMiddle =>
@@ -37,5 +38,9 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
         curve: Curves.ease,
       );
     }
+  }
+
+  void showBottomSheet(bool isShow) {
+    state = state.copyWith(isShow: isShow);
   }
 }

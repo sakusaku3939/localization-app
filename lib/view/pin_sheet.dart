@@ -9,13 +9,14 @@ class PinSheet extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (ref.watch(floorMapProvider).editPin.size != 0) {
+    if (ref.watch(pinSheetProvider).isShow) {
       final sheetNotifier = ref.read(pinSheetProvider.notifier);
       return NotificationListener<DraggableScrollableNotification>(
         onNotification: (notification) {
           // 一番下までドラッグされたらシートを閉じる
           if (notification.extent < 0.04) {
-            ref.read(floorMapProvider.notifier).toggleEditMode(true);
+            sheetNotifier.showBottomSheet(false);
+            ref.read(floorMapProvider.notifier).resetEditPin();
           }
           return true;
         },

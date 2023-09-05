@@ -199,11 +199,11 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
         state.photoController.position.dy - (y + adjust) + topMargin + 20,
       ),
     );
+    ref.read(pinSheetProvider.notifier).showBottomSheet(true);
   }
 
-  void toggleEditMode(bool mode) {
+  void resetEditPin() {
     state = state.copyWith(
-      isEditMode: mode,
       editPin: const LocationPin(
         id: 0,
         x: 0,
@@ -213,6 +213,11 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
         size: 0,
       ),
     );
+  }
+
+  void setEditMode(bool mode) {
+    state = state.copyWith(isEditMode: mode);
+    resetEditPin();
     if (!mode) {
       _updatePins();
     }

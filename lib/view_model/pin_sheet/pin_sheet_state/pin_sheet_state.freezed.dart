@@ -16,7 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$PinSheetState {
-  bool get isFocusOnPin => throw _privateConstructorUsedError;
+  bool get isShow => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $PinSheetStateCopyWith<PinSheetState> get copyWith =>
@@ -29,7 +29,7 @@ abstract class $PinSheetStateCopyWith<$Res> {
           PinSheetState value, $Res Function(PinSheetState) then) =
       _$PinSheetStateCopyWithImpl<$Res, PinSheetState>;
   @useResult
-  $Res call({bool isFocusOnPin});
+  $Res call({bool isShow});
 }
 
 /// @nodoc
@@ -45,12 +45,12 @@ class _$PinSheetStateCopyWithImpl<$Res, $Val extends PinSheetState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? isFocusOnPin = null,
+    Object? isShow = null,
   }) {
     return _then(_value.copyWith(
-      isFocusOnPin: null == isFocusOnPin
-          ? _value.isFocusOnPin
-          : isFocusOnPin // ignore: cast_nullable_to_non_nullable
+      isShow: null == isShow
+          ? _value.isShow
+          : isShow // ignore: cast_nullable_to_non_nullable
               as bool,
     ) as $Val);
   }
@@ -64,7 +64,7 @@ abstract class _$$_PinSheetStateCopyWith<$Res>
       __$$_PinSheetStateCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({bool isFocusOnPin});
+  $Res call({bool isShow});
 }
 
 /// @nodoc
@@ -78,12 +78,12 @@ class __$$_PinSheetStateCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? isFocusOnPin = null,
+    Object? isShow = null,
   }) {
     return _then(_$_PinSheetState(
-      isFocusOnPin: null == isFocusOnPin
-          ? _value.isFocusOnPin
-          : isFocusOnPin // ignore: cast_nullable_to_non_nullable
+      isShow: null == isShow
+          ? _value.isShow
+          : isShow // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
   }
@@ -92,14 +92,14 @@ class __$$_PinSheetStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_PinSheetState implements _PinSheetState {
-  const _$_PinSheetState({required this.isFocusOnPin});
+  const _$_PinSheetState({required this.isShow});
 
   @override
-  final bool isFocusOnPin;
+  final bool isShow;
 
   @override
   String toString() {
-    return 'PinSheetState(isFocusOnPin: $isFocusOnPin)';
+    return 'PinSheetState(isShow: $isShow)';
   }
 
   @override
@@ -107,12 +107,11 @@ class _$_PinSheetState implements _PinSheetState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_PinSheetState &&
-            (identical(other.isFocusOnPin, isFocusOnPin) ||
-                other.isFocusOnPin == isFocusOnPin));
+            (identical(other.isShow, isShow) || other.isShow == isShow));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, isFocusOnPin);
+  int get hashCode => Object.hash(runtimeType, isShow);
 
   @JsonKey(ignore: true)
   @override
@@ -122,11 +121,10 @@ class _$_PinSheetState implements _PinSheetState {
 }
 
 abstract class _PinSheetState implements PinSheetState {
-  const factory _PinSheetState({required final bool isFocusOnPin}) =
-      _$_PinSheetState;
+  const factory _PinSheetState({required final bool isShow}) = _$_PinSheetState;
 
   @override
-  bool get isFocusOnPin;
+  bool get isShow;
   @override
   @JsonKey(ignore: true)
   _$$_PinSheetStateCopyWith<_$_PinSheetState> get copyWith =>

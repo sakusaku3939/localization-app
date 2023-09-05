@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:localization/view/floor_map_view.dart';
 import 'package:localization/view_model/floor_map/floor_map_viewmodel.dart';
+import 'package:localization/view_model/pin_sheet/pin_sheet_viewmodel.dart';
 
 class Home extends HookConsumerWidget {
   const Home({super.key});
@@ -24,18 +25,20 @@ class Home extends HookConsumerWidget {
         ],
       ),
       body: const FloorMapView(),
-      floatingActionButton: ref.watch(floorMapProvider).editPin.size == 0
+      floatingActionButton: !ref.watch(pinSheetProvider).isShow
           ? FloatingActionButton(
               onPressed: () {
                 ref
                     .read(floorMapProvider.notifier)
-                    .toggleEditMode(!ref.read(floorMapProvider).isEditMode);
+                    .setEditMode(!ref.read(floorMapProvider).isEditMode);
               },
               child: Consumer(
                 builder: (context, ref, _) {
-                  return Icon(ref.watch(floorMapProvider).isEditMode
-                      ? Icons.close
-                      : Icons.edit);
+                  return Icon(
+                    ref.watch(floorMapProvider).isEditMode
+                        ? Icons.close
+                        : Icons.edit,
+                  );
                 },
               ),
             )
