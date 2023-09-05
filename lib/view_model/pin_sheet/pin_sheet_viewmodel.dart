@@ -1,0 +1,41 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:localization/view_model/pin_sheet/pin_sheet_state/pin_sheet_state.dart';
+
+final pinSheetProvider =
+    StateNotifierProvider.autoDispose<PinSheetViewModel, PinSheetState>(
+  (ref) => PinSheetViewModel(ref),
+);
+
+class PinSheetViewModel extends StateNotifier<PinSheetState> {
+  final Ref ref;
+  final controller = DraggableScrollableController();
+  final snaps = <double>[0, 0.12, 0.6];
+
+  PinSheetViewModel(this.ref)
+      : super(const PinSheetState(
+    isFocusOnPin: false,
+  ));
+
+  bool get isSheetSizeMiddle =>
+      controller.isAttached ? controller.size.round() <= snaps[1] : false;
+
+  bool get isSheetSizeMax =>
+      controller.isAttached ? controller.size <= snaps[2] : false;
+
+  void popSheet() {
+    if (isSheetSizeMiddle) {
+      controller.animateTo(
+        0,
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.ease,
+      );
+    } else if (isSheetSizeMax) {
+      controller.animateTo(
+        snaps[1],
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.ease,
+      );
+    }
+  }
+}

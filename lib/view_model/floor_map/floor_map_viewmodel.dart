@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:localization/view_model/pin_sheet/pin_sheet_viewmodel.dart';
 import 'package:localization/view_model/floor_map/floor_map_state/floor_map_state.dart';
 import 'package:localization/view_model/floor_map/location_pin/location_pin.dart';
 import 'package:localization/view_model/floor_map/photo_view_state/photo_view_state.dart';
@@ -14,9 +15,6 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
   final Ref ref;
   final image = Image.asset("assets/images/shonandai_floor_map.png").image;
   final defaultPinSize = 16.0;
-
-  final sheetController = DraggableScrollableController();
-  final sheetSnaps = <double>[0, 0.12, 0.6];
 
   PhotoViewState photoViewState = const PhotoViewState(
     dx: 0,
@@ -190,12 +188,10 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
     _updateEditPin();
 
     // シートの位置に合わせてマップを移動
-    final isSheetSizeMiddle = sheetController.isAttached
-        ? sheetController.size.round() <= sheetSnaps[1]
-        : false;
-    final topMargin = isSheetSizeMiddle
-        ? screenHeight * (1 - sheetSnaps[1]) / 2
-        : screenHeight * (1 - sheetSnaps[2]) / 2;
+    final sheetNotifier = ref.read(pinSheetProvider.notifier);
+    final topMargin = sheetNotifier.isSheetSizeMiddle
+        ? screenHeight * (1 - sheetNotifier.snaps[1]) / 2
+        : screenHeight * (1 - sheetNotifier.snaps[2]) / 2;
 
     state.photoController.updateMultiple(
       position: Offset(
@@ -219,25 +215,6 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
     );
     if (!mode) {
       _updatePins();
-    }
-  }
-
-  void popSheet() {
-    final isSheetSizeMiddle = sheetController.size.round() <= sheetSnaps[1];
-    final isSheetSizeMax = sheetController.size <= sheetSnaps[2];
-
-    if (isSheetSizeMiddle) {
-      sheetController.animateTo(
-        0,
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.ease,
-      );
-    } else if (isSheetSizeMax) {
-      sheetController.animateTo(
-        sheetSnaps[1],
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.ease,
-      );
     }
   }
 
