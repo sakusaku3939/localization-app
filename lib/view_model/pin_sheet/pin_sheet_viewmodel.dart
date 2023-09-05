@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:localization/view_model/floor_map/floor_map_viewmodel.dart';
 import 'package:localization/view_model/pin_sheet/pin_sheet_state/pin_sheet_state.dart';
 
 final pinSheetProvider =

@@ -30,7 +30,7 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
   FloorMapViewModel(this.ref)
       : super(FloorMapState(
           locationPins: [],
-          editPin: const LocationPin(
+          editablePin: const LocationPin(
             id: 0,
             x: 0,
             y: 0,
@@ -63,7 +63,7 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
 
         // ピンの座標をマップ拡大に合わせて更新
         if (state.isEditMode) {
-          _updateEditPin();
+          _updateEditablePin();
         } else {
           _updatePins();
         }
@@ -100,20 +100,20 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
     state = state.copyWith(locationPins: locations);
   }
 
-  void _updateEditPin() {
+  void _updateEditablePin() {
     // ピンが非表示の時は更新しない
-    if (state.editPin.x == 0 && state.editPin.y == 0) {
+    if (state.editablePin.x == 0 && state.editablePin.y == 0) {
       return;
     }
     final pinSize = _calcPinSize();
     final (pinLeft, pinTop) = _calcPinCoordinate(
-      pinX: state.editPin.x,
-      pinY: state.editPin.y,
+      pinX: state.editablePin.x,
+      pinY: state.editablePin.y,
       pinSize: pinSize,
     );
 
     state = state.copyWith(
-      editPin: state.editPin.copyWith(
+      editablePin: state.editablePin.copyWith(
         pinLeft: pinLeft,
         pinTop: pinTop,
         size: pinSize,
@@ -172,7 +172,7 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
     return (pinX, pinY);
   }
 
-  void addEditPin({required double x, required double y}) {
+  void addEditablePin({required double x, required double y}) {
     // マップ上にピンを配置
     final adjust = _calcPinSize() / 10;
     final (pinX, pinY) = convertToMapPosition(
@@ -180,12 +180,12 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
       pinTop: y + adjust,
     );
     state = state.copyWith(
-      editPin: state.editPin.copyWith(
+      editablePin: state.editablePin.copyWith(
         x: pinX,
         y: pinY,
       ),
     );
-    _updateEditPin();
+    _updateEditablePin();
 
     // シートの位置に合わせてマップを移動
     final sheetNotifier = ref.read(pinSheetProvider.notifier);
@@ -202,9 +202,9 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
     ref.read(pinSheetProvider.notifier).showBottomSheet(true);
   }
 
-  void resetEditPin() {
+  void resetEditablePin() {
     state = state.copyWith(
-      editPin: const LocationPin(
+      editablePin: const LocationPin(
         id: 0,
         x: 0,
         y: 0,
@@ -217,7 +217,7 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
 
   void setEditMode(bool mode) {
     state = state.copyWith(isEditMode: mode);
-    resetEditPin();
+    resetEditablePin();
     if (!mode) {
       _updatePins();
     }

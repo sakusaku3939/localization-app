@@ -16,7 +16,7 @@ class PinSheet extends HookConsumerWidget {
           // 一番下までドラッグされたらシートを閉じる
           if (notification.extent < 0.04) {
             sheetNotifier.showBottomSheet(false);
-            ref.read(floorMapProvider.notifier).resetEditPin();
+            ref.read(floorMapProvider.notifier).resetEditablePin();
           }
           return true;
         },

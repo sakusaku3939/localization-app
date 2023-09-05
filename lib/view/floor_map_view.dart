@@ -57,7 +57,7 @@ class FloorMapView extends HookConsumerWidget {
     if (!ref.read(floorMapProvider).isEditMode) {
       return;
     }
-    ref.read(floorMapProvider.notifier).addEditPin(
+    ref.read(floorMapProvider.notifier).addEditablePin(
           x: tapDetails.localPosition.dx,
           y: tapDetails.localPosition.dy,
         );
@@ -72,10 +72,10 @@ class LocationPins extends HookConsumerWidget {
     if (!ref.watch(floorMapProvider).isEditMode) {
       return Stack(
         children: [
-          for (var location in ref.watch(floorMapProvider).locationPins)
+          for (var pin in ref.watch(floorMapProvider).locationPins)
             Positioned(
-              left: location.pinLeft,
-              top: location.pinTop,
+              left: pin.pinLeft,
+              top: pin.pinTop,
               child: GestureDetector(
                 onTap: () {
                   print("tapped pin");
@@ -83,21 +83,21 @@ class LocationPins extends HookConsumerWidget {
                 child: Icon(
                   Icons.location_pin,
                   color: ColorPalette.red,
-                  size: location.size,
+                  size: pin.size,
                 ),
               ),
             ),
         ],
       );
     } else {
-      final location = ref.watch(floorMapProvider).editPin;
+      final pin = ref.watch(floorMapProvider).editablePin;
       return Positioned(
-        left: location.pinLeft,
-        top: location.pinTop,
+        left: pin.pinLeft,
+        top: pin.pinTop,
         child: Icon(
           Icons.pin_drop,
           color: ColorPalette.red,
-          size: location.size,
+          size: pin.size,
         ),
       );
     }
