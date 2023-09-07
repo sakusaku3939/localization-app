@@ -53,20 +53,65 @@ class PinSheet extends HookConsumerWidget {
                   controller: scrollController,
                   child: Column(
                     children: [
-                      Container(
-                        width: 32,
-                        height: 4,
-                        margin: const EdgeInsets.symmetric(vertical: 14),
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(4),
-                          ),
-                          color: ColorPalette.grey,
+                      _dragHandle(),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 16),
+                            const Text(
+                              "データセット",
+                              style: TextStyle(fontSize: 16),
+                            ),
+                            SizedBox(
+                              height: 180 + 16,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: 3,
+                                itemBuilder: (context, index) {
+                                  if (index == 0) {
+                                    return Container(
+                                      width: 180,
+                                      height: 180,
+                                      margin: const EdgeInsets.only(
+                                        top: 8,
+                                        right: 8,
+                                        bottom: 8,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: ColorPalette.lightGrey,
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(28),
+                                        ),
+                                        border: Border.all(
+                                          color: ColorPalette.grey,
+                                          width: 2,
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                  return Container(
+                                    width: 180,
+                                    height: 180,
+                                    margin: const EdgeInsets.only(
+                                      top: 8,
+                                      right: 8,
+                                      bottom: 8,
+                                    ),
+                                    decoration: const BoxDecoration(
+                                      color: ColorPalette.lightGrey,
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(28),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      Container(
-                        height: 120,
-                      )
                     ],
                   ),
                 ),
@@ -78,5 +123,19 @@ class PinSheet extends HookConsumerWidget {
     } else {
       return const SizedBox.shrink();
     }
+  }
+
+  Widget _dragHandle() {
+    return Container(
+      width: 32,
+      height: 4,
+      margin: const EdgeInsets.symmetric(vertical: 14),
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.all(
+          Radius.circular(4),
+        ),
+        color: ColorPalette.grey,
+      ),
+    );
   }
 }
