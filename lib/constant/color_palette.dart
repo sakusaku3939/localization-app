@@ -12,5 +12,6 @@ class ColorPalette {
   static const Color lightestGrey = Color(0xffFAFAFA);
   static const Color lightGrey = Color(0xffEEEEEE);
   static const Color grey = Color(0xff9E9E9E);
+  static const Color darkGrey = Color(0xff757575);
   static const Color red = Color(0xffD32F2F);
 }
