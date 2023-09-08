@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:localization/view_model/floor_map/floor_map_viewmodel.dart';
 import 'package:localization/view_model/pin_sheet/pin_sheet_state/pin_sheet_state.dart';
 
 final pinSheetProvider =
@@ -10,18 +11,18 @@ final pinSheetProvider =
 class PinSheetViewModel extends StateNotifier<PinSheetState> {
   final Ref ref;
   final controller = DraggableScrollableController();
-  final snaps = <double>[0, 0.12, 0.6];
+  final snaps = <double>[0, 0.12, 0.6, 0.95];
 
   PinSheetViewModel(this.ref)
       : super(const PinSheetState(
-    isShow: false,
-  ));
+          isShow: false,
+        ));
 
   bool get isSheetSizeMiddle =>
       controller.isAttached ? controller.size.round() <= snaps[1] : false;
 
   bool get isSheetSizeMax =>
-      controller.isAttached ? controller.size <= snaps[2] : false;
+      controller.isAttached ? controller.size <= snaps.last : false;
 
   void popSheet() {
     if (isSheetSizeMiddle) {
@@ -41,5 +42,24 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
 
   void showBottomSheet(bool isShow) {
     state = state.copyWith(isShow: isShow);
+  }
+
+  void onKeyboardFocus(bool hasFocus) async {
+    updatePin() => ref.read(floorMapProvider.notifier).update();
+    controller.addListener(updatePin);
+    if (hasFocus) {
+      await controller.animateTo(
+        snaps.last,
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.ease,
+      );
+    } else {
+      await controller.animateTo(
+        snaps[2],
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.ease,
+      );
+    }
+    controller.removeListener(updatePin);
   }
 }

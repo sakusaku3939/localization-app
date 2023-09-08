@@ -62,13 +62,17 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
         );
 
         // ピンの座標をマップ拡大に合わせて更新
-        if (state.isEditMode) {
-          _updateEditablePin();
-        } else {
-          _updatePins();
-        }
+        update();
       },
     );
+  }
+
+  void update() {
+    if (state.isEditMode) {
+      _updateEditablePin();
+    } else {
+      _updatePins();
+    }
   }
 
   void _updatePins() {
