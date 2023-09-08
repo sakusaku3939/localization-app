@@ -17,6 +17,8 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$PinSheetState {
   bool get isShow => throw _privateConstructorUsedError;
+  double get pinX => throw _privateConstructorUsedError;
+  double get pinY => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $PinSheetStateCopyWith<PinSheetState> get copyWith =>
@@ -29,7 +31,7 @@ abstract class $PinSheetStateCopyWith<$Res> {
           PinSheetState value, $Res Function(PinSheetState) then) =
       _$PinSheetStateCopyWithImpl<$Res, PinSheetState>;
   @useResult
-  $Res call({bool isShow});
+  $Res call({bool isShow, double pinX, double pinY});
 }
 
 /// @nodoc
@@ -46,12 +48,22 @@ class _$PinSheetStateCopyWithImpl<$Res, $Val extends PinSheetState>
   @override
   $Res call({
     Object? isShow = null,
+    Object? pinX = null,
+    Object? pinY = null,
   }) {
     return _then(_value.copyWith(
       isShow: null == isShow
           ? _value.isShow
           : isShow // ignore: cast_nullable_to_non_nullable
               as bool,
+      pinX: null == pinX
+          ? _value.pinX
+          : pinX // ignore: cast_nullable_to_non_nullable
+              as double,
+      pinY: null == pinY
+          ? _value.pinY
+          : pinY // ignore: cast_nullable_to_non_nullable
+              as double,
     ) as $Val);
   }
 }
@@ -64,7 +76,7 @@ abstract class _$$_PinSheetStateCopyWith<$Res>
       __$$_PinSheetStateCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({bool isShow});
+  $Res call({bool isShow, double pinX, double pinY});
 }
 
 /// @nodoc
@@ -79,12 +91,22 @@ class __$$_PinSheetStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? isShow = null,
+    Object? pinX = null,
+    Object? pinY = null,
   }) {
     return _then(_$_PinSheetState(
       isShow: null == isShow
           ? _value.isShow
           : isShow // ignore: cast_nullable_to_non_nullable
               as bool,
+      pinX: null == pinX
+          ? _value.pinX
+          : pinX // ignore: cast_nullable_to_non_nullable
+              as double,
+      pinY: null == pinY
+          ? _value.pinY
+          : pinY // ignore: cast_nullable_to_non_nullable
+              as double,
     ));
   }
 }
@@ -92,14 +114,19 @@ class __$$_PinSheetStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_PinSheetState implements _PinSheetState {
-  const _$_PinSheetState({required this.isShow});
+  const _$_PinSheetState(
+      {required this.isShow, required this.pinX, required this.pinY});
 
   @override
   final bool isShow;
+  @override
+  final double pinX;
+  @override
+  final double pinY;
 
   @override
   String toString() {
-    return 'PinSheetState(isShow: $isShow)';
+    return 'PinSheetState(isShow: $isShow, pinX: $pinX, pinY: $pinY)';
   }
 
   @override
@@ -107,11 +134,13 @@ class _$_PinSheetState implements _PinSheetState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_PinSheetState &&
-            (identical(other.isShow, isShow) || other.isShow == isShow));
+            (identical(other.isShow, isShow) || other.isShow == isShow) &&
+            (identical(other.pinX, pinX) || other.pinX == pinX) &&
+            (identical(other.pinY, pinY) || other.pinY == pinY));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, isShow);
+  int get hashCode => Object.hash(runtimeType, isShow, pinX, pinY);
 
   @JsonKey(ignore: true)
   @override
@@ -121,10 +150,17 @@ class _$_PinSheetState implements _PinSheetState {
 }
 
 abstract class _PinSheetState implements PinSheetState {
-  const factory _PinSheetState({required final bool isShow}) = _$_PinSheetState;
+  const factory _PinSheetState(
+      {required final bool isShow,
+      required final double pinX,
+      required final double pinY}) = _$_PinSheetState;
 
   @override
   bool get isShow;
+  @override
+  double get pinX;
+  @override
+  double get pinY;
   @override
   @JsonKey(ignore: true)
   _$$_PinSheetStateCopyWith<_$_PinSheetState> get copyWith =>

@@ -16,6 +16,8 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
   PinSheetViewModel(this.ref)
       : super(const PinSheetState(
           isShow: false,
+          pinX: 0,
+          pinY: 0,
         ));
 
   bool get isSheetSizeMiddle =>
@@ -40,8 +42,12 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
     }
   }
 
-  void showBottomSheet(bool isShow) {
-    state = state.copyWith(isShow: isShow);
+  void showBottomSheet(bool isShow, {double? pinX, double? pinY}) {
+    state = state.copyWith(
+      isShow: isShow,
+      pinX: pinX ?? state.pinX,
+      pinY: pinY ?? state.pinY,
+    );
   }
 
   void onKeyboardFocus(bool hasFocus) async {

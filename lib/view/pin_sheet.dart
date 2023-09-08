@@ -162,7 +162,8 @@ class PinSheet extends HookConsumerWidget {
   }
 
   Widget _coordinateInputFields(WidgetRef ref) {
-    textField(String label) => TextFormField(
+    textField(String label, double coordinate) => TextFormField(
+          controller: TextEditingController(text: coordinate.toString()),
           keyboardType: TextInputType.number,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           decoration: InputDecoration(
@@ -184,9 +185,9 @@ class PinSheet extends HookConsumerWidget {
         padding: const EdgeInsets.symmetric(vertical: 12),
         child: Row(
           children: [
-            Expanded(child: textField("X")),
+            Expanded(child: textField("X", ref.watch(pinSheetProvider).pinX)),
             const SizedBox(width: 8),
-            Expanded(child: textField("Y")),
+            Expanded(child: textField("Y", ref.watch(pinSheetProvider).pinY)),
           ],
         ),
       ),

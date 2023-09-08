@@ -6,5 +6,7 @@ part 'pin_sheet_state.freezed.dart';
 class PinSheetState with _$PinSheetState {
   const factory PinSheetState({
     required bool isShow,
+    required double pinX,
+    required double pinY,
   }) = _PinSheetState;
 }

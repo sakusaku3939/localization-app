@@ -182,7 +182,11 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
         state.photoController.position.dy - (y + adjust) + topMargin + 20,
       ),
     );
-    ref.read(pinSheetProvider.notifier).showBottomSheet(true);
+    ref.read(pinSheetProvider.notifier).showBottomSheet(
+          true,
+          pinX: pinX,
+          pinY: pinY,
+        );
   }
 
   void _updateEditablePin() {
