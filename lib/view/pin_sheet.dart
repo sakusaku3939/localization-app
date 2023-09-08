@@ -64,7 +64,7 @@ class PinSheet extends HookConsumerWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const SizedBox(height: 16),
+                              const SizedBox(height: 8),
                               const Text(
                                 "データセット",
                                 style: TextStyle(fontSize: 16),
@@ -76,6 +76,8 @@ class PinSheet extends HookConsumerWidget {
                                 style: TextStyle(fontSize: 16),
                               ),
                               _coordinateInputFields(ref),
+                              const SizedBox(height: 16),
+                              _addButton(),
                             ],
                           ),
                         ),
@@ -187,6 +189,29 @@ class PinSheet extends HookConsumerWidget {
             Expanded(child: textField("Y")),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _addButton() {
+    return SizedBox(
+      width: double.infinity,
+      child: FilledButton.tonalIcon(
+        icon: const Icon(
+          Icons.add,
+          color: Colors.white,
+          size: 16,
+        ),
+        label: const Text(
+          "データセットを追加",
+          style: TextStyle(color: Colors.white),
+        ),
+        style: ButtonStyle(
+          padding: MaterialStateProperty.all(
+            const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
+          ),
+        ),
+        onPressed: () {},
       ),
     );
   }
