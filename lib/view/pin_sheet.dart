@@ -162,8 +162,10 @@ class PinSheet extends HookConsumerWidget {
   }
 
   Widget _coordinateInputFields(WidgetRef ref) {
-    textField(String label, double coordinate) => TextFormField(
-          controller: TextEditingController(text: coordinate.toString()),
+    textField(String label, int coordinate) => TextFormField(
+          controller: TextEditingController(
+            text: coordinate.toString(),
+          ),
           keyboardType: TextInputType.number,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           decoration: InputDecoration(

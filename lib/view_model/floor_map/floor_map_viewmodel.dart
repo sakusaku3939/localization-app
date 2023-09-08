@@ -80,8 +80,8 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
     final diffScale = photoViewState.scale / photoViewState.defaultImageScale;
     final pinSize = defaultPinSize * (diffScale * 2).ceil() / 2;
 
-    const pinX = [4000.0, 5000.0];
-    const pinY = [5400.0, 5200.0];
+    const pinX = [4000, 5000];
+    const pinY = [5400, 5200];
     final locations = <LocationPin>[];
 
     for (int i = 0; i < 2; i++) {
@@ -105,8 +105,8 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
   }
 
   (double, double) _calcPinCoordinate({
-    required double pinX,
-    required double pinY,
+    required int pinX,
+    required int pinY,
     required double pinSize,
   }) {
     // マップ画像上のピンの座標を計算
@@ -139,7 +139,7 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
     return pinSize;
   }
 
-  (double, double) convertToMapPosition({
+  (int, int) convertToMapPosition({
     required double pinLeft,
     required double pinTop,
   }) {
@@ -149,8 +149,8 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
     final mapPinTop = pinTop - photoViewState.dy + overHeight;
 
     // ピンの絶対座標を計算
-    final pinX = mapPinLeft / photoViewState.scale;
-    final pinY = mapPinTop / photoViewState.scale;
+    final pinX = (mapPinLeft / photoViewState.scale).round();
+    final pinY = (mapPinTop / photoViewState.scale).round();
 
     return (pinX, pinY);
   }

@@ -8,8 +8,8 @@ part 'location_pin.g.dart';
 class LocationPin with _$LocationPin {
   const factory LocationPin({
     required int id,
-    required double x,
-    required double y,
+    required int x,
+    required int y,
     required double pinLeft,
     required double pinTop,
     required double size,

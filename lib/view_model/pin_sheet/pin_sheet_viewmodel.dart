@@ -42,7 +42,7 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
     }
   }
 
-  void showBottomSheet(bool isShow, {double? pinX, double? pinY}) {
+  void showBottomSheet(bool isShow, {int? pinX, int? pinY}) {
     state = state.copyWith(
       isShow: isShow,
       pinX: pinX ?? state.pinX,

@@ -21,8 +21,8 @@ LocationPin _$LocationPinFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$LocationPin {
   int get id => throw _privateConstructorUsedError;
-  double get x => throw _privateConstructorUsedError;
-  double get y => throw _privateConstructorUsedError;
+  int get x => throw _privateConstructorUsedError;
+  int get y => throw _privateConstructorUsedError;
   double get pinLeft => throw _privateConstructorUsedError;
   double get pinTop => throw _privateConstructorUsedError;
   double get size => throw _privateConstructorUsedError;
@@ -39,8 +39,7 @@ abstract class $LocationPinCopyWith<$Res> {
           LocationPin value, $Res Function(LocationPin) then) =
       _$LocationPinCopyWithImpl<$Res, LocationPin>;
   @useResult
-  $Res call(
-      {int id, double x, double y, double pinLeft, double pinTop, double size});
+  $Res call({int id, int x, int y, double pinLeft, double pinTop, double size});
 }
 
 /// @nodoc
@@ -71,11 +70,11 @@ class _$LocationPinCopyWithImpl<$Res, $Val extends LocationPin>
       x: null == x
           ? _value.x
           : x // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       y: null == y
           ? _value.y
           : y // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       pinLeft: null == pinLeft
           ? _value.pinLeft
           : pinLeft // ignore: cast_nullable_to_non_nullable
@@ -100,8 +99,7 @@ abstract class _$$_LocationPinCopyWith<$Res>
       __$$_LocationPinCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {int id, double x, double y, double pinLeft, double pinTop, double size});
+  $Res call({int id, int x, int y, double pinLeft, double pinTop, double size});
 }
 
 /// @nodoc
@@ -130,11 +128,11 @@ class __$$_LocationPinCopyWithImpl<$Res>
       x: null == x
           ? _value.x
           : x // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       y: null == y
           ? _value.y
           : y // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       pinLeft: null == pinLeft
           ? _value.pinLeft
           : pinLeft // ignore: cast_nullable_to_non_nullable
@@ -168,9 +166,9 @@ class _$_LocationPin implements _LocationPin {
   @override
   final int id;
   @override
-  final double x;
+  final int x;
   @override
-  final double y;
+  final int y;
   @override
   final double pinLeft;
   @override
@@ -217,8 +215,8 @@ class _$_LocationPin implements _LocationPin {
 abstract class _LocationPin implements LocationPin {
   const factory _LocationPin(
       {required final int id,
-      required final double x,
-      required final double y,
+      required final int x,
+      required final int y,
       required final double pinLeft,
       required final double pinTop,
       required final double size}) = _$_LocationPin;
@@ -229,9 +227,9 @@ abstract class _LocationPin implements LocationPin {
   @override
   int get id;
   @override
-  double get x;
+  int get x;
   @override
-  double get y;
+  int get y;
   @override
   double get pinLeft;
   @override
