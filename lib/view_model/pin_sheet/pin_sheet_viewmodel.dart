@@ -67,5 +67,6 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
       );
     }
     controller.removeListener(updatePin);
+    updatePin();
   }
 }
