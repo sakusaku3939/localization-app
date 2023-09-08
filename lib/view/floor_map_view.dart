@@ -78,7 +78,10 @@ class LocationPins extends HookConsumerWidget {
               top: pin.pinTop,
               child: GestureDetector(
                 onTap: () {
-                  print("tapped pin");
+                  ref.read(pinSheetProvider.notifier).showBottomSheet(
+                        true,
+                        pin: pin,
+                      );
                 },
                 child: Icon(
                   Icons.location_pin,

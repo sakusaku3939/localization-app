@@ -170,22 +170,9 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
     );
     _updateEditablePin();
 
-    // シートの位置に合わせてマップを移動
-    final sheetNotifier = ref.read(pinSheetProvider.notifier);
-    final topMargin = sheetNotifier.isSheetSizeMiddle
-        ? screenHeight * (1 - sheetNotifier.snaps[1]) / 2
-        : screenHeight * (1 - sheetNotifier.snaps[2]) / 2;
-
-    state.photoController.updateMultiple(
-      position: Offset(
-        state.photoController.position.dx,
-        state.photoController.position.dy - (y + adjust) + topMargin + 20,
-      ),
-    );
     ref.read(pinSheetProvider.notifier).showBottomSheet(
           true,
-          pinX: pinX,
-          pinY: pinY,
+          pin: state.editablePin,
         );
   }
 

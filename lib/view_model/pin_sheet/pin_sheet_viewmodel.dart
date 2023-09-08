@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:localization/view_model/floor_map/floor_map_viewmodel.dart';
+import 'package:localization/view_model/floor_map/location_pin/location_pin.dart';
 import 'package:localization/view_model/pin_sheet/pin_sheet_state/pin_sheet_state.dart';
 
 final pinSheetProvider =
@@ -42,7 +43,32 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
     }
   }
 
-  void showBottomSheet(bool isShow, {int? pinX, int? pinY}) {
+  void showBottomSheet(
+    bool isShow, {
+    LocationPin? pin,
+  }) {
+    final pinTop = pin?.pinTop;
+    final pinX = pin?.x;
+    final pinY = pin?.y;
+
+    if (isShow) {
+      // シートの位置に合わせてマップを移動
+      final floorMapNotifier = ref.read(floorMapProvider.notifier);
+      final topMargin = isSheetSizeMiddle
+          ? floorMapNotifier.screenHeight * (1 - snaps[1]) / 2
+          : floorMapNotifier.screenHeight * (1 - snaps[2]) / 2;
+
+      floorMapNotifier.state.photoController.updateMultiple(
+        position: Offset(
+          floorMapNotifier.state.photoController.position.dx,
+          floorMapNotifier.state.photoController.position.dy -
+              (pinTop ?? 0) +
+              topMargin +
+              20,
+        ),
+      );
+    }
+
     state = state.copyWith(
       isShow: isShow,
       pinX: pinX ?? state.pinX,
