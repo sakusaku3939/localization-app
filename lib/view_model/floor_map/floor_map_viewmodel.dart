@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:localization/view_model/floor_map/pin/pin.dart';
 import 'package:localization/view_model/pin_sheet/pin_sheet_viewmodel.dart';
 import 'package:localization/view_model/floor_map/floor_map_state/floor_map_state.dart';
 import 'package:localization/view_model/floor_map/location_pin/location_pin.dart';
@@ -26,6 +27,10 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
   );
   double screenWidth = 0;
   double screenHeight = 0;
+  List<Pin> pins = [
+    const Pin(id: 0, x: 4000, y: 5400),
+    const Pin(id: 0, x: 5000, y: 5200),
+  ];
 
   FloorMapViewModel(this.ref)
       : super(FloorMapState(
@@ -80,21 +85,19 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
     final diffScale = photoViewState.scale / photoViewState.defaultImageScale;
     final pinSize = defaultPinSize * (diffScale * 2).ceil() / 2;
 
-    const pinX = [4000, 5000];
-    const pinY = [5400, 5200];
     final locations = <LocationPin>[];
 
-    for (int i = 0; i < 2; i++) {
+    for (var pin in pins) {
       final (pinLeft, pinTop) = _calcPinCoordinate(
-        pinX: pinX[i],
-        pinY: pinY[i],
+        pinX: pin.x,
+        pinY: pin.y,
         pinSize: pinSize,
       );
       locations.add(
         LocationPin(
-          id: 0,
-          x: pinX[i],
-          y: pinY[i],
+          id: pin.id,
+          x: pin.x,
+          y: pin.y,
           pinLeft: pinLeft,
           pinTop: pinTop,
           size: pinSize,
