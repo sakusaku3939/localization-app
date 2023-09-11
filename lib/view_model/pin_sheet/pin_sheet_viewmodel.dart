@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:localization/view_model/floor_map/floor_map_viewmodel.dart';
 import 'package:localization/view_model/floor_map/location_pin/location_pin.dart';
+import 'package:localization/view_model/floor_map/pin/pin.dart';
 import 'package:localization/view_model/pin_sheet/pin_sheet_state/pin_sheet_state.dart';
 
 final pinSheetProvider =
@@ -94,5 +95,16 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
     }
     controller.removeListener(updatePin);
     updatePin();
+  }
+
+  void addDataset() async {
+    final floorMapNotifier = ref.read(floorMapProvider.notifier);
+    floorMapNotifier.pins.add(Pin(id: 0, x: state.pinX, y: state.pinY));
+    floorMapNotifier.setEditMode(false);
+    await controller.animateTo(
+      0,
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.ease,
+    );
   }
 }

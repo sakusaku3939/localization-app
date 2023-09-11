@@ -16,6 +16,10 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
   final Ref ref;
   final image = Image.asset("assets/images/shonandai_floor_map.png").image;
   final defaultPinSize = 16.0;
+  final List<Pin> pins = [
+    const Pin(id: 0, x: 4000, y: 5400),
+    const Pin(id: 0, x: 5000, y: 5200),
+  ];
 
   PhotoViewState photoViewState = const PhotoViewState(
     dx: 0,
@@ -27,10 +31,6 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
   );
   double screenWidth = 0;
   double screenHeight = 0;
-  List<Pin> pins = [
-    const Pin(id: 0, x: 4000, y: 5400),
-    const Pin(id: 0, x: 5000, y: 5200),
-  ];
 
   FloorMapViewModel(this.ref)
       : super(FloorMapState(

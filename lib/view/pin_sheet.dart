@@ -77,7 +77,7 @@ class PinSheet extends HookConsumerWidget {
                               ),
                               _coordinateInputFields(ref),
                               const SizedBox(height: 16),
-                              _addButton(),
+                              _addButton(ref),
                             ],
                           ),
                         ),
@@ -196,7 +196,7 @@ class PinSheet extends HookConsumerWidget {
     );
   }
 
-  Widget _addButton() {
+  Widget _addButton(WidgetRef ref) {
     return SizedBox(
       width: double.infinity,
       child: FilledButton.tonalIcon(
@@ -214,7 +214,7 @@ class PinSheet extends HookConsumerWidget {
             const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
           ),
         ),
-        onPressed: () {},
+        onPressed: ref.read(pinSheetProvider.notifier).addDataset,
       ),
     );
   }
