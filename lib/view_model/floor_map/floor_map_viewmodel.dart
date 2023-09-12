@@ -16,11 +16,11 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
   final Ref ref;
   final image = Image.asset("assets/images/shonandai_floor_map.png").image;
   final defaultPinSize = 16.0;
-  final List<Pin> pins = [
-    const Pin(id: 0, x: 4000, y: 5400),
-    const Pin(id: 0, x: 5000, y: 5200),
-  ];
 
+  List<Pin> pins = [
+    const Pin(id: 0, x: 4000, y: 5400),
+    const Pin(id: 1, x: 5000, y: 5200),
+  ];
   PhotoViewState photoViewState = const PhotoViewState(
     dx: 0,
     dy: 0,
@@ -45,6 +45,7 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
           ),
           photoController: PhotoViewController(),
           isEditMode: false,
+          isAddMode: false,
         )) {
     _init();
   }
@@ -73,7 +74,7 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
   }
 
   void update() {
-    if (state.isEditMode) {
+    if (state.isAddMode) {
       _updateEditablePin();
     } else {
       _updatePins();
@@ -215,6 +216,10 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
 
   void setEditMode(bool mode) {
     state = state.copyWith(isEditMode: mode);
+  }
+
+  void setAddMode(bool mode) {
+    state = state.copyWith(isAddMode: mode, isEditMode: mode);
     resetEditablePin();
     if (!mode) {
       _updatePins();

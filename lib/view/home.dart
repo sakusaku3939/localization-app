@@ -30,12 +30,12 @@ class Home extends HookConsumerWidget {
               onPressed: () {
                 ref
                     .read(floorMapProvider.notifier)
-                    .setEditMode(!ref.read(floorMapProvider).isEditMode);
+                    .setAddMode(!ref.read(floorMapProvider).isAddMode);
               },
               child: Consumer(
                 builder: (context, ref, _) {
                   return Icon(
-                    ref.watch(floorMapProvider).isEditMode
+                    ref.watch(floorMapProvider).isAddMode
                         ? Icons.close
                         : Icons.edit,
                   );

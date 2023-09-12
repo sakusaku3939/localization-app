@@ -11,5 +11,6 @@ class FloorMapState with _$FloorMapState {
     required LocationPin editablePin,
     required PhotoViewController photoController,
     required bool isEditMode,
+    required bool isAddMode,
   }) = _FloorMapState;
 }

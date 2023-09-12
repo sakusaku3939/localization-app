@@ -98,9 +98,10 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
   }
 
   void addDataset() async {
+    const id = 3;
     final floorMapNotifier = ref.read(floorMapProvider.notifier);
-    floorMapNotifier.pins.add(Pin(id: 0, x: state.pinX, y: state.pinY));
-    floorMapNotifier.setEditMode(false);
+    floorMapNotifier.pins.add(Pin(id: id, x: state.pinX, y: state.pinY));
+    floorMapNotifier.setAddMode(false);
     await controller.animateTo(
       0,
       duration: const Duration(milliseconds: 200),

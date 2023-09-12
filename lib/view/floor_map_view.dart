@@ -22,7 +22,7 @@ class FloorMapView extends HookConsumerWidget {
         return false;
       },
       child: GestureDetector(
-        onTapUp: (tapDetails) => onTapInEditMode(ref, tapDetails),
+        onTapUp: (tapDetails) => onTapInAddMode(ref, tapDetails),
         child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
             floorMapNotifier.screenWidth = constraints.maxWidth;
@@ -53,8 +53,8 @@ class FloorMapView extends HookConsumerWidget {
     );
   }
 
-  void onTapInEditMode(WidgetRef ref, TapUpDetails tapDetails) {
-    if (!ref.read(floorMapProvider).isEditMode) {
+  void onTapInAddMode(WidgetRef ref, TapUpDetails tapDetails) {
+    if (!ref.read(floorMapProvider).isAddMode) {
       return;
     }
     ref.read(floorMapProvider.notifier).addEditablePin(
@@ -69,7 +69,7 @@ class LocationPins extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (!ref.watch(floorMapProvider).isEditMode) {
+    if (!ref.watch(floorMapProvider).isAddMode) {
       return Stack(
         children: [
           for (var pin in ref.watch(floorMapProvider).locationPins)
@@ -78,6 +78,7 @@ class LocationPins extends HookConsumerWidget {
               top: pin.pinTop,
               child: GestureDetector(
                 onTap: () {
+                  ref.watch(floorMapProvider.notifier).setEditMode(true);
                   ref.read(pinSheetProvider.notifier).showBottomSheet(
                         true,
                         pin: pin,

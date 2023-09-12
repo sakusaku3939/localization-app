@@ -20,6 +20,7 @@ mixin _$FloorMapState {
   LocationPin get editablePin => throw _privateConstructorUsedError;
   PhotoViewController get photoController => throw _privateConstructorUsedError;
   bool get isEditMode => throw _privateConstructorUsedError;
+  bool get isAddMode => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $FloorMapStateCopyWith<FloorMapState> get copyWith =>
@@ -36,7 +37,8 @@ abstract class $FloorMapStateCopyWith<$Res> {
       {List<LocationPin> locationPins,
       LocationPin editablePin,
       PhotoViewController photoController,
-      bool isEditMode});
+      bool isEditMode,
+      bool isAddMode});
 
   $LocationPinCopyWith<$Res> get editablePin;
 }
@@ -58,6 +60,7 @@ class _$FloorMapStateCopyWithImpl<$Res, $Val extends FloorMapState>
     Object? editablePin = null,
     Object? photoController = null,
     Object? isEditMode = null,
+    Object? isAddMode = null,
   }) {
     return _then(_value.copyWith(
       locationPins: null == locationPins
@@ -75,6 +78,10 @@ class _$FloorMapStateCopyWithImpl<$Res, $Val extends FloorMapState>
       isEditMode: null == isEditMode
           ? _value.isEditMode
           : isEditMode // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isAddMode: null == isAddMode
+          ? _value.isAddMode
+          : isAddMode // ignore: cast_nullable_to_non_nullable
               as bool,
     ) as $Val);
   }
@@ -100,7 +107,8 @@ abstract class _$$_FloorMapStateCopyWith<$Res>
       {List<LocationPin> locationPins,
       LocationPin editablePin,
       PhotoViewController photoController,
-      bool isEditMode});
+      bool isEditMode,
+      bool isAddMode});
 
   @override
   $LocationPinCopyWith<$Res> get editablePin;
@@ -121,6 +129,7 @@ class __$$_FloorMapStateCopyWithImpl<$Res>
     Object? editablePin = null,
     Object? photoController = null,
     Object? isEditMode = null,
+    Object? isAddMode = null,
   }) {
     return _then(_$_FloorMapState(
       locationPins: null == locationPins
@@ -139,6 +148,10 @@ class __$$_FloorMapStateCopyWithImpl<$Res>
           ? _value.isEditMode
           : isEditMode // ignore: cast_nullable_to_non_nullable
               as bool,
+      isAddMode: null == isAddMode
+          ? _value.isAddMode
+          : isAddMode // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -150,7 +163,8 @@ class _$_FloorMapState implements _FloorMapState {
       {required final List<LocationPin> locationPins,
       required this.editablePin,
       required this.photoController,
-      required this.isEditMode})
+      required this.isEditMode,
+      required this.isAddMode})
       : _locationPins = locationPins;
 
   final List<LocationPin> _locationPins;
@@ -167,10 +181,12 @@ class _$_FloorMapState implements _FloorMapState {
   final PhotoViewController photoController;
   @override
   final bool isEditMode;
+  @override
+  final bool isAddMode;
 
   @override
   String toString() {
-    return 'FloorMapState(locationPins: $locationPins, editablePin: $editablePin, photoController: $photoController, isEditMode: $isEditMode)';
+    return 'FloorMapState(locationPins: $locationPins, editablePin: $editablePin, photoController: $photoController, isEditMode: $isEditMode, isAddMode: $isAddMode)';
   }
 
   @override
@@ -185,7 +201,9 @@ class _$_FloorMapState implements _FloorMapState {
             (identical(other.photoController, photoController) ||
                 other.photoController == photoController) &&
             (identical(other.isEditMode, isEditMode) ||
-                other.isEditMode == isEditMode));
+                other.isEditMode == isEditMode) &&
+            (identical(other.isAddMode, isAddMode) ||
+                other.isAddMode == isAddMode));
   }
 
   @override
@@ -194,7 +212,8 @@ class _$_FloorMapState implements _FloorMapState {
       const DeepCollectionEquality().hash(_locationPins),
       editablePin,
       photoController,
-      isEditMode);
+      isEditMode,
+      isAddMode);
 
   @JsonKey(ignore: true)
   @override
@@ -208,7 +227,8 @@ abstract class _FloorMapState implements FloorMapState {
       {required final List<LocationPin> locationPins,
       required final LocationPin editablePin,
       required final PhotoViewController photoController,
-      required final bool isEditMode}) = _$_FloorMapState;
+      required final bool isEditMode,
+      required final bool isAddMode}) = _$_FloorMapState;
 
   @override
   List<LocationPin> get locationPins;
@@ -218,6 +238,8 @@ abstract class _FloorMapState implements FloorMapState {
   PhotoViewController get photoController;
   @override
   bool get isEditMode;
+  @override
+  bool get isAddMode;
   @override
   @JsonKey(ignore: true)
   _$$_FloorMapStateCopyWith<_$_FloorMapState> get copyWith =>
