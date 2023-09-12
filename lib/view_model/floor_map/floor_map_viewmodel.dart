@@ -36,7 +36,7 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
       : super(FloorMapState(
           locationPins: [],
           editablePin: const LocationPin(
-            id: 0,
+            id: -1,
             x: 0,
             y: 0,
             pinLeft: 0,
@@ -162,7 +162,7 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
   void addEditablePin({int? id, required int pinX, required int pinY}) {
     state = state.copyWith(
       editablePin: state.editablePin.copyWith(
-        id: id ?? 0,
+        id: id ?? state.editablePin.id,
         x: pinX,
         y: pinY,
       ),
@@ -198,7 +198,7 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
   void resetEditablePin() {
     state = state.copyWith(
       editablePin: const LocationPin(
-        id: 0,
+        id: -1,
         x: 0,
         y: 0,
         pinLeft: 0,

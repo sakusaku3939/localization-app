@@ -18,7 +18,7 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
   PinSheetViewModel(this.ref)
       : super(const PinSheetState(
           isShow: false,
-          id: 0,
+          id: -1,
           pinX: 0,
           pinY: 0,
         ));
@@ -74,7 +74,7 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
     floorMapNotifier.setEditMode(isShow);
     state = state.copyWith(
       isShow: isShow,
-      id: pin?.id ?? 0,
+      id: pin?.id ?? -1,
       pinX: pinX ?? state.pinX,
       pinY: pinY ?? state.pinY,
     );
