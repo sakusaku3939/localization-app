@@ -22,7 +22,7 @@ class FloorMapView extends HookConsumerWidget {
         return false;
       },
       child: GestureDetector(
-        onTapUp: (tapDetails) => onTapInAddMode(ref, tapDetails),
+        onTapUp: (tapDetails) => onTapInEditMode(ref, tapDetails),
         child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
             floorMapNotifier.screenWidth = constraints.maxWidth;
@@ -53,14 +53,18 @@ class FloorMapView extends HookConsumerWidget {
     );
   }
 
-  void onTapInAddMode(WidgetRef ref, TapUpDetails tapDetails) {
-    if (!ref.read(floorMapProvider).isAddMode) {
+  void onTapInEditMode(WidgetRef ref, TapUpDetails tapDetails) {
+    if (!ref.read(floorMapProvider).isEditMode) {
       return;
     }
-    ref.read(floorMapProvider.notifier).addEditablePin(
-          x: tapDetails.localPosition.dx,
-          y: tapDetails.localPosition.dy,
-        );
+    // マップ上にピンを配置
+    final floorMapNotifier = ref.read(floorMapProvider.notifier);
+    final sheetAdjust = floorMapNotifier.calcPinSize() / 10;
+    final (pinX, pinY) = floorMapNotifier.convertToMapPosition(
+      pinLeft: tapDetails.localPosition.dx,
+      pinTop: tapDetails.localPosition.dy + sheetAdjust,
+    );
+    floorMapNotifier.addEditablePin(pinX: pinX, pinY: pinY);
   }
 }
 
@@ -69,20 +73,33 @@ class LocationPins extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (!ref.watch(floorMapProvider).isAddMode) {
+    final floorMap = ref.watch(floorMapProvider);
+    if (floorMap.isEditMode || floorMap.isAddMode) {
+      return Positioned(
+        left: floorMap.editablePin.pinLeft,
+        top: floorMap.editablePin.pinTop,
+        child: Icon(
+          Icons.pin_drop,
+          color: ColorPalette.red,
+          size: floorMap.editablePin.size,
+        ),
+      );
+    } else {
       return Stack(
         children: [
-          for (var pin in ref.watch(floorMapProvider).locationPins)
+          for (var pin in floorMap.locationPins)
             Positioned(
               left: pin.pinLeft,
               top: pin.pinTop,
               child: GestureDetector(
                 onTap: () {
-                  ref.watch(floorMapProvider.notifier).setEditMode(true);
-                  ref.read(pinSheetProvider.notifier).showBottomSheet(
-                        true,
-                        pin: pin,
-                      );
+                  final floorMapNotifier = ref.read(floorMapProvider.notifier);
+                  floorMapNotifier.setEditMode(true);
+                  floorMapNotifier.addEditablePin(
+                    id: pin.id,
+                    pinX: pin.x,
+                    pinY: pin.y,
+                  );
                 },
                 child: Icon(
                   Icons.location_pin,
@@ -92,17 +109,6 @@ class LocationPins extends HookConsumerWidget {
               ),
             ),
         ],
-      );
-    } else {
-      final pin = ref.watch(floorMapProvider).editablePin;
-      return Positioned(
-        left: pin.pinLeft,
-        top: pin.pinTop,
-        child: Icon(
-          Icons.pin_drop,
-          color: ColorPalette.red,
-          size: pin.size,
-        ),
       );
     }
   }

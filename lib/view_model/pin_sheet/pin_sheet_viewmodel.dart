@@ -18,6 +18,7 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
   PinSheetViewModel(this.ref)
       : super(const PinSheetState(
           isShow: false,
+          id: 0,
           pinX: 0,
           pinY: 0,
         ));
@@ -48,13 +49,13 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
     bool isShow, {
     LocationPin? pin,
   }) {
+    final floorMapNotifier = ref.read(floorMapProvider.notifier);
     final pinTop = pin?.pinTop;
     final pinX = pin?.x;
     final pinY = pin?.y;
 
     if (isShow) {
       // シートの位置に合わせてマップを移動
-      final floorMapNotifier = ref.read(floorMapProvider.notifier);
       final topMargin = isSheetSizeMiddle
           ? floorMapNotifier.screenHeight * (1 - snaps[1]) / 2
           : floorMapNotifier.screenHeight * (1 - snaps[2]) / 2;
@@ -70,8 +71,10 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
       );
     }
 
+    floorMapNotifier.setEditMode(isShow);
     state = state.copyWith(
       isShow: isShow,
+      id: pin?.id ?? 0,
       pinX: pinX ?? state.pinX,
       pinY: pinY ?? state.pinY,
     );
@@ -107,5 +110,19 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
       duration: const Duration(milliseconds: 200),
       curve: Curves.ease,
     );
+  }
+
+  void updateDataset() async {
+    final floorMapNotifier = ref.read(floorMapProvider.notifier);
+    floorMapNotifier.updatePin(id: state.id, pinX: state.pinX, pinY: state.pinY);
+    await controller.animateTo(
+      0,
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.ease,
+    );
+  }
+
+  void deleteDataset() {
+
   }
 }

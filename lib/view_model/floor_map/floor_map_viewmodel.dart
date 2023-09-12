@@ -74,7 +74,7 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
   }
 
   void update() {
-    if (state.isAddMode) {
+    if (state.isEditMode) {
       _updateEditablePin();
     } else {
       _updatePins();
@@ -84,7 +84,7 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
   void _updatePins() {
     // 拡大率から0.5刻みにピンの大きさを調整
     final diffScale = photoViewState.scale / photoViewState.defaultImageScale;
-    final pinSize = defaultPinSize * (diffScale * 2).ceil() / 2;
+    final pinSize = defaultPinSize * (diffScale * 2).round() / 2;
 
     final locations = <LocationPin>[];
 
@@ -137,7 +137,7 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
     return (overWidth, overHeight);
   }
 
-  double _calcPinSize() {
+  double calcPinSize() {
     final diffScale = photoViewState.scale / photoViewState.defaultImageScale;
     final pinSize = defaultPinSize * diffScale;
     return pinSize;
@@ -159,21 +159,15 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
     return (pinX, pinY);
   }
 
-  void addEditablePin({required double x, required double y}) {
-    // マップ上にピンを配置
-    final adjust = _calcPinSize() / 10;
-    final (pinX, pinY) = convertToMapPosition(
-      pinLeft: x,
-      pinTop: y + adjust,
-    );
+  void addEditablePin({int? id, required int pinX, required int pinY}) {
     state = state.copyWith(
       editablePin: state.editablePin.copyWith(
+        id: id ?? 0,
         x: pinX,
         y: pinY,
       ),
     );
     _updateEditablePin();
-
     ref.read(pinSheetProvider.notifier).showBottomSheet(
           true,
           pin: state.editablePin,
@@ -185,7 +179,7 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
     if (state.editablePin.x == 0 && state.editablePin.y == 0) {
       return;
     }
-    final pinSize = _calcPinSize();
+    final pinSize = calcPinSize();
     final (pinLeft, pinTop) = _calcPinCoordinate(
       pinX: state.editablePin.x,
       pinY: state.editablePin.y,
@@ -216,14 +210,22 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
 
   void setEditMode(bool mode) {
     state = state.copyWith(isEditMode: mode);
+    update();
   }
 
   void setAddMode(bool mode) {
     state = state.copyWith(isAddMode: mode, isEditMode: mode);
     resetEditablePin();
-    if (!mode) {
-      _updatePins();
-    }
+    update();
+  }
+
+  void updatePin({required int id, required int pinX, required int pinY}) {
+    pins = pins
+        .map(
+          (e) => e.id == id ? e.copyWith(x: pinX, y: pinY) : e,
+    )
+        .toList();
+    update();
   }
 
   void resolveImageProvider(BuildContext context) {

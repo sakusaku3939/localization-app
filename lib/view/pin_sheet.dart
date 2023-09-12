@@ -77,7 +77,9 @@ class PinSheet extends HookConsumerWidget {
                               ),
                               _coordinateInputFields(ref),
                               const SizedBox(height: 16),
-                              _addButton(ref),
+                              ref.read(floorMapProvider).isAddMode
+                                  ? _addButton(ref)
+                                  : _updateButtons(ref),
                             ],
                           ),
                         ),
@@ -216,6 +218,47 @@ class PinSheet extends HookConsumerWidget {
         ),
         onPressed: ref.read(pinSheetProvider.notifier).addDataset,
       ),
+    );
+  }
+
+  Widget _updateButtons(WidgetRef ref) {
+    return Row(
+      children: [
+        IconButton(
+          icon: const Icon(
+            Icons.delete_outline,
+            color: Colors.white,
+            size: 16,
+          ),
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(ColorPalette.primary),
+            padding: MaterialStateProperty.all(
+              const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
+            ),
+          ),
+          onPressed: ref.read(pinSheetProvider.notifier).deleteDataset,
+        ),
+        const SizedBox(width: 4),
+        Expanded(
+          child: FilledButton.tonalIcon(
+            icon: const Icon(
+              Icons.update,
+              color: Colors.white,
+              size: 16,
+            ),
+            label: const Text(
+              "データセットを更新",
+              style: TextStyle(color: Colors.white),
+            ),
+            style: ButtonStyle(
+              padding: MaterialStateProperty.all(
+                const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
+              ),
+            ),
+            onPressed: ref.read(pinSheetProvider.notifier).updateDataset,
+          ),
+        ),
+      ],
     );
   }
 }
