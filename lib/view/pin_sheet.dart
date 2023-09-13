@@ -164,12 +164,20 @@ class PinSheet extends HookConsumerWidget {
   }
 
   Widget _coordinateInputFields(WidgetRef ref) {
+    final sheetNotifier = ref.read(pinSheetProvider.notifier);
     textField(String label, int coordinate) => TextFormField(
-          controller: TextEditingController(
-            text: coordinate.toString(),
+          controller: TextEditingController.fromValue(
+            TextEditingValue(
+              text: coordinate.toString(),
+              selection: TextSelection.collapsed(
+                offset: coordinate.toString().length,
+              ),
+            ),
           ),
           keyboardType: TextInputType.number,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          onChanged: (String value) =>
+              sheetNotifier.onInputFieldsChanged(label, value),
           decoration: InputDecoration(
             labelText: label,
             border: OutlineInputBorder(
@@ -184,7 +192,7 @@ class PinSheet extends HookConsumerWidget {
           ),
         );
     return Focus(
-      onFocusChange: ref.read(pinSheetProvider.notifier).onKeyboardFocus,
+      onFocusChange: sheetNotifier.onKeyboardFocus,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12),
         child: Row(
@@ -255,7 +263,8 @@ class PinSheet extends HookConsumerWidget {
                 const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
               ),
             ),
-            onPressed: ref.read(pinSheetProvider.notifier).updateDataset,
+            onPressed: () =>
+                ref.read(pinSheetProvider.notifier).updateDataset(ref.context),
           ),
         ),
       ],

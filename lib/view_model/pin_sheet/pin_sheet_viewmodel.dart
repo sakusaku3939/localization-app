@@ -15,6 +15,9 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
   final controller = DraggableScrollableController();
   final snaps = <double>[0, 0.12, 0.6, 0.95];
 
+  int? textFieldPinX;
+  int? textFieldPinY;
+
   PinSheetViewModel(this.ref)
       : super(const PinSheetState(
           isShow: false,
@@ -29,13 +32,18 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
   bool get isSheetSizeMax =>
       controller.isAttached ? controller.size <= snaps.last : false;
 
+  Future<void> closeSheet() async {
+    await controller.animateTo(
+      0.04,
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.ease,
+    );
+    showBottomSheet(false);
+  }
+
   void popSheet() {
     if (isSheetSizeMiddle) {
-      controller.animateTo(
-        0,
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.ease,
-      );
+      closeSheet();
     } else if (isSheetSizeMax) {
       controller.animateTo(
         snaps[1],
@@ -80,7 +88,17 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
     );
   }
 
+  void onInputFieldsChanged(String label, String value) {
+    switch (label) {
+      case "X":
+        textFieldPinX = int.parse(value);
+      case "Y":
+        textFieldPinY = int.parse(value);
+    }
+  }
+
   void onKeyboardFocus(bool hasFocus) async {
+    // キーボードに合わせてシートの高さを調節する
     updatePin() => ref.read(floorMapProvider.notifier).update();
     controller.addListener(updatePin);
     if (hasFocus) {
@@ -90,6 +108,12 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
         curve: Curves.ease,
       );
     } else {
+      // ピンの位置を入力フィールドの値に合わせて更新する
+      final floorMapNotifier = ref.read(floorMapProvider.notifier);
+      floorMapNotifier.addEditablePin(
+        pinX: textFieldPinX ?? floorMapNotifier.state.editablePin.x,
+        pinY: textFieldPinY ?? floorMapNotifier.state.editablePin.y,
+      );
       await controller.animateTo(
         snaps[2],
         duration: const Duration(milliseconds: 200),
@@ -103,26 +127,25 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
   void addDataset() async {
     const id = 3;
     final floorMapNotifier = ref.read(floorMapProvider.notifier);
-    floorMapNotifier.pins.add(Pin(id: id, x: state.pinX, y: state.pinY));
+    floorMapNotifier.pins.add(Pin(
+      id: id,
+      x: state.pinX,
+      y: state.pinY,
+    ));
     floorMapNotifier.setAddMode(false);
-    await controller.animateTo(
-      0,
-      duration: const Duration(milliseconds: 200),
-      curve: Curves.ease,
-    );
+    closeSheet();
   }
 
-  void updateDataset() async {
+  void updateDataset(BuildContext context) async {
     final floorMapNotifier = ref.read(floorMapProvider.notifier);
-    floorMapNotifier.updatePin(id: state.id, pinX: state.pinX, pinY: state.pinY);
-    await controller.animateTo(
-      0,
-      duration: const Duration(milliseconds: 200),
-      curve: Curves.ease,
+    floorMapNotifier.updatePin(
+      id: state.id,
+      pinX: state.pinX,
+      pinY: state.pinY,
     );
+    FocusScope.of(context).unfocus();
+    closeSheet();
   }
 
-  void deleteDataset() {
-
-  }
+  void deleteDataset() {}
 }
