@@ -221,10 +221,18 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
 
   void updatePin({required int id, required int pinX, required int pinY}) {
     pins = pins
-        .map(
-          (e) => e.id == id ? e.copyWith(x: pinX, y: pinY) : e,
-    )
+        .map((e) => e.id == id
+            ? e.copyWith(
+                x: pinX,
+                y: pinY,
+              )
+            : e)
         .toList();
+    update();
+  }
+
+  void deletePin({required int id}) {
+    pins.removeWhere((e) => e.id == id);
     update();
   }
 

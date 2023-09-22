@@ -136,7 +136,7 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
     closeSheet();
   }
 
-  void updateDataset(BuildContext context) async {
+  void updateDataset(BuildContext context) {
     final floorMapNotifier = ref.read(floorMapProvider.notifier);
     floorMapNotifier.updatePin(
       id: state.id,
@@ -147,5 +147,10 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
     closeSheet();
   }
 
-  void deleteDataset() {}
+  void deleteDataset(BuildContext context) {
+    final floorMapNotifier = ref.read(floorMapProvider.notifier);
+    floorMapNotifier.deletePin(id: state.id);
+    FocusScope.of(context).unfocus();
+    closeSheet();
+  }
 }

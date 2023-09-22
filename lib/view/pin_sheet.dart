@@ -224,7 +224,7 @@ class PinSheet extends HookConsumerWidget {
             const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
           ),
         ),
-        onPressed: ref.read(pinSheetProvider.notifier).addDataset,
+        onPressed: () => ref.read(pinSheetProvider.notifier).addDataset(),
       ),
     );
   }
@@ -244,7 +244,8 @@ class PinSheet extends HookConsumerWidget {
               const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
             ),
           ),
-          onPressed: ref.read(pinSheetProvider.notifier).deleteDataset,
+          onPressed: () =>
+              ref.read(pinSheetProvider.notifier).deleteDataset(ref.context),
         ),
         const SizedBox(width: 4),
         Expanded(
