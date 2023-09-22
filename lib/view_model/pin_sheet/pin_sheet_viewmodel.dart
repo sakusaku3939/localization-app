@@ -148,9 +148,34 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
   }
 
   void deleteDataset(BuildContext context) {
-    final floorMapNotifier = ref.read(floorMapProvider.notifier);
-    floorMapNotifier.deletePin(id: state.id);
-    FocusScope.of(context).unfocus();
-    closeSheet();
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text(
+            "削除の確認",
+            style: TextStyle(fontSize: 20),
+          ),
+          content: const Text("登録されたデータセットを削除しますか？この操作は元に戻せません。"),
+          actionsPadding: const EdgeInsets.fromLTRB(0, 0, 12, 8),
+          actions: [
+            TextButton(
+              child: const Text("キャンセル"),
+              onPressed: () => Navigator.pop(context),
+            ),
+            TextButton(
+              child: const Text("削除"),
+              onPressed: () {
+                final floorMapNotifier = ref.read(floorMapProvider.notifier);
+                floorMapNotifier.deletePin(id: state.id);
+                FocusScope.of(context).unfocus();
+                closeSheet();
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
