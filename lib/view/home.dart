@@ -37,7 +37,7 @@ class Home extends HookConsumerWidget {
                   return Icon(
                     ref.watch(floorMapProvider).isAddMode
                         ? Icons.close
-                        : Icons.edit,
+                        : Icons.add_location_alt_outlined,
                   );
                 },
               ),
