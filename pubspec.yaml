@@ -17,6 +17,9 @@ dependencies:
   json_annotation: ^4.8.1
   hooks_riverpod: ^2.3.10
   flutter_hooks: ^0.20.1
+  image_picker: ^1.0.4
+  firebase_core: ^2.16.0
+  firebase_storage: ^11.2.7
 
 dev_dependencies:
   flutter_test:

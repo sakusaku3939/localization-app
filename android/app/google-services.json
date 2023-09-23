@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "875382420227",
+    "project_id": "localization-app-c5747",
+    "storage_bucket": "localization-app-c5747.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:875382420227:android:e6fb5874c4d371342a2f36",
+        "android_client_info": {
+          "package_name": "com.sakusaku3939.localization"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfUVW-U6kKuQVQbDQgFcxFD87wj1pJXeU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
