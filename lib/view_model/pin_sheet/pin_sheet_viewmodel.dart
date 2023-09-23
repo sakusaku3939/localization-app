@@ -5,6 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:localization/helper/current.dart';
+import 'package:localization/helper/snackbar_helper.dart';
 import 'package:localization/view_model/floor_map/floor_map_viewmodel.dart';
 import 'package:localization/view_model/floor_map/location_pin/location_pin.dart';
 import 'package:localization/view_model/floor_map/pin/pin.dart';
@@ -146,6 +148,7 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
       if (kDebugMode) {
         print(e);
       }
+      SnackBarHelper().show("エラー: $e");
     }
   }
 
@@ -161,20 +164,20 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
     closeSheet();
   }
 
-  void updateDataset(BuildContext context) {
+  void updateDataset() {
     final floorMapNotifier = ref.read(floorMapProvider.notifier);
     floorMapNotifier.updatePin(
       id: state.id,
       pinX: state.pinX,
       pinY: state.pinY,
     );
-    FocusScope.of(context).unfocus();
+    FocusScope.of(Current.context).unfocus();
     closeSheet();
   }
 
-  void deleteDataset(BuildContext context) {
+  void deleteDataset() {
     showDialog(
-      context: context,
+      context: Current.context,
       builder: (context) {
         return AlertDialog(
           title: const Text(
