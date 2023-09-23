@@ -1,5 +1,10 @@
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:localization/view_model/floor_map/floor_map_viewmodel.dart';
 import 'package:localization/view_model/floor_map/location_pin/location_pin.dart';
 import 'package:localization/view_model/floor_map/pin/pin.dart';
@@ -122,6 +127,26 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
     }
     controller.removeListener(updatePin);
     updatePin();
+  }
+
+  Future<void> uploadImage() async {
+    final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (image == null) {
+      return;
+    }
+    final storageRef = FirebaseStorage.instance.ref();
+    final imageFile = File(image.path);
+    final path = "${textFieldPinX}_$textFieldPinY";
+
+    try {
+      await storageRef
+          .child("$path/${DateTime.now().microsecondsSinceEpoch}.jpg")
+          .putFile(imageFile);
+    } on FirebaseException catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
   }
 
   void addDataset() async {

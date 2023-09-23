@@ -69,7 +69,7 @@ class PinSheet extends HookConsumerWidget {
                                 "データセット",
                                 style: TextStyle(fontSize: 16),
                               ),
-                              _datasetCarousel(),
+                              _datasetCarousel(ref),
                               const SizedBox(height: 16),
                               const Text(
                                 "座標の調整",
@@ -111,7 +111,7 @@ class PinSheet extends HookConsumerWidget {
     );
   }
 
-  Widget _datasetCarousel() {
+  Widget _datasetCarousel(WidgetRef ref) {
     const size = 180.0;
     const margin = EdgeInsets.only(
       top: 12,
@@ -125,24 +125,27 @@ class PinSheet extends HookConsumerWidget {
         itemCount: 3,
         itemBuilder: (context, index) {
           if (index == 0) {
-            return Container(
-              width: size,
-              height: size,
-              margin: margin,
-              decoration: BoxDecoration(
-                color: ColorPalette.lightGrey,
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(28),
+            return GestureDetector(
+              onTap: ref.read(pinSheetProvider.notifier).uploadImage,
+              child: Container(
+                width: size,
+                height: size,
+                margin: margin,
+                decoration: BoxDecoration(
+                  color: ColorPalette.lightGrey,
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(28),
+                  ),
+                  border: Border.all(
+                    color: ColorPalette.grey,
+                    width: 1,
+                  ),
                 ),
-                border: Border.all(
+                child: const Icon(
+                  Icons.add,
                   color: ColorPalette.grey,
-                  width: 1,
+                  size: 32,
                 ),
-              ),
-              child: const Icon(
-                Icons.add,
-                color: ColorPalette.grey,
-                size: 32,
               ),
             );
           } else {
