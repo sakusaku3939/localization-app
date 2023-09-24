@@ -31,6 +31,7 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
           id: -1,
           pinX: 0,
           pinY: 0,
+          storageRefList: null,
         ));
 
   bool get isSheetSizeMiddle =>
@@ -84,6 +85,7 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
               20,
         ),
       );
+      fetchDatasets();
     }
 
     floorMapNotifier.setEditMode(isShow);
@@ -138,11 +140,12 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
     }
     final storageRef = FirebaseStorage.instance.ref();
     final imageFile = File(image.path);
-    final path = "${textFieldPinX}_$textFieldPinY";
+    final x = ref.read(floorMapProvider.notifier).state.editablePin.x;
+    final y = ref.read(floorMapProvider.notifier).state.editablePin.y;
 
     try {
       await storageRef
-          .child("$path/${DateTime.now().microsecondsSinceEpoch}.jpg")
+          .child("${x}_$y/${DateTime.now().microsecondsSinceEpoch}.jpg")
           .putFile(imageFile);
     } on FirebaseException catch (e) {
       if (kDebugMode) {
@@ -150,6 +153,15 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
       }
       SnackBarHelper().show("エラー: $e");
     }
+  }
+
+  Future<void> fetchDatasets() async {
+    final storageRef = FirebaseStorage.instance.ref();
+    final x = ref.read(floorMapProvider.notifier).state.editablePin.x;
+    final y = ref.read(floorMapProvider.notifier).state.editablePin.y;
+
+    final fileList = await storageRef.child("${x}_$y").listAll();
+    state = state.copyWith(storageRefList: fileList.items);
   }
 
   void addDataset() async {

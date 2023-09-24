@@ -20,6 +20,7 @@ mixin _$PinSheetState {
   int get id => throw _privateConstructorUsedError;
   int get pinX => throw _privateConstructorUsedError;
   int get pinY => throw _privateConstructorUsedError;
+  List<Reference>? get storageRefList => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $PinSheetStateCopyWith<PinSheetState> get copyWith =>
@@ -32,7 +33,12 @@ abstract class $PinSheetStateCopyWith<$Res> {
           PinSheetState value, $Res Function(PinSheetState) then) =
       _$PinSheetStateCopyWithImpl<$Res, PinSheetState>;
   @useResult
-  $Res call({bool isShow, int id, int pinX, int pinY});
+  $Res call(
+      {bool isShow,
+      int id,
+      int pinX,
+      int pinY,
+      List<Reference>? storageRefList});
 }
 
 /// @nodoc
@@ -52,6 +58,7 @@ class _$PinSheetStateCopyWithImpl<$Res, $Val extends PinSheetState>
     Object? id = null,
     Object? pinX = null,
     Object? pinY = null,
+    Object? storageRefList = freezed,
   }) {
     return _then(_value.copyWith(
       isShow: null == isShow
@@ -70,6 +77,10 @@ class _$PinSheetStateCopyWithImpl<$Res, $Val extends PinSheetState>
           ? _value.pinY
           : pinY // ignore: cast_nullable_to_non_nullable
               as int,
+      storageRefList: freezed == storageRefList
+          ? _value.storageRefList
+          : storageRefList // ignore: cast_nullable_to_non_nullable
+              as List<Reference>?,
     ) as $Val);
   }
 }
@@ -82,7 +93,12 @@ abstract class _$$_PinSheetStateCopyWith<$Res>
       __$$_PinSheetStateCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({bool isShow, int id, int pinX, int pinY});
+  $Res call(
+      {bool isShow,
+      int id,
+      int pinX,
+      int pinY,
+      List<Reference>? storageRefList});
 }
 
 /// @nodoc
@@ -100,6 +116,7 @@ class __$$_PinSheetStateCopyWithImpl<$Res>
     Object? id = null,
     Object? pinX = null,
     Object? pinY = null,
+    Object? storageRefList = freezed,
   }) {
     return _then(_$_PinSheetState(
       isShow: null == isShow
@@ -118,6 +135,10 @@ class __$$_PinSheetStateCopyWithImpl<$Res>
           ? _value.pinY
           : pinY // ignore: cast_nullable_to_non_nullable
               as int,
+      storageRefList: freezed == storageRefList
+          ? _value._storageRefList
+          : storageRefList // ignore: cast_nullable_to_non_nullable
+              as List<Reference>?,
     ));
   }
 }
@@ -129,7 +150,9 @@ class _$_PinSheetState implements _PinSheetState {
       {required this.isShow,
       required this.id,
       required this.pinX,
-      required this.pinY});
+      required this.pinY,
+      required final List<Reference>? storageRefList})
+      : _storageRefList = storageRefList;
 
   @override
   final bool isShow;
@@ -139,10 +162,19 @@ class _$_PinSheetState implements _PinSheetState {
   final int pinX;
   @override
   final int pinY;
+  final List<Reference>? _storageRefList;
+  @override
+  List<Reference>? get storageRefList {
+    final value = _storageRefList;
+    if (value == null) return null;
+    if (_storageRefList is EqualUnmodifiableListView) return _storageRefList;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
 
   @override
   String toString() {
-    return 'PinSheetState(isShow: $isShow, id: $id, pinX: $pinX, pinY: $pinY)';
+    return 'PinSheetState(isShow: $isShow, id: $id, pinX: $pinX, pinY: $pinY, storageRefList: $storageRefList)';
   }
 
   @override
@@ -153,11 +185,14 @@ class _$_PinSheetState implements _PinSheetState {
             (identical(other.isShow, isShow) || other.isShow == isShow) &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.pinX, pinX) || other.pinX == pinX) &&
-            (identical(other.pinY, pinY) || other.pinY == pinY));
+            (identical(other.pinY, pinY) || other.pinY == pinY) &&
+            const DeepCollectionEquality()
+                .equals(other._storageRefList, _storageRefList));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, isShow, id, pinX, pinY);
+  int get hashCode => Object.hash(runtimeType, isShow, id, pinX, pinY,
+      const DeepCollectionEquality().hash(_storageRefList));
 
   @JsonKey(ignore: true)
   @override
@@ -171,7 +206,8 @@ abstract class _PinSheetState implements PinSheetState {
       {required final bool isShow,
       required final int id,
       required final int pinX,
-      required final int pinY}) = _$_PinSheetState;
+      required final int pinY,
+      required final List<Reference>? storageRefList}) = _$_PinSheetState;
 
   @override
   bool get isShow;
@@ -181,6 +217,8 @@ abstract class _PinSheetState implements PinSheetState {
   int get pinX;
   @override
   int get pinY;
+  @override
+  List<Reference>? get storageRefList;
   @override
   @JsonKey(ignore: true)
   _$$_PinSheetStateCopyWith<_$_PinSheetState> get copyWith =>

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -112,6 +113,7 @@ class PinSheet extends HookConsumerWidget {
   }
 
   Widget _datasetCarousel(WidgetRef ref) {
+    final storageRefList = ref.watch(pinSheetProvider).storageRefList;
     const size = 180.0;
     const margin = EdgeInsets.only(
       top: 12,
@@ -122,7 +124,7 @@ class PinSheet extends HookConsumerWidget {
       height: 180 + 24,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: 3,
+        itemCount: (storageRefList?.length ?? 0) + 1,
         itemBuilder: (context, index) {
           if (index == 0) {
             return GestureDetector(
@@ -153,10 +155,34 @@ class PinSheet extends HookConsumerWidget {
               width: size,
               height: size,
               margin: margin,
-              decoration: const BoxDecoration(
-                color: ColorPalette.lightGrey,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(28),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(28),
+                child: FutureBuilder(
+                  future: storageRefList?[index - 1].getDownloadURL(),
+                  builder: (
+                    BuildContext context,
+                    AsyncSnapshot<String> snapshot,
+                  ) {
+                    const loaderWidget = Padding(
+                      padding: EdgeInsets.all(80),
+                      child: CircularProgressIndicator(),
+                    );
+                    if (snapshot.hasData && snapshot.data != null) {
+                      return CachedNetworkImage(
+                        cacheKey: storageRefList?[index - 1].fullPath,
+                        imageUrl: snapshot.data!,
+                        progressIndicatorBuilder:
+                            (context, url, downloadProgress) => loaderWidget,
+                        errorWidget: (context, url, error) => const Icon(
+                          Icons.error,
+                          color: ColorPalette.grey,
+                          size: 32,
+                        ),
+                      );
+                    } else {
+                      return loaderWidget;
+                    }
+                  },
                 ),
               ),
             );
