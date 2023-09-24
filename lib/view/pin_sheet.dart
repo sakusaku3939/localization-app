@@ -126,6 +126,7 @@ class PinSheet extends HookConsumerWidget {
         itemCount: (storageRefList?.length ?? 0) + 1,
         itemBuilder: (context, index) {
           if (index == 0) {
+            // 画像アップロード用のボタン
             return GestureDetector(
               onTap: ref.read(pinSheetProvider.notifier).uploadImage,
               child: Container(
@@ -163,8 +164,10 @@ class PinSheet extends HookConsumerWidget {
                     AsyncSnapshot<String> snapshot,
                   ) {
                     if (snapshot.hasData && snapshot.data != null) {
-                      return Image.network(snapshot.data!);
+                      // ネットワークから画像を表示
+                      return Image.network(snapshot.data!, fit: BoxFit.fill);
                     } else {
+                      // 画像URLの取得中はローダーを表示
                       return const Padding(
                         padding: EdgeInsets.all(80),
                         child: CircularProgressIndicator(),
