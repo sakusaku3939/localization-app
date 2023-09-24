@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -163,24 +162,13 @@ class PinSheet extends HookConsumerWidget {
                     BuildContext context,
                     AsyncSnapshot<String> snapshot,
                   ) {
-                    const loaderWidget = Padding(
-                      padding: EdgeInsets.all(80),
-                      child: CircularProgressIndicator(),
-                    );
                     if (snapshot.hasData && snapshot.data != null) {
-                      return CachedNetworkImage(
-                        cacheKey: storageRefList?[index - 1].fullPath,
-                        imageUrl: snapshot.data!,
-                        progressIndicatorBuilder:
-                            (context, url, downloadProgress) => loaderWidget,
-                        errorWidget: (context, url, error) => const Icon(
-                          Icons.error,
-                          color: ColorPalette.grey,
-                          size: 32,
-                        ),
-                      );
+                      return Image.network(snapshot.data!);
                     } else {
-                      return loaderWidget;
+                      return const Padding(
+                        padding: EdgeInsets.all(80),
+                        child: CircularProgressIndicator(),
+                      );
                     }
                   },
                 ),
