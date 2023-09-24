@@ -46,6 +46,7 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
       duration: const Duration(milliseconds: 200),
       curve: Curves.ease,
     );
+    state = state.copyWith(storageRefList: null);
     showBottomSheet(false);
   }
 
@@ -147,6 +148,7 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
       await storageRef
           .child("${x}_$y/${DateTime.now().microsecondsSinceEpoch}.jpg")
           .putFile(imageFile);
+      fetchDatasets();
     } on FirebaseException catch (e) {
       if (kDebugMode) {
         print(e);
@@ -161,7 +163,7 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
     final y = ref.read(floorMapProvider.notifier).state.editablePin.y;
 
     final fileList = await storageRef.child("${x}_$y").listAll();
-    state = state.copyWith(storageRefList: fileList.items);
+    state = state.copyWith(storageRefList: fileList.items.reversed.toList());
   }
 
   void addDataset() async {
