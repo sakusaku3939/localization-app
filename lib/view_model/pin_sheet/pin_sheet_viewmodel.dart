@@ -1,16 +1,15 @@
 import 'dart:io';
 
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:localization/helper/current.dart';
-import 'package:localization/helper/snackbar_helper.dart';
+import 'package:localization/constant/global_state.dart';
+import 'package:localization/model/firebase_api.dart';
 import 'package:localization/view_model/floor_map/floor_map_viewmodel.dart';
 import 'package:localization/view_model/floor_map/location_pin/location_pin.dart';
 import 'package:localization/view_model/floor_map/pin/pin.dart';
 import 'package:localization/view_model/pin_sheet/pin_sheet_state/pin_sheet_state.dart';
+import 'package:uuid/uuid.dart';
 
 final pinSheetProvider =
     StateNotifierProvider.autoDispose<PinSheetViewModel, PinSheetState>(
@@ -21,6 +20,7 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
   final Ref ref;
   final controller = DraggableScrollableController();
   final snaps = <double>[0, 0.12, 0.6, 0.95];
+  final firebase = FirebaseApi();
 
   int? textFieldPinX;
   int? textFieldPinY;
@@ -132,6 +132,7 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
     }
     controller.removeListener(updatePin);
     updatePin();
+    // TODO Storageフォルダ名の更新
   }
 
   Future<void> uploadImage() async {
@@ -139,31 +140,27 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
     if (image == null) {
       return;
     }
-    final storageRef = FirebaseStorage.instance.ref();
     final imageFile = File(image.path);
     final x = ref.read(floorMapProvider.notifier).state.editablePin.x;
     final y = ref.read(floorMapProvider.notifier).state.editablePin.y;
+    final path = await firebase.getStoragePath(firestorePath: "${x}_$y");
 
-    try {
-      await storageRef
-          .child("${x}_$y/${DateTime.now().microsecondsSinceEpoch}.jpg")
-          .putFile(imageFile);
-      fetchDatasets();
-    } on FirebaseException catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
-      SnackBarHelper().show("エラー: $e");
-    }
+    await firebase.uploadToStorage(
+      path: "$path/${DateTime.now().microsecondsSinceEpoch}.jpg",
+      data: imageFile,
+    );
+    fetchDatasets();
   }
 
   Future<void> fetchDatasets() async {
-    final storageRef = FirebaseStorage.instance.ref();
     final x = ref.read(floorMapProvider.notifier).state.editablePin.x;
     final y = ref.read(floorMapProvider.notifier).state.editablePin.y;
 
-    final fileList = await storageRef.child("${x}_$y").listAll();
-    state = state.copyWith(storageRefList: fileList.items.reversed.toList());
+    final path = await firebase.getStoragePath(firestorePath: "${x}_$y");
+    if (path != null) {
+      final refs = await firebase.fetchStorageRefs(path: path);
+      state = state.copyWith(storageRefList: refs);
+    }
   }
 
   void addDataset() async {
@@ -174,6 +171,13 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
       x: state.pinX,
       y: state.pinY,
     ));
+    await firebase.writeToFirestore(
+      root: "storage",
+      path: "${state.pinX}_${state.pinY}",
+      data: {
+        "path": const Uuid().v4(),
+      },
+    );
     floorMapNotifier.setAddMode(false);
     closeSheet();
   }
@@ -185,13 +189,13 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
       pinX: state.pinX,
       pinY: state.pinY,
     );
-    FocusScope.of(Current.context).unfocus();
+    FocusScope.of(GlobalState.context).unfocus();
     closeSheet();
   }
 
   void deleteDataset() {
     showDialog(
-      context: Current.context,
+      context: GlobalState.context,
       builder: (context) {
         return AlertDialog(
           title: const Text(
