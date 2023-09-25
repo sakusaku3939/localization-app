@@ -7,7 +7,7 @@ part 'pin_sheet_state.freezed.dart';
 class PinSheetState with _$PinSheetState {
   const factory PinSheetState({
     required bool isShow,
-    required int id,
+    required String id,
     required int pinX,
     required int pinY,
     required List<Reference>? storageRefList,

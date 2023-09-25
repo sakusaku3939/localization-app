@@ -18,8 +18,8 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
   final defaultPinSize = 16.0;
 
   List<Pin> pins = [
-    const Pin(id: 0, x: 4000, y: 5400),
-    const Pin(id: 1, x: 5000, y: 5200),
+    const Pin(id: "0", x: 4000, y: 5400),
+    const Pin(id: "1", x: 5000, y: 5200),
   ];
   PhotoViewState photoViewState = const PhotoViewState(
     dx: 0,
@@ -36,7 +36,7 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
       : super(FloorMapState(
           locationPins: [],
           editablePin: const LocationPin(
-            id: -1,
+            id: "",
             x: 0,
             y: 0,
             pinLeft: 0,
@@ -159,7 +159,7 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
     return (pinX, pinY);
   }
 
-  void addEditablePin({int? id, required int pinX, required int pinY}) {
+  void addEditablePin({String? id, required int pinX, required int pinY}) {
     state = state.copyWith(
       editablePin: state.editablePin.copyWith(
         id: id ?? state.editablePin.id,
@@ -198,7 +198,7 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
   void resetEditablePin() {
     state = state.copyWith(
       editablePin: const LocationPin(
-        id: -1,
+        id: "",
         x: 0,
         y: 0,
         pinLeft: 0,
@@ -219,7 +219,7 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
     update();
   }
 
-  void updatePin({required int id, required int pinX, required int pinY}) {
+  void updatePin({required String id, required int pinX, required int pinY}) {
     pins = pins
         .map((e) => e.id == id
             ? e.copyWith(
@@ -231,7 +231,7 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
     update();
   }
 
-  void deletePin({required int id}) {
+  void deletePin({required String id}) {
     pins.removeWhere((e) => e.id == id);
     update();
   }

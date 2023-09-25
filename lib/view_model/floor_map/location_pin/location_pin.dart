@@ -7,7 +7,7 @@ part 'location_pin.g.dart';
 @freezed
 class LocationPin with _$LocationPin {
   const factory LocationPin({
-    required int id,
+    required String id,
     required int x,
     required int y,
     required double pinLeft,

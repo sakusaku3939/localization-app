@@ -7,7 +7,7 @@ part of 'pin.dart';
 // **************************************************************************
 
 _$_Pin _$$_PinFromJson(Map<String, dynamic> json) => _$_Pin(
-      id: json['id'] as int,
+      id: json['id'] as String,
       x: json['x'] as int,
       y: json['y'] as int,
     );

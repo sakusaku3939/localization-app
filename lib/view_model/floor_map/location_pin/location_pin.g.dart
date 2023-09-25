@@ -8,7 +8,7 @@ part of 'location_pin.dart';
 
 _$_LocationPin _$$_LocationPinFromJson(Map<String, dynamic> json) =>
     _$_LocationPin(
-      id: json['id'] as int,
+      id: json['id'] as String,
       x: json['x'] as int,
       y: json['y'] as int,
       pinLeft: (json['pinLeft'] as num).toDouble(),

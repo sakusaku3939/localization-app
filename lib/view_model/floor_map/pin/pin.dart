@@ -7,7 +7,7 @@ part 'pin.g.dart';
 @freezed
 class Pin with _$Pin {
   const factory Pin({
-    required int id,
+    required String id,
     required int x,
     required int y,
   }) = _Pin;

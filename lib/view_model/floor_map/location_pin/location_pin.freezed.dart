@@ -20,7 +20,7 @@ LocationPin _$LocationPinFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$LocationPin {
-  int get id => throw _privateConstructorUsedError;
+  String get id => throw _privateConstructorUsedError;
   int get x => throw _privateConstructorUsedError;
   int get y => throw _privateConstructorUsedError;
   double get pinLeft => throw _privateConstructorUsedError;
@@ -39,7 +39,8 @@ abstract class $LocationPinCopyWith<$Res> {
           LocationPin value, $Res Function(LocationPin) then) =
       _$LocationPinCopyWithImpl<$Res, LocationPin>;
   @useResult
-  $Res call({int id, int x, int y, double pinLeft, double pinTop, double size});
+  $Res call(
+      {String id, int x, int y, double pinLeft, double pinTop, double size});
 }
 
 /// @nodoc
@@ -66,7 +67,7 @@ class _$LocationPinCopyWithImpl<$Res, $Val extends LocationPin>
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       x: null == x
           ? _value.x
           : x // ignore: cast_nullable_to_non_nullable
@@ -99,7 +100,8 @@ abstract class _$$_LocationPinCopyWith<$Res>
       __$$_LocationPinCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int id, int x, int y, double pinLeft, double pinTop, double size});
+  $Res call(
+      {String id, int x, int y, double pinLeft, double pinTop, double size});
 }
 
 /// @nodoc
@@ -124,7 +126,7 @@ class __$$_LocationPinCopyWithImpl<$Res>
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       x: null == x
           ? _value.x
           : x // ignore: cast_nullable_to_non_nullable
@@ -164,7 +166,7 @@ class _$_LocationPin implements _LocationPin {
       _$$_LocationPinFromJson(json);
 
   @override
-  final int id;
+  final String id;
   @override
   final int x;
   @override
@@ -214,7 +216,7 @@ class _$_LocationPin implements _LocationPin {
 
 abstract class _LocationPin implements LocationPin {
   const factory _LocationPin(
-      {required final int id,
+      {required final String id,
       required final int x,
       required final int y,
       required final double pinLeft,
@@ -225,7 +227,7 @@ abstract class _LocationPin implements LocationPin {
       _$_LocationPin.fromJson;
 
   @override
-  int get id;
+  String get id;
   @override
   int get x;
   @override

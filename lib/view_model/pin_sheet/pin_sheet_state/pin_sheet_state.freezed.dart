@@ -17,7 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$PinSheetState {
   bool get isShow => throw _privateConstructorUsedError;
-  int get id => throw _privateConstructorUsedError;
+  String get id => throw _privateConstructorUsedError;
   int get pinX => throw _privateConstructorUsedError;
   int get pinY => throw _privateConstructorUsedError;
   List<Reference>? get storageRefList => throw _privateConstructorUsedError;
@@ -35,7 +35,7 @@ abstract class $PinSheetStateCopyWith<$Res> {
   @useResult
   $Res call(
       {bool isShow,
-      int id,
+      String id,
       int pinX,
       int pinY,
       List<Reference>? storageRefList});
@@ -68,7 +68,7 @@ class _$PinSheetStateCopyWithImpl<$Res, $Val extends PinSheetState>
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       pinX: null == pinX
           ? _value.pinX
           : pinX // ignore: cast_nullable_to_non_nullable
@@ -95,7 +95,7 @@ abstract class _$$_PinSheetStateCopyWith<$Res>
   @useResult
   $Res call(
       {bool isShow,
-      int id,
+      String id,
       int pinX,
       int pinY,
       List<Reference>? storageRefList});
@@ -126,7 +126,7 @@ class __$$_PinSheetStateCopyWithImpl<$Res>
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       pinX: null == pinX
           ? _value.pinX
           : pinX // ignore: cast_nullable_to_non_nullable
@@ -157,7 +157,7 @@ class _$_PinSheetState implements _PinSheetState {
   @override
   final bool isShow;
   @override
-  final int id;
+  final String id;
   @override
   final int pinX;
   @override
@@ -204,7 +204,7 @@ class _$_PinSheetState implements _PinSheetState {
 abstract class _PinSheetState implements PinSheetState {
   const factory _PinSheetState(
       {required final bool isShow,
-      required final int id,
+      required final String id,
       required final int pinX,
       required final int pinY,
       required final List<Reference>? storageRefList}) = _$_PinSheetState;
@@ -212,7 +212,7 @@ abstract class _PinSheetState implements PinSheetState {
   @override
   bool get isShow;
   @override
-  int get id;
+  String get id;
   @override
   int get pinX;
   @override

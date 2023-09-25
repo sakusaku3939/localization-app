@@ -28,7 +28,7 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
   PinSheetViewModel(this.ref)
       : super(const PinSheetState(
           isShow: false,
-          id: -1,
+          id: "",
           pinX: 0,
           pinY: 0,
           storageRefList: null,
@@ -92,7 +92,7 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
     floorMapNotifier.setEditMode(isShow);
     state = state.copyWith(
       isShow: isShow,
-      id: pin?.id ?? -1,
+      id: pin?.id ?? "",
       pinX: pinX ?? state.pinX,
       pinY: pinY ?? state.pinY,
     );
@@ -132,7 +132,6 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
     }
     controller.removeListener(updatePin);
     updatePin();
-    // TODO Storageフォルダ名の更新
   }
 
   Future<void> uploadImage() async {
@@ -141,9 +140,9 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
       return;
     }
     final imageFile = File(image.path);
-    final x = ref.read(floorMapProvider.notifier).state.editablePin.x;
-    final y = ref.read(floorMapProvider.notifier).state.editablePin.y;
-    final path = await firebase.getStoragePath(firestorePath: "${x}_$y");
+    final path = await firebase.getStoragePath(
+      firestoreId: ref.read(floorMapProvider.notifier).state.editablePin.id,
+    );
 
     await firebase.uploadToStorage(
       path: "$path/${DateTime.now().microsecondsSinceEpoch}.jpg",
@@ -153,10 +152,9 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
   }
 
   Future<void> fetchDatasets() async {
-    final x = ref.read(floorMapProvider.notifier).state.editablePin.x;
-    final y = ref.read(floorMapProvider.notifier).state.editablePin.y;
-
-    final path = await firebase.getStoragePath(firestorePath: "${x}_$y");
+    final path = await firebase.getStoragePath(
+      firestoreId: ref.read(floorMapProvider.notifier).state.editablePin.id,
+    );
     if (path != null) {
       final refs = await firebase.fetchStorageRefs(path: path);
       state = state.copyWith(storageRefList: refs);
@@ -164,20 +162,21 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
   }
 
   void addDataset() async {
-    const id = 3;
     final floorMapNotifier = ref.read(floorMapProvider.notifier);
-    floorMapNotifier.pins.add(Pin(
-      id: id,
-      x: state.pinX,
-      y: state.pinY,
-    ));
-    await firebase.writeToFirestore(
+    final id = await firebase.addToFirestore(
       root: "storage",
-      path: "${state.pinX}_${state.pinY}",
       data: {
+        "coordinate": "${state.pinX}_${state.pinY}",
         "path": const Uuid().v4(),
       },
     );
+    if (id.isNotEmpty) {
+      floorMapNotifier.pins.add(Pin(
+        id: id,
+        x: state.pinX,
+        y: state.pinY,
+      ));
+    }
     floorMapNotifier.setAddMode(false);
     closeSheet();
   }

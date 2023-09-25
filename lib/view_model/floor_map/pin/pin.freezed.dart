@@ -20,7 +20,7 @@ Pin _$PinFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Pin {
-  int get id => throw _privateConstructorUsedError;
+  String get id => throw _privateConstructorUsedError;
   int get x => throw _privateConstructorUsedError;
   int get y => throw _privateConstructorUsedError;
 
@@ -34,7 +34,7 @@ abstract class $PinCopyWith<$Res> {
   factory $PinCopyWith(Pin value, $Res Function(Pin) then) =
       _$PinCopyWithImpl<$Res, Pin>;
   @useResult
-  $Res call({int id, int x, int y});
+  $Res call({String id, int x, int y});
 }
 
 /// @nodoc
@@ -57,7 +57,7 @@ class _$PinCopyWithImpl<$Res, $Val extends Pin> implements $PinCopyWith<$Res> {
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       x: null == x
           ? _value.x
           : x // ignore: cast_nullable_to_non_nullable
@@ -76,7 +76,7 @@ abstract class _$$_PinCopyWith<$Res> implements $PinCopyWith<$Res> {
       __$$_PinCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int id, int x, int y});
+  $Res call({String id, int x, int y});
 }
 
 /// @nodoc
@@ -96,7 +96,7 @@ class __$$_PinCopyWithImpl<$Res> extends _$PinCopyWithImpl<$Res, _$_Pin>
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       x: null == x
           ? _value.x
           : x // ignore: cast_nullable_to_non_nullable
@@ -117,7 +117,7 @@ class _$_Pin implements _Pin {
   factory _$_Pin.fromJson(Map<String, dynamic> json) => _$$_PinFromJson(json);
 
   @override
-  final int id;
+  final String id;
   @override
   final int x;
   @override
@@ -158,14 +158,14 @@ class _$_Pin implements _Pin {
 
 abstract class _Pin implements Pin {
   const factory _Pin(
-      {required final int id,
+      {required final String id,
       required final int x,
       required final int y}) = _$_Pin;
 
   factory _Pin.fromJson(Map<String, dynamic> json) = _$_Pin.fromJson;
 
   @override
-  int get id;
+  String get id;
   @override
   int get x;
   @override

@@ -14,20 +14,21 @@ class FirebaseApi {
   final storageRef = FirebaseStorage.instance.ref();
   final db = FirebaseFirestore.instance;
 
-  Future<void> writeToFirestore({
+  Future<String> addToFirestore({
     required String root,
-    required String path,
     required Map<String, String> data,
   }) async {
-    await db
-        .collection(root)
-        .doc(path)
-        .set(data)
-        .onError((e, _) => _errorLogger(e));
+    try {
+      final document = await db.collection(root).add(data);
+      return document.id;
+    } on FirebaseException catch (e) {
+      _errorLogger(e);
+      return "";
+    }
   }
 
-  Future<String?> getStoragePath({required String firestorePath}) async {
-    final docRef = db.collection("storage").doc(firestorePath);
+  Future<String?> getStoragePath({required String firestoreId}) async {
+    final docRef = db.collection("storage").doc(firestoreId);
     try {
       final document = await docRef.get();
       final Map<String, dynamic>? data = document.data();
