@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:localization/constant/global_state.dart';
 import 'package:localization/model/firebase_api.dart';
+import 'package:localization/view/helper/snackbar_helper.dart';
 import 'package:localization/view_model/floor_map/floor_map_viewmodel.dart';
 import 'package:localization/view_model/floor_map/location_pin/location_pin.dart';
 import 'package:localization/view_model/floor_map/pin/pin.dart';
@@ -143,11 +144,15 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
       firestoreId: ref.read(floorMapProvider.notifier).state.editablePin.id,
     );
 
-    await firebase.uploadToStorage(
-      path: "$path/${DateTime.now().microsecondsSinceEpoch}.jpg",
-      data: imageFile,
-    );
-    fetchDatasets();
+    if (path != null) {
+      await firebase.uploadToStorage(
+        path: "$path/${DateTime.now().microsecondsSinceEpoch}.jpg",
+        data: imageFile,
+      );
+      fetchDatasets();
+    } else {
+      SnackBarHelper().show("エラー: 画像のアップロードに失敗しました");
+    }
   }
 
   Future<void> fetchDatasets() async {

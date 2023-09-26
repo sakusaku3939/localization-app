@@ -97,7 +97,6 @@ class FirebaseApi {
     required String path,
     required File data,
   }) async {
-    await storageRef.child(path).putFile(data);
     try {
       await storageRef.child(path).putFile(data);
       return true;
