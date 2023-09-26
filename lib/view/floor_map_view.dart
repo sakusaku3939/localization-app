@@ -54,17 +54,17 @@ class FloorMapView extends HookConsumerWidget {
   }
 
   void onTapInEditMode(WidgetRef ref, TapUpDetails tapDetails) {
-    if (!ref.read(floorMapProvider).isEditMode) {
-      return;
+    if (ref.read(floorMapProvider).isEditMode ||
+        ref.read(floorMapProvider).isAddMode) {
+      // マップ上にピンを配置
+      final floorMapNotifier = ref.read(floorMapProvider.notifier);
+      final sheetAdjust = floorMapNotifier.calcPinSize() / 10;
+      final (pinX, pinY) = floorMapNotifier.convertToMapPosition(
+        pinLeft: tapDetails.localPosition.dx,
+        pinTop: tapDetails.localPosition.dy + sheetAdjust,
+      );
+      floorMapNotifier.addEditablePin(pinX: pinX, pinY: pinY);
     }
-    // マップ上にピンを配置
-    final floorMapNotifier = ref.read(floorMapProvider.notifier);
-    final sheetAdjust = floorMapNotifier.calcPinSize() / 10;
-    final (pinX, pinY) = floorMapNotifier.convertToMapPosition(
-      pinLeft: tapDetails.localPosition.dx,
-      pinTop: tapDetails.localPosition.dy + sheetAdjust,
-    );
-    floorMapNotifier.addEditablePin(pinX: pinX, pinY: pinY);
   }
 }
 

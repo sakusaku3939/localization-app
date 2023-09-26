@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:localization/view/helper/snackbar_helper.dart';
+import 'package:uuid/uuid.dart';
 
 class FirebaseApi {
   static final FirebaseApi instance = FirebaseApi._internal();
@@ -21,19 +22,52 @@ class FirebaseApi {
     try {
       final document = await db.collection(root).add(data);
       return document.id;
-    } on FirebaseException catch (e) {
+    } catch (e) {
       _errorLogger(e);
       return "";
     }
   }
 
-  Future<String?> getStoragePath({required String firestoreId}) async {
-    final docRef = db.collection("storage").doc(firestoreId);
+  Future<void> writeToFirestore({
+    required String root,
+    required String path,
+    required Map<String, String> data,
+    bool update = false,
+  }) async {
     try {
+      if (update) {
+        await db.collection(root).doc(path).update(data);
+      } else {
+        await db.collection(root).doc(path).set(data);
+      }
+    } catch (e) {
+      _errorLogger(e);
+    }
+  }
+
+  Future<String?> getStoragePath({required String firestoreId}) async {
+    if (firestoreId.isEmpty) {
+      return null;
+    }
+    try {
+      final docRef = db.collection("storage").doc(firestoreId);
       final document = await docRef.get();
       final Map<String, dynamic>? data = document.data();
-      return data?["path"];
-    } on FirebaseException catch (e) {
+      final path = data?["path"];
+      if (path != null) {
+        return path;
+      }
+      final generatedPath = const Uuid().v4();
+      writeToFirestore(
+        root: "storage",
+        path: firestoreId,
+        data: {
+          "path": generatedPath,
+        },
+        update: true,
+      );
+      return generatedPath;
+    } catch (e) {
       _errorLogger(e);
       return null;
     }
@@ -47,7 +81,7 @@ class FirebaseApi {
     try {
       await storageRef.child(path).putFile(data);
       return true;
-    } on FirebaseException catch (e) {
+    } catch (e) {
       _errorLogger(e);
       return false;
     }

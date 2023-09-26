@@ -9,7 +9,6 @@ import 'package:localization/view_model/floor_map/floor_map_viewmodel.dart';
 import 'package:localization/view_model/floor_map/location_pin/location_pin.dart';
 import 'package:localization/view_model/floor_map/pin/pin.dart';
 import 'package:localization/view_model/pin_sheet/pin_sheet_state/pin_sheet_state.dart';
-import 'package:uuid/uuid.dart';
 
 final pinSheetProvider =
     StateNotifierProvider.autoDispose<PinSheetViewModel, PinSheetState>(
@@ -107,7 +106,7 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
     }
   }
 
-  void onKeyboardFocus(bool hasFocus) async {
+  Future<void> onKeyboardFocus(bool hasFocus) async {
     // キーボードに合わせてシートの高さを調節する
     updatePin() => ref.read(floorMapProvider.notifier).update();
     controller.addListener(updatePin);
@@ -158,16 +157,18 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
     if (path != null) {
       final refs = await firebase.fetchStorageRefs(path: path);
       state = state.copyWith(storageRefList: refs);
+    } else {
+      state = state.copyWith(storageRefList: null);
     }
   }
 
-  void addDataset() async {
+  Future<void> addDataset() async {
     final floorMapNotifier = ref.read(floorMapProvider.notifier);
     final id = await firebase.addToFirestore(
       root: "storage",
       data: {
-        "coordinate": "${state.pinX}_${state.pinY}",
-        "path": const Uuid().v4(),
+        "x": state.pinX.toString(),
+        "y": state.pinY.toString(),
       },
     );
     if (id.isNotEmpty) {
@@ -181,7 +182,7 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
     closeSheet();
   }
 
-  void updateDataset() {
+  Future<void> updateDataset() async {
     final floorMapNotifier = ref.read(floorMapProvider.notifier);
     floorMapNotifier.updatePin(
       id: state.id,
@@ -190,6 +191,15 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
     );
     FocusScope.of(GlobalState.context).unfocus();
     closeSheet();
+    await firebase.writeToFirestore(
+      root: "storage",
+      path: state.id,
+      data: {
+        "x": state.pinX.toString(),
+        "y": state.pinY.toString(),
+      },
+      update: true,
+    );
   }
 
   void deleteDataset() {
