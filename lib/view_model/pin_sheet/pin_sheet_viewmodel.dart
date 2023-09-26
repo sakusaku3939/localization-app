@@ -151,14 +151,13 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
   }
 
   Future<void> fetchDatasets() async {
+    state = state.copyWith(storageRefList: null);
     final path = await firebase.getStoragePath(
       firestoreId: ref.read(floorMapProvider.notifier).state.editablePin.id,
     );
     if (path != null) {
       final refs = await firebase.fetchStorageRefs(path: path);
       state = state.copyWith(storageRefList: refs);
-    } else {
-      state = state.copyWith(storageRefList: null);
     }
   }
 

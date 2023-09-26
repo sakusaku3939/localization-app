@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:localization/model/firebase_api.dart';
 import 'package:localization/view_model/floor_map/pin/pin.dart';
 import 'package:localization/view_model/pin_sheet/pin_sheet_viewmodel.dart';
 import 'package:localization/view_model/floor_map/floor_map_state/floor_map_state.dart';
@@ -16,11 +17,9 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
   final Ref ref;
   final image = Image.asset("assets/images/shonandai_floor_map.png").image;
   final defaultPinSize = 16.0;
+  final firebase = FirebaseApi();
 
-  List<Pin> pins = [
-    const Pin(id: "0", x: 4000, y: 5400),
-    const Pin(id: "1", x: 5000, y: 5200),
-  ];
+  List<Pin> pins = [];
   PhotoViewState photoViewState = const PhotoViewState(
     dx: 0,
     dy: 0,
@@ -50,7 +49,7 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
     _init();
   }
 
-  void _init() {
+  Future<void> _init() async {
     bool initialized = false;
     state.photoController.outputStateStream.listen(
       (event) {
@@ -71,6 +70,7 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
         update();
       },
     );
+    pins = await firebase.fetchAllCoordinates(root: "storage");
   }
 
   void update() {
@@ -81,7 +81,7 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
     }
   }
 
-  void _updatePins() {
+  Future<void> _updatePins() async {
     // 拡大率から0.5刻みにピンの大きさを調整
     final diffScale = photoViewState.scale / photoViewState.defaultImageScale;
     final pinSize = defaultPinSize * (diffScale * 2).round() / 2;

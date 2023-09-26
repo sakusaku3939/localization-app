@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:localization/view/helper/snackbar_helper.dart';
+import 'package:localization/view_model/floor_map/pin/pin.dart';
 import 'package:uuid/uuid.dart';
 
 class FirebaseApi {
@@ -42,6 +43,25 @@ class FirebaseApi {
       }
     } catch (e) {
       _errorLogger(e);
+    }
+  }
+
+  Future<List<Pin>> fetchAllCoordinates({required String root}) async {
+    try {
+      final querySnapshot = await db.collection(root).get();
+      final pins = <Pin>[];
+      for (var query in querySnapshot.docs) {
+        final data = query.data();
+        pins.add(Pin(
+          id: query.id,
+          x: int.parse(data["x"]),
+          y: int.parse(data["y"]),
+        ));
+      }
+      return pins;
+    } catch (e) {
+      _errorLogger(e);
+      return [];
     }
   }
 
