@@ -22,6 +22,7 @@ class FirebaseApi {
   }) async {
     try {
       final document = await db.collection(root).add(data);
+      _log("Add document to id: ${document.id}");
       return document.id;
     } catch (e) {
       _errorLogger(e);
@@ -41,12 +42,13 @@ class FirebaseApi {
       } else {
         await db.collection(root).doc(path).set(data);
       }
+      _log("Write document: $path");
     } catch (e) {
       _errorLogger(e);
     }
   }
 
-  Future<List<Pin>> fetchAllCoordinates({required String root}) async {
+  Future<List<Pin>> fetchPins({required String root}) async {
     try {
       final querySnapshot = await db.collection(root).get();
       final pins = <Pin>[];
@@ -58,6 +60,7 @@ class FirebaseApi {
           y: int.parse(data["y"]),
         ));
       }
+      _log("Fetch pins: $pins");
       return pins;
     } catch (e) {
       _errorLogger(e);
@@ -75,6 +78,7 @@ class FirebaseApi {
       final Map<String, dynamic>? data = document.data();
       final path = data?["path"];
       if (path != null) {
+        _log("Get storage path: $path");
         return path;
       }
       final generatedPath = const Uuid().v4();
@@ -86,6 +90,7 @@ class FirebaseApi {
         },
         update: true,
       );
+      _log("Get storage path: $generatedPath");
       return generatedPath;
     } catch (e) {
       _errorLogger(e);
@@ -99,6 +104,7 @@ class FirebaseApi {
   }) async {
     try {
       await storageRef.child(path).putFile(data);
+      _log("Upload to storage: $path");
       return true;
     } catch (e) {
       _errorLogger(e);
@@ -108,7 +114,15 @@ class FirebaseApi {
 
   Future<List<Reference>> fetchStorageRefs({required String path}) async {
     final fileList = await storageRef.child(path).listAll();
-    return fileList.items.reversed.toList();
+    final sortedFileList = fileList.items.reversed.toList();
+    _log("Fetch storage refs: $sortedFileList");
+    return sortedFileList;
+  }
+
+  void _log(dynamic t) {
+    if (kDebugMode) {
+      print(t);
+    }
   }
 
   void _errorLogger(dynamic e) {
