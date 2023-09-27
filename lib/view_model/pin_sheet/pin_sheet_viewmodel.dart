@@ -5,11 +5,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:localization/constant/global_state.dart';
 import 'package:localization/model/firebase_api.dart';
-import 'package:localization/view/helper/snackbar_helper.dart';
 import 'package:localization/view_model/floor_map/floor_map_viewmodel.dart';
 import 'package:localization/view_model/floor_map/location_pin/location_pin.dart';
 import 'package:localization/view_model/floor_map/pin/pin.dart';
 import 'package:localization/view_model/pin_sheet/pin_sheet_state/pin_sheet_state.dart';
+import 'package:uuid/uuid.dart';
 
 final pinSheetProvider =
     StateNotifierProvider.autoDispose<PinSheetViewModel, PinSheetState>(
@@ -24,6 +24,7 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
 
   int? textFieldPinX;
   int? textFieldPinY;
+  bool hasUploaded = false;
 
   PinSheetViewModel(this.ref)
       : super(const PinSheetState(
@@ -32,7 +33,9 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
           pinX: 0,
           pinY: 0,
           storageRefList: null,
-        ));
+        )) {
+    firebase.deleteTempFiles();
+  }
 
   bool get isSheetSizeMiddle =>
       controller.isAttached ? controller.size.round() <= snaps[1] : false;
@@ -87,6 +90,9 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
         ),
       );
       fetchDatasets();
+    } else if (hasUploaded) {
+      firebase.deleteTempFiles();
+      hasUploaded = false;
     }
 
     floorMapNotifier.setEditMode(isShow);
@@ -140,19 +146,13 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
       return;
     }
     final imageFile = File(image.path);
-    final path = await firebase.getStoragePath(
+    await firebase.uploadToStorage(
       firestoreId: ref.read(floorMapProvider.notifier).state.editablePin.id,
+      name: "${DateTime.now().microsecondsSinceEpoch}.jpg",
+      data: imageFile,
     );
-
-    if (path != null) {
-      await firebase.uploadToStorage(
-        path: "$path/${DateTime.now().microsecondsSinceEpoch}.jpg",
-        data: imageFile,
-      );
-      fetchDatasets();
-    } else {
-      SnackBarHelper().show("エラー: 画像のアップロードに失敗しました");
-    }
+    hasUploaded = true;
+    fetchDatasets();
   }
 
   Future<void> fetchDatasets() async {
@@ -168,12 +168,20 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
 
   Future<void> addDataset() async {
     final floorMapNotifier = ref.read(floorMapProvider.notifier);
+    final data = {
+      "x": state.pinX.toString(),
+      "y": state.pinY.toString(),
+    };
+    if (hasUploaded) {
+      final path = const Uuid().v4();
+      firebase.copyStorageFiles(srcPath: "Temp", destPath: path);
+      data.addAll({
+        "path": path,
+      });
+    }
     final id = await firebase.addToFirestore(
       root: "storage",
-      data: {
-        "x": state.pinX.toString(),
-        "y": state.pinY.toString(),
-      },
+      data: data,
     );
     if (id.isNotEmpty) {
       floorMapNotifier.pins.add(Pin(

@@ -10,7 +10,8 @@ class PinSheet extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (ref.watch(pinSheetProvider).isShow) {
+    final isSheetShow = ref.watch(pinSheetProvider).isShow;
+    if (isSheetShow) {
       final sheetNotifier = ref.read(pinSheetProvider.notifier);
       return GestureDetector(
         onTap: () {
@@ -19,7 +20,7 @@ class PinSheet extends HookConsumerWidget {
         child: NotificationListener<DraggableScrollableNotification>(
           onNotification: (notification) {
             // 一番下までドラッグされたらシートを閉じる
-            if (notification.extent < 0.04) {
+            if (notification.extent < 0.04 && isSheetShow) {
               sheetNotifier.showBottomSheet(false);
               ref.read(floorMapProvider.notifier).resetEditablePin();
             }
