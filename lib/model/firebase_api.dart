@@ -119,6 +119,23 @@ class FirebaseApi {
     return sortedFileList;
   }
 
+  Future<void> deleteFromStorage({required String firestoreId}) async {
+    try {
+      final deletesAsync = <Future>[];
+      final storagePath = await getStoragePath(firestoreId: firestoreId);
+      final storageRefs = await fetchStorageRefs(path: storagePath!);
+      for (final ref in storageRefs) {
+        deletesAsync.add(ref.delete());
+      }
+
+      deletesAsync.add(db.collection("storage").doc(firestoreId).delete());
+      await Future.wait(deletesAsync);
+      _log("Delete from storage to id: $firestoreId");
+    } catch (e) {
+      _errorLogger(e);
+    }
+  }
+
   void _log(dynamic t) {
     if (kDebugMode) {
       print(t);

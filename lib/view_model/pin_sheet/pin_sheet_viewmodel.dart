@@ -206,8 +206,8 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
     );
   }
 
-  void deleteDataset() {
-    showDialog(
+  Future<void> showDeleteDialog() async {
+    await showDialog(
       context: GlobalState.context,
       builder: (context) {
         return AlertDialog(
@@ -224,17 +224,21 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
             ),
             TextButton(
               child: const Text("削除"),
-              onPressed: () {
-                final floorMapNotifier = ref.read(floorMapProvider.notifier);
-                floorMapNotifier.deletePin(id: state.id);
-                FocusScope.of(context).unfocus();
-                closeSheet();
-                Navigator.pop(context);
-              },
+              onPressed: () => deleteDataset(context),
             ),
           ],
         );
       },
     );
+  }
+
+  Future<void> deleteDataset(BuildContext context) async {
+    final deleteId = state.id;
+    final floorMapNotifier = ref.read(floorMapProvider.notifier);
+    floorMapNotifier.deletePin(id: deleteId);
+    FocusScope.of(context).unfocus();
+    closeSheet();
+    Navigator.pop(context);
+    await firebase.deleteFromStorage(firestoreId: deleteId);
   }
 }
