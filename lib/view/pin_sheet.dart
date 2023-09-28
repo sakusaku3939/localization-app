@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:localization/constant/color_palette.dart';
+import 'package:localization/view/preview_image_view.dart';
 import 'package:localization/view_model/pin_sheet/pin_sheet_viewmodel.dart';
 import 'package:localization/view_model/floor_map/floor_map_viewmodel.dart';
 
@@ -120,13 +121,15 @@ class PinSheet extends HookConsumerWidget {
       right: 8,
       bottom: 12,
     );
+    final imageUrls = <int, String>{};
     return SizedBox(
       height: 180 + 24,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: (storageRefList?.length ?? 0) + 1,
-        itemBuilder: (context, index) {
-          if (index == 0) {
+        itemBuilder: (context, rawIndex) {
+          final index = rawIndex - 1;
+          if (rawIndex == 0) {
             // 画像アップロード用のボタン
             return GestureDetector(
               onTap: ref.read(pinSheetProvider.notifier).uploadImage,
@@ -152,29 +155,51 @@ class PinSheet extends HookConsumerWidget {
               ),
             );
           } else {
-            return Container(
-              width: size,
-              height: size,
-              margin: margin,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(28),
-                child: FutureBuilder(
-                  future: storageRefList?[index - 1].getDownloadURL(),
-                  builder: (
-                    BuildContext context,
-                    AsyncSnapshot<String> snapshot,
-                  ) {
-                    if (snapshot.hasData && snapshot.data != null) {
-                      // ネットワークから画像を表示
-                      return Image.network(snapshot.data!, fit: BoxFit.fill);
-                    } else {
-                      // 画像URLの取得中はローダーを表示
-                      return const Padding(
-                        padding: EdgeInsets.all(80),
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                  },
+            return GestureDetector(
+              onTap: () {
+                if (imageUrls.isNotEmpty && imageUrls[index] != null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PreviewImageView(
+                        tag: index,
+                        imageUrl: imageUrls[index]!,
+                      ),
+                    ),
+                  );
+                }
+              },
+              child: Hero(
+                tag: index,
+                child: Container(
+                  width: size,
+                  height: size,
+                  margin: margin,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(28),
+                    child: FutureBuilder(
+                      future: storageRefList?[index].getDownloadURL(),
+                      builder: (
+                        BuildContext context,
+                        AsyncSnapshot<String> snapshot,
+                      ) {
+                        if (snapshot.hasData && snapshot.data != null) {
+                          // ネットワークから画像を表示
+                          imageUrls[index] = snapshot.data!;
+                          return Image.network(
+                            snapshot.data!,
+                            fit: BoxFit.fill,
+                          );
+                        } else {
+                          // 画像URLの取得中はローダーを表示
+                          return const Padding(
+                            padding: EdgeInsets.all(80),
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                      },
+                    ),
+                  ),
                 ),
               ),
             );
