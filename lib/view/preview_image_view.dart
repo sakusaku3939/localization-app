@@ -68,14 +68,13 @@ class PreviewImageView extends HookConsumerWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 7),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           _bottomBarButton(
             Icons.download,
             "保存",
             () => previewImageNotifier.downloadImage(imageUrl),
           ),
-          const SizedBox(width: 1),
           _bottomBarButton(
             Icons.delete_outline,
             "削除",
