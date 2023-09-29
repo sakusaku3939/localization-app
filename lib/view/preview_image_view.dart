@@ -2,10 +2,14 @@ import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:localization/view_model/preview_image/preview_image_viewmodel.dart';
 
 class PreviewImageView extends HookConsumerWidget {
-  const PreviewImageView(
-      {super.key, required this.tag, required this.imageUrl});
+  const PreviewImageView({
+    super.key,
+    required this.tag,
+    required this.imageUrl,
+  });
 
   final Object tag;
   final String imageUrl;
@@ -24,7 +28,7 @@ class PreviewImageView extends HookConsumerWidget {
             tag: tag,
             child: Stack(
               children: [
-                _appbar(context),
+                _appbar(ref),
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,
@@ -34,8 +38,8 @@ class PreviewImageView extends HookConsumerWidget {
                 ),
                 Positioned(
                   bottom: 0,
-                  right: 0,
-                  child: _bottomBar(),
+                  width: MediaQuery.of(context).size.width,
+                  child: _bottomBar(ref),
                 ),
               ],
             ),
@@ -45,11 +49,11 @@ class PreviewImageView extends HookConsumerWidget {
     );
   }
 
-  Widget _appbar(BuildContext context) {
+  Widget _appbar(WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.only(top: 24),
       child: IconButton(
-        onPressed: () => Navigator.of(context).pop(),
+        onPressed: () => Navigator.of(ref.context).pop(),
         icon: const Icon(
           Icons.close,
           color: Colors.white,
@@ -59,26 +63,44 @@ class PreviewImageView extends HookConsumerWidget {
     );
   }
 
-  Widget _bottomBar() {
+  Widget _bottomBar(WidgetRef ref) {
+    final previewImageNotifier = ref.read(previewImageProvider.notifier);
     return Padding(
       padding: const EdgeInsets.only(bottom: 7),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          IconButton(
-            onPressed: () => {},
-            icon: const Icon(
-              Icons.delete_outline,
-              color: Colors.white,
-              size: 24,
-            ),
+          _bottomBarButton(
+            Icons.download,
+            "保存",
+            () => previewImageNotifier.downloadImage(imageUrl),
           ),
-          const SizedBox(width: 8),
-          IconButton(
-            onPressed: () => {},
-            icon: const Icon(
-              Icons.download,
+          const SizedBox(width: 1),
+          _bottomBarButton(
+            Icons.delete_outline,
+            "削除",
+            () => {},
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _bottomBarButton(IconData icon, String text, void Function() onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        children: [
+          Icon(
+            icon,
+            color: Colors.white,
+            size: 24,
+          ),
+          Text(
+            text,
+            style: const TextStyle(
               color: Colors.white,
-              size: 24,
+              fontSize: 13,
             ),
           ),
         ],
