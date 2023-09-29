@@ -25,7 +25,7 @@ class PreviewImageViewModel extends StateNotifier<int> {
       final file = File("$directory/${const Uuid().v4()}.jpg");
       await file.create();
       await file.writeAsBytes(res.bodyBytes);
-      SnackBarHelper().show("画像のダウンロードが完了しました");
+      SnackBarHelper().show("画像をダウンロードしました");
     } catch (e, stackTrace) {
       if (kDebugMode) {
         print(e);
