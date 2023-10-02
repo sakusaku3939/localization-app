@@ -162,7 +162,7 @@ class PinSheet extends HookConsumerWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => PreviewImageView(
-                        tag: index,
+                        index: index,
                         imageUrl: imageUrls[index]!,
                       ),
                     ),

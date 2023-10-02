@@ -235,9 +235,10 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
   }
 
   Future<void> deleteImage(int index) async {
-    await state.storageRefList?[index].delete();
-    final newStorageRefList = state.storageRefList;
-    newStorageRefList?.removeAt(index);
+    final deleteRef = state.storageRefList?[index];
+    await deleteRef?.delete();
+    final newStorageRefList = [...?state.storageRefList];
+    newStorageRefList.remove(deleteRef);
     state = state.copyWith(storageRefList: newStorageRefList);
   }
 }

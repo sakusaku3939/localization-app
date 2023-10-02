@@ -7,11 +7,11 @@ import 'package:localization/view_model/preview_image/preview_image_viewmodel.da
 class PreviewImageView extends HookConsumerWidget {
   const PreviewImageView({
     super.key,
-    required this.tag,
+    required this.index,
     required this.imageUrl,
   });
 
-  final Object tag;
+  final int index;
   final String imageUrl;
 
   @override
@@ -25,7 +25,7 @@ class PreviewImageView extends HookConsumerWidget {
           },
           direction: DismissiblePageDismissDirection.multi,
           child: Hero(
-            tag: tag,
+            tag: index,
             child: Stack(
               children: [
                 _appbar(ref),
@@ -78,7 +78,7 @@ class PreviewImageView extends HookConsumerWidget {
           _bottomBarButton(
             Icons.delete_outline,
             "削除",
-            () => {},
+            () => previewImageNotifier.deleteImage(index),
           ),
         ],
       ),

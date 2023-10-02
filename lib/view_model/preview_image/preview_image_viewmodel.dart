@@ -1,9 +1,12 @@
 import 'dart:io';
 import 'package:external_path/external_path.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:localization/view/helper/dialog_helper.dart';
 import 'package:localization/view/helper/snackbar_helper.dart';
+import 'package:localization/view_model/pin_sheet/pin_sheet_viewmodel.dart';
 import 'package:uuid/uuid.dart';
 
 final previewImageProvider =
@@ -33,5 +36,19 @@ class PreviewImageViewModel extends StateNotifier<int> {
       }
       SnackBarHelper().show("エラー: $e");
     }
+  }
+
+  Future<void> deleteImage(int index) async {
+    await DialogHelper().show(
+      title: "削除の確認",
+      content: "画像を削除しますか？この操作は元に戻せません。",
+      okButton: "削除",
+      onOkClick: (context) {
+        Navigator.of(context)
+          ..pop()
+          ..pop();
+        ref.read(pinSheetProvider.notifier).deleteImage(index);
+      },
+    );
   }
 }
