@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:localization/constant/global_state.dart';
 import 'package:localization/model/firebase_api.dart';
+import 'package:localization/view/helper/dialog_helper.dart';
 import 'package:localization/view_model/floor_map/floor_map_viewmodel.dart';
 import 'package:localization/view_model/floor_map/location_pin/location_pin.dart';
 import 'package:localization/view_model/floor_map/pin/pin.dart';
@@ -215,28 +216,11 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
   }
 
   Future<void> showDeleteDialog() async {
-    await showDialog(
-      context: GlobalState.context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text(
-            "削除の確認",
-            style: TextStyle(fontSize: 20),
-          ),
-          content: const Text("登録されたデータセットを削除しますか？この操作は元に戻せません。"),
-          actionsPadding: const EdgeInsets.fromLTRB(0, 0, 12, 8),
-          actions: [
-            TextButton(
-              child: const Text("キャンセル"),
-              onPressed: () => Navigator.pop(context),
-            ),
-            TextButton(
-              child: const Text("削除"),
-              onPressed: () => deleteDataset(context),
-            ),
-          ],
-        );
-      },
+    await DialogHelper().show(
+      title: "削除の確認",
+      content: "登録されたデータセットを削除しますか？この操作は元に戻せません。",
+      okButton: "削除",
+      onOkClick: (context) => deleteDataset(context),
     );
   }
 
@@ -248,5 +232,12 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
     closeSheet();
     Navigator.pop(context);
     await firebase.deleteFromStorage(firestoreId: deleteId);
+  }
+
+  Future<void> deleteImage(int index) async {
+    await state.storageRefList?[index].delete();
+    final newStorageRefList = state.storageRefList;
+    newStorageRefList?.removeAt(index);
+    state = state.copyWith(storageRefList: newStorageRefList);
   }
 }
