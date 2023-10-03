@@ -14,7 +14,7 @@ class FloorMapView extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final floorMapNotifier = ref.read(floorMapProvider.notifier);
-    floorMapNotifier.resolveImageProvider(context);
+    floorMapNotifier.resolveImageProvider();
 
     return WillPopScope(
       onWillPop: () async {

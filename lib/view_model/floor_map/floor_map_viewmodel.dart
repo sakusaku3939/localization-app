@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:localization/constant/global_context.dart';
 import 'package:localization/model/firebase_api.dart';
 import 'package:localization/view_model/floor_map/pin/pin.dart';
 import 'package:localization/view_model/pin_sheet/pin_sheet_viewmodel.dart';
@@ -236,8 +237,9 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
     update();
   }
 
-  void resolveImageProvider(BuildContext context) {
-    ImageStream stream = image.resolve(createLocalImageConfiguration(context));
+  void resolveImageProvider() {
+    ImageStream stream =
+        image.resolve(createLocalImageConfiguration(globalContext));
     stream.addListener(ImageStreamListener((ImageInfo info, bool _) {
       photoViewState = photoViewState.copyWith(
         width: info.image.width.toDouble(),

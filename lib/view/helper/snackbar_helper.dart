@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:localization/constant/global_state.dart';
+import 'package:localization/constant/global_context.dart';
 
 class SnackBarHelper {
   static final SnackBarHelper instance = SnackBarHelper._internal();
@@ -13,6 +13,6 @@ class SnackBarHelper {
       content: Text(message),
       duration: const Duration(seconds: 3),
     );
-    ScaffoldMessenger.of(GlobalState.context).showSnackBar(snackBar);
+    ScaffoldMessenger.of(globalContext).showSnackBar(snackBar);
   }
 }

@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:localization/constant/color_palette.dart';
-import 'package:localization/constant/global_state.dart';
+import 'package:localization/constant/global_context.dart';
 import 'package:localization/view/home.dart';
 import 'firebase_options.dart';
 
@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      navigatorKey: GlobalState.navigatorKey,
+      navigatorKey: globalNavigatorKey,
       theme: ThemeData(
         colorScheme: ColorPalette.colorScheme,
         useMaterial3: true,

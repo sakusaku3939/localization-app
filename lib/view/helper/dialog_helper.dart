@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:localization/constant/global_state.dart';
+import 'package:localization/constant/global_context.dart';
 
 class DialogHelper {
   static final DialogHelper instance = DialogHelper._internal();
@@ -12,10 +12,10 @@ class DialogHelper {
     required String title,
     required String content,
     required String okButton,
-    required void Function(BuildContext context) onOkClick,
+    required void Function() onOkClick,
   }) async {
     await showDialog(
-      context: GlobalState.context,
+      context: globalContext,
       builder: (context) {
         return AlertDialog(
           title: Text(
@@ -30,8 +30,8 @@ class DialogHelper {
               onPressed: () => Navigator.pop(context),
             ),
             TextButton(
+              onPressed: onOkClick,
               child: Text(okButton),
-              onPressed: () => onOkClick(context),
             ),
           ],
         );

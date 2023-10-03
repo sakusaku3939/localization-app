@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:localization/constant/global_state.dart';
+import 'package:localization/constant/global_context.dart';
 import 'package:localization/constant/safe_area_size.dart';
 import 'package:localization/model/firebase_api.dart';
 import 'package:localization/view/helper/dialog_helper.dart';
@@ -207,7 +207,7 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
       pinX: state.pinX,
       pinY: state.pinY,
     );
-    FocusScope.of(GlobalState.context).unfocus();
+    FocusScope.of(globalContext).unfocus();
     closeSheet();
     await firebase.writeToFirestore(
       root: "storage",
@@ -225,17 +225,17 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
       title: "削除の確認",
       content: "登録されたデータセットを削除しますか？この操作は元に戻せません。",
       okButton: "削除",
-      onOkClick: (context) => deleteDataset(context),
+      onOkClick: deleteDataset,
     );
   }
 
-  Future<void> deleteDataset(BuildContext context) async {
+  Future<void> deleteDataset() async {
     final deleteId = state.id;
     final floorMapNotifier = ref.read(floorMapProvider.notifier);
     floorMapNotifier.deletePin(id: deleteId);
-    FocusScope.of(context).unfocus();
+    FocusScope.of(globalContext).unfocus();
     closeSheet();
-    Navigator.pop(context);
+    Navigator.pop(globalContext);
     await firebase.deleteFromStorage(firestoreId: deleteId);
   }
 
