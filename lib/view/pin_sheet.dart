@@ -28,7 +28,7 @@ class PinSheet extends HookConsumerWidget {
             return true;
           },
           child: DraggableScrollableSheet(
-            initialChildSize: 0.6,
+            initialChildSize: sheetNotifier.initialSnap,
             minChildSize: sheetNotifier.snaps.first,
             maxChildSize: sheetNotifier.snaps.last,
             snapSizes: sheetNotifier.snaps,

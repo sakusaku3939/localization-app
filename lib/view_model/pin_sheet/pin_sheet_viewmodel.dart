@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:localization/constant/global_state.dart';
+import 'package:localization/constant/safe_area_size.dart';
 import 'package:localization/model/firebase_api.dart';
 import 'package:localization/view/helper/dialog_helper.dart';
 import 'package:localization/view_model/floor_map/floor_map_viewmodel.dart';
@@ -20,8 +21,12 @@ final pinSheetProvider =
 class PinSheetViewModel extends StateNotifier<PinSheetState> {
   final Ref ref;
   final controller = DraggableScrollableController();
-  final snaps = <double>[0, 0.12, 0.6, 0.95];
   final firebase = FirebaseApi();
+
+  static const _sheetChildSize = 458;
+  final initialSnap = _sheetChildSize / SafeAreaSize.height + 0.03;
+
+  get snaps => <double>[0, 0.12, initialSnap, 0.95];
 
   int? textFieldPinX;
   int? textFieldPinY;
