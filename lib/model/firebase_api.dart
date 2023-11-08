@@ -112,10 +112,9 @@ class FirebaseApi {
         await writeToFirestore(
           root: "storage",
           path: firestoreId,
-          data: {
-            "latitude": geolocation.latitude.toString(),
-            "longitude": geolocation.longitude.toString(),
-          },
+          data: geolocation
+              .toJson()
+              .map((key, value) => MapEntry(key, value.toString())),
           update: true,
         );
       }

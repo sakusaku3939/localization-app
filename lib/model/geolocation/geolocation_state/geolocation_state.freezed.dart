@@ -14,6 +14,10 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
+GeolocationState _$GeolocationStateFromJson(Map<String, dynamic> json) {
+  return _GeolocationState.fromJson(json);
+}
+
 /// @nodoc
 mixin _$GeolocationState {
   double get longitude => throw _privateConstructorUsedError;
@@ -22,6 +26,7 @@ mixin _$GeolocationState {
   double get heading => throw _privateConstructorUsedError;
   double get headingAccuracy => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $GeolocationStateCopyWith<GeolocationState> get copyWith =>
       throw _privateConstructorUsedError;
@@ -144,7 +149,7 @@ class __$$_GeolocationStateCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$_GeolocationState implements _GeolocationState {
   const _$_GeolocationState(
       {required this.longitude,
@@ -152,6 +157,9 @@ class _$_GeolocationState implements _GeolocationState {
       required this.accuracy,
       required this.heading,
       required this.headingAccuracy});
+
+  factory _$_GeolocationState.fromJson(Map<String, dynamic> json) =>
+      _$$_GeolocationStateFromJson(json);
 
   @override
   final double longitude;
@@ -185,6 +193,7 @@ class _$_GeolocationState implements _GeolocationState {
                 other.headingAccuracy == headingAccuracy));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType, longitude, latitude, accuracy, heading, headingAccuracy);
@@ -194,6 +203,13 @@ class _$_GeolocationState implements _GeolocationState {
   @pragma('vm:prefer-inline')
   _$$_GeolocationStateCopyWith<_$_GeolocationState> get copyWith =>
       __$$_GeolocationStateCopyWithImpl<_$_GeolocationState>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_GeolocationStateToJson(
+      this,
+    );
+  }
 }
 
 abstract class _GeolocationState implements GeolocationState {
@@ -203,6 +219,9 @@ abstract class _GeolocationState implements GeolocationState {
       required final double accuracy,
       required final double heading,
       required final double headingAccuracy}) = _$_GeolocationState;
+
+  factory _GeolocationState.fromJson(Map<String, dynamic> json) =
+      _$_GeolocationState.fromJson;
 
   @override
   double get longitude;
