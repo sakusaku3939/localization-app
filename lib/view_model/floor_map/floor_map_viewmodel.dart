@@ -16,8 +16,8 @@ final floorMapProvider =
 
 class FloorMapViewModel extends StateNotifier<FloorMapState> {
   final Ref ref;
-  final image = Image.asset("assets/images/shonandai_floor_map.png").image;
-  final defaultPinSize = 16.0;
+  final image = Image.asset("assets/images/i208_map.png").image;
+  final defaultPinSize = 20.0;
   final firebase = FirebaseApi();
 
   List<Pin> pins = [];
@@ -45,7 +45,7 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
           ),
           photoController: PhotoViewController(),
           isEditMode: false,
-          isAddMode: false,
+          isAddMode: true,
         )) {
     _init();
   }
@@ -83,10 +83,7 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
   }
 
   Future<void> _updatePins() async {
-    // 拡大率から0.5刻みにピンの大きさを調整
-    final diffScale = photoViewState.scale / photoViewState.defaultImageScale;
-    final pinSize = defaultPinSize * (diffScale * 2).round() / 2;
-
+    final pinSize = calcPinSize();
     final locations = <LocationPin>[];
 
     for (var pin in pins) {
@@ -215,7 +212,7 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
   }
 
   void setAddMode(bool mode) {
-    state = state.copyWith(isAddMode: mode, isEditMode: mode);
+    state = state.copyWith(isAddMode: mode);
     resetEditablePin();
     update();
   }

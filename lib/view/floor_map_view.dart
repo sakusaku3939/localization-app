@@ -34,7 +34,7 @@ class FloorMapView extends HookConsumerWidget {
                   builder: (BuildContext context, int index) {
                     return PhotoViewGalleryPageOptions(
                       imageProvider: floorMapNotifier.image,
-                      initialScale: PhotoViewComputedScale.contained * 2.0,
+                      initialScale: PhotoViewComputedScale.contained * 2.5,
                       minScale: PhotoViewComputedScale.contained * 1.0,
                       controller: ref.read(floorMapProvider).photoController,
                     );
@@ -74,7 +74,7 @@ class LocationPins extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final floorMap = ref.watch(floorMapProvider);
-    if (floorMap.isEditMode || floorMap.isAddMode) {
+    if (floorMap.isEditMode) {
       return Positioned(
         left: floorMap.editablePin.pinLeft,
         top: floorMap.editablePin.pinTop,

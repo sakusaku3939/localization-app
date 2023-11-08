@@ -204,6 +204,7 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
       ));
     }
     floorMapNotifier.setAddMode(false);
+    floorMapNotifier.setEditMode(false);
     closeSheet();
   }
 
