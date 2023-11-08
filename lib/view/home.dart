@@ -36,7 +36,7 @@ class Home extends HookConsumerWidget {
               label: Consumer(
                 builder: (context, ref, _) {
                   return Text(
-                    ref.watch(floorMapProvider).isAddMode ? "ピンの追加" : "ピンの編集",
+                    ref.watch(floorMapProvider).isAddMode ? "ピンを選択" : "閉じる",
                   );
                 },
               ),
@@ -44,8 +44,8 @@ class Home extends HookConsumerWidget {
                 builder: (context, ref, _) {
                   return Icon(
                     ref.watch(floorMapProvider).isAddMode
-                        ? Icons.add_location_alt_outlined
-                        : Icons.edit_location_alt,
+                        ? Icons.edit_location_alt
+                        : Icons.close,
                   );
                 },
               ),
