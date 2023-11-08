@@ -243,9 +243,9 @@ class PinSheet extends HookConsumerWidget {
         padding: const EdgeInsets.symmetric(vertical: 12),
         child: Row(
           children: [
-            Expanded(child: textField("X", ref.watch(pinSheetProvider).pinX)),
+            Expanded(child: textField("X", ref.watch(pinSheetProvider).mapX)),
             const SizedBox(width: 8),
-            Expanded(child: textField("Y", ref.watch(pinSheetProvider).pinY)),
+            Expanded(child: textField("Y", ref.watch(pinSheetProvider).mapY)),
           ],
         ),
       ),

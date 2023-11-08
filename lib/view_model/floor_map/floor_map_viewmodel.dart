@@ -71,7 +71,7 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
         update();
       },
     );
-    pins = await firebase.fetchPins(root: "storage");
+    pins = await firebase.fetchPins(root: "i208");
   }
 
   void update() {

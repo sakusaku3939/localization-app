@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
+import 'package:localization/constant/i208_map_size.dart';
 import 'package:localization/view/helper/snackbar_helper.dart';
 import 'package:localization/view_model/floor_map/pin/pin.dart';
 import 'package:uuid/uuid.dart';
@@ -58,8 +59,8 @@ class FirebaseApi {
         final data = query.data();
         pins.add(Pin(
           id: query.id,
-          x: int.parse(data["x"]),
-          y: int.parse(data["y"]),
+          x: I208MapSize().convertToPinX(int.parse(data["x"])),
+          y: I208MapSize().convertToPinY(int.parse(data["y"])),
         ));
       }
       _log("Fetch pins: $pins");
@@ -75,7 +76,7 @@ class FirebaseApi {
       return "Temp";
     }
     try {
-      final docRef = db.collection("storage").doc(firestoreId);
+      final docRef = db.collection("i208").doc(firestoreId);
       final document = await docRef.get();
       final Map<String, dynamic>? data = document.data();
       final path = data?["path"];
@@ -99,7 +100,7 @@ class FirebaseApi {
       if (path == null) {
         path = const Uuid().v4();
         await writeToFirestore(
-          root: "storage",
+          root: "i208",
           path: firestoreId,
           data: {
             "path": path,
@@ -110,7 +111,7 @@ class FirebaseApi {
       // GPS情報が含まれる場合は追加
       if (geolocation != null) {
         await writeToFirestore(
-          root: "storage",
+          root: "i208",
           path: firestoreId,
           data: geolocation
               .toJson()
@@ -144,7 +145,7 @@ class FirebaseApi {
           deletesAsync.add(ref.delete());
         }
       }
-      deletesAsync.add(db.collection("storage").doc(firestoreId).delete());
+      deletesAsync.add(db.collection("i208").doc(firestoreId).delete());
       await Future.wait(deletesAsync);
       _log("Delete from storage to id: $firestoreId");
     } catch (e, stackTrace) {

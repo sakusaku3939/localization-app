@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:localization/constant/global_context.dart';
+import 'package:localization/constant/i208_map_size.dart';
 import 'package:localization/constant/safe_area_size.dart';
 import 'package:localization/model/firebase_api.dart';
 import 'package:localization/model/geolocation/geolocation_helper.dart';
@@ -29,16 +30,16 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
 
   get snaps => <double>[0, 0.12, initialSnap, 0.95];
 
-  int? textFieldPinX;
-  int? textFieldPinY;
+  int? textFieldMapX;
+  int? textFieldMapY;
   bool hasUploaded = false;
 
   PinSheetViewModel(this.ref)
       : super(const PinSheetState(
           isShow: false,
           id: "",
-          pinX: 0,
-          pinY: 0,
+          mapX: 0,
+          mapY: 0,
           storageRefList: null,
         )) {
     firebase.deleteTempFiles();
@@ -106,17 +107,20 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
     state = state.copyWith(
       isShow: isShow,
       id: pin?.id ?? "",
-      pinX: pinX ?? state.pinX,
-      pinY: pinY ?? state.pinY,
+      mapX: pinX != null ? I208MapSize().convertToMapX(pinX) : state.mapX,
+      mapY: pinY != null ? I208MapSize().convertToMapY(pinY) : state.mapY,
     );
   }
 
   void onInputFieldsChanged(String label, String value) {
+    if (value.isEmpty) {
+      return;
+    }
     switch (label) {
       case "X":
-        textFieldPinX = int.parse(value);
+        textFieldMapX = int.parse(value);
       case "Y":
-        textFieldPinY = int.parse(value);
+        textFieldMapY = int.parse(value);
     }
   }
 
@@ -134,8 +138,12 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
       // ピンの位置を入力フィールドの値に合わせて更新する
       final floorMapNotifier = ref.read(floorMapProvider.notifier);
       floorMapNotifier.addEditablePin(
-        pinX: textFieldPinX ?? floorMapNotifier.state.editablePin.x,
-        pinY: textFieldPinY ?? floorMapNotifier.state.editablePin.y,
+        pinX: textFieldMapX != null
+            ? I208MapSize().convertToPinX(textFieldMapX!)
+            : floorMapNotifier.state.editablePin.x,
+        pinY: textFieldMapY != null
+            ? I208MapSize().convertToPinX(textFieldMapY!)
+            : floorMapNotifier.state.editablePin.y,
       );
       await controller.animateTo(
         snaps[2],
@@ -158,11 +166,10 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
 
     final imageFile = File(image.path);
     await firebase.uploadToStorage(
-      firestoreId: ref.read(floorMapProvider.notifier).state.editablePin.id,
-      name: "${DateTime.now().microsecondsSinceEpoch}.jpg",
-      data: imageFile,
-      geolocation: geolocation
-    );
+        firestoreId: ref.read(floorMapProvider.notifier).state.editablePin.id,
+        name: "${DateTime.now().microsecondsSinceEpoch}.jpg",
+        data: imageFile,
+        geolocation: geolocation);
 
     hasUploaded = true;
     fetchDatasets();
@@ -182,8 +189,8 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
   Future<void> addDataset() async {
     final floorMapNotifier = ref.read(floorMapProvider.notifier);
     final data = {
-      "x": state.pinX.toString(),
-      "y": state.pinY.toString(),
+      "x": state.mapX.toString(),
+      "y": state.mapY.toString(),
     };
     if (hasUploaded) {
       final path = const Uuid().v4();
@@ -193,14 +200,14 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
       });
     }
     final id = await firebase.addToFirestore(
-      root: "storage",
+      root: "i208",
       data: data,
     );
     if (id.isNotEmpty) {
       floorMapNotifier.pins.add(Pin(
         id: id,
-        x: state.pinX,
-        y: state.pinY,
+        x: I208MapSize().convertToPinX(state.mapX),
+        y: I208MapSize().convertToPinY(state.mapY),
       ));
     }
     floorMapNotifier.setAddMode(false);
@@ -212,17 +219,17 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
     final floorMapNotifier = ref.read(floorMapProvider.notifier);
     floorMapNotifier.updatePin(
       id: state.id,
-      pinX: state.pinX,
-      pinY: state.pinY,
+      pinX: I208MapSize().convertToPinX(state.mapX),
+      pinY: I208MapSize().convertToPinY(state.mapY),
     );
     FocusScope.of(globalContext).unfocus();
     closeSheet();
     await firebase.writeToFirestore(
-      root: "storage",
+      root: "i208",
       path: state.id,
       data: {
-        "x": state.pinX.toString(),
-        "y": state.pinY.toString(),
+        "x": state.mapX.toString(),
+        "y": state.mapY.toString(),
       },
       update: true,
     );

@@ -8,8 +8,8 @@ class PinSheetState with _$PinSheetState {
   const factory PinSheetState({
     required bool isShow,
     required String id,
-    required int pinX,
-    required int pinY,
+    required int mapX,
+    required int mapY,
     required List<Reference>? storageRefList,
   }) = _PinSheetState;
 }
