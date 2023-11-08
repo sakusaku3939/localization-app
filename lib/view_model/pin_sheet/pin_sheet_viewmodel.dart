@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -160,16 +158,18 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
     if (image == null) {
       return;
     }
+
     DialogHelper().showLoader();
     final geolocation = await GeolocationHelper().fetchPosition();
     DialogHelper().closeLoader();
 
-    final imageFile = File(image.path);
+    final imageData = await image.readAsBytes();
     await firebase.uploadToStorage(
-        firestoreId: ref.read(floorMapProvider.notifier).state.editablePin.id,
-        name: "${DateTime.now().microsecondsSinceEpoch}.jpg",
-        data: imageFile,
-        geolocation: geolocation);
+      firestoreId: ref.read(floorMapProvider.notifier).state.editablePin.id,
+      name: "${DateTime.now().microsecondsSinceEpoch}.jpg",
+      data: imageData,
+      geolocation: geolocation,
+    );
 
     hasUploaded = true;
     fetchDatasets();

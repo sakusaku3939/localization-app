@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
@@ -91,7 +89,7 @@ class FirebaseApi {
   Future<bool> uploadToStorage({
     required String firestoreId,
     required String name,
-    required File data,
+    required Uint8List data,
     GeolocationState? geolocation,
   }) async {
     try {
@@ -119,7 +117,7 @@ class FirebaseApi {
           update: true,
         );
       }
-      await storage.child("$path/$name").putFile(data);
+      await storage.child("$path/$name").putData(data);
       _log("Upload to storage: $path");
       return true;
     } catch (e, stackTrace) {
