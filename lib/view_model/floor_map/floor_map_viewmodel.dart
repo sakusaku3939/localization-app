@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:localization/constant/global_context.dart';
 import 'package:localization/model/firebase_api.dart';
-import 'package:localization/model/geolocation/geolocation_helper.dart';
 import 'package:localization/view_model/floor_map/pin/pin.dart';
 import 'package:localization/view_model/pin_sheet/pin_sheet_viewmodel.dart';
 import 'package:localization/view_model/floor_map/floor_map_state/floor_map_state.dart';
@@ -174,7 +173,6 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
           true,
           pin: state.editablePin,
         );
-    GeolocationHelper().fetchPosition().then((value) => print(value));
   }
 
   void _updateEditablePin() {

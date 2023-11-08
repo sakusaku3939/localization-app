@@ -7,6 +7,8 @@ import 'package:localization/view/helper/snackbar_helper.dart';
 import 'package:localization/view_model/floor_map/pin/pin.dart';
 import 'package:uuid/uuid.dart';
 
+import 'geolocation/geolocation_state/geolocation_state.dart';
+
 class FirebaseApi {
   static final FirebaseApi instance = FirebaseApi._internal();
 
@@ -89,9 +91,11 @@ class FirebaseApi {
     required String firestoreId,
     required String name,
     required File data,
+    GeolocationState? geolocation,
   }) async {
     try {
       String? path = await getStoragePath(firestoreId: firestoreId);
+      // パスが存在しない場合は新しくフォルダ生成
       if (path == null) {
         path = const Uuid().v4();
         await writeToFirestore(
@@ -99,6 +103,18 @@ class FirebaseApi {
           path: firestoreId,
           data: {
             "path": path,
+          },
+          update: true,
+        );
+      }
+      // GPS情報が含まれる場合は追加
+      if (geolocation != null) {
+        await writeToFirestore(
+          root: "storage",
+          path: firestoreId,
+          data: {
+            "latitude": geolocation.latitude.toString(),
+            "longitude": geolocation.longitude.toString(),
           },
           update: true,
         );
