@@ -33,7 +33,7 @@ class Home extends HookConsumerWidget {
               !ref.watch(floorMapProvider).isEditMode)
             const Positioned(
               top: 4,
-              child: Text("編集するピンを選択してください"),
+              child: Text("編集したいピンを選択"),
             ),
         ],
       ),
