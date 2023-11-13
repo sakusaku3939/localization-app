@@ -25,7 +25,18 @@ class Home extends HookConsumerWidget {
           const SizedBox(width: 4),
         ],
       ),
-      body: const FloorMapView(),
+      body: Stack(
+        alignment: Alignment.center,
+        children: [
+          const FloorMapView(),
+          if (!ref.watch(floorMapProvider).isAddMode &&
+              !ref.watch(floorMapProvider).isEditMode)
+            const Positioned(
+              top: 4,
+              child: Text("編集するピンを選択してください"),
+            ),
+        ],
+      ),
       floatingActionButton: !ref.watch(pinSheetProvider).isShow
           ? FloatingActionButton.extended(
               onPressed: () {
@@ -35,18 +46,16 @@ class Home extends HookConsumerWidget {
               },
               label: Consumer(
                 builder: (context, ref, _) {
-                  return Text(
-                    ref.watch(floorMapProvider).isAddMode ? "ピンを選択" : "閉じる",
-                  );
+                  return ref.watch(floorMapProvider).isAddMode
+                      ? const Text("ピンを選択")
+                      : const Text("閉じる");
                 },
               ),
               icon: Consumer(
                 builder: (context, ref, _) {
-                  return Icon(
-                    ref.watch(floorMapProvider).isAddMode
-                        ? Icons.edit_location_alt
-                        : Icons.close,
-                  );
+                  return ref.watch(floorMapProvider).isAddMode
+                      ? const Icon(Icons.edit_location_alt)
+                      : const Icon(Icons.close);
                 },
               ),
             )
