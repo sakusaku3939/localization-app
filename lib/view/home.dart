@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:localization/model/image_uploader.dart';
 import 'package:localization/view/floor_map_view.dart';
-import 'package:localization/view/helper/dialog_helper.dart';
 import 'package:localization/view_model/floor_map/floor_map_viewmodel.dart';
 import 'package:localization/view_model/pin_sheet/pin_sheet_viewmodel.dart';
 
@@ -80,10 +81,11 @@ Widget _exportButton() {
         const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       ),
     ),
-    onPressed: () => DialogHelper().showOkDialog(
-      title: "Alert",
-      content: "まだ実装していません",
-      okButton: "OK",
-    ),
+    onPressed: () async {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (image != null) {
+        await ImageUploader().uploadImage(image);
+      }
+    },
   );
 }
