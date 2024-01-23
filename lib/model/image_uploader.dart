@@ -21,13 +21,16 @@ class ImageUploader {
       'POST',
       Uri.parse('http://10.10.0.85:5000/upload'),
     );
+    const token = "326E5FFC-D86C-4AD9-AB7D-C887C937F21B";
+    request.headers.addAll({"AccessToken": token});
     request.files.add(
       http.MultipartFile.fromBytes(
-          'file',
-          await image.readAsBytes().then((value) {
-            return value.cast();
-          }),
-          filename: image.path.toString() + image.name),
+        'file',
+        await image.readAsBytes().then((value) {
+          return value.cast();
+        }),
+        filename: image.path.toString() + image.name,
+      ),
     );
 
     final streamedResponse = await request.send();
