@@ -17,6 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$PinSheetState {
   bool get isShow => throw _privateConstructorUsedError;
+  bool get isPredict => throw _privateConstructorUsedError;
   String get id => throw _privateConstructorUsedError;
   int get mapX => throw _privateConstructorUsedError;
   int get mapY => throw _privateConstructorUsedError;
@@ -35,6 +36,7 @@ abstract class $PinSheetStateCopyWith<$Res> {
   @useResult
   $Res call(
       {bool isShow,
+      bool isPredict,
       String id,
       int mapX,
       int mapY,
@@ -55,6 +57,7 @@ class _$PinSheetStateCopyWithImpl<$Res, $Val extends PinSheetState>
   @override
   $Res call({
     Object? isShow = null,
+    Object? isPredict = null,
     Object? id = null,
     Object? mapX = null,
     Object? mapY = null,
@@ -64,6 +67,10 @@ class _$PinSheetStateCopyWithImpl<$Res, $Val extends PinSheetState>
       isShow: null == isShow
           ? _value.isShow
           : isShow // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isPredict: null == isPredict
+          ? _value.isPredict
+          : isPredict // ignore: cast_nullable_to_non_nullable
               as bool,
       id: null == id
           ? _value.id
@@ -95,6 +102,7 @@ abstract class _$$_PinSheetStateCopyWith<$Res>
   @useResult
   $Res call(
       {bool isShow,
+      bool isPredict,
       String id,
       int mapX,
       int mapY,
@@ -113,6 +121,7 @@ class __$$_PinSheetStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? isShow = null,
+    Object? isPredict = null,
     Object? id = null,
     Object? mapX = null,
     Object? mapY = null,
@@ -122,6 +131,10 @@ class __$$_PinSheetStateCopyWithImpl<$Res>
       isShow: null == isShow
           ? _value.isShow
           : isShow // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isPredict: null == isPredict
+          ? _value.isPredict
+          : isPredict // ignore: cast_nullable_to_non_nullable
               as bool,
       id: null == id
           ? _value.id
@@ -148,6 +161,7 @@ class __$$_PinSheetStateCopyWithImpl<$Res>
 class _$_PinSheetState implements _PinSheetState {
   const _$_PinSheetState(
       {required this.isShow,
+      required this.isPredict,
       required this.id,
       required this.mapX,
       required this.mapY,
@@ -156,6 +170,8 @@ class _$_PinSheetState implements _PinSheetState {
 
   @override
   final bool isShow;
+  @override
+  final bool isPredict;
   @override
   final String id;
   @override
@@ -174,7 +190,7 @@ class _$_PinSheetState implements _PinSheetState {
 
   @override
   String toString() {
-    return 'PinSheetState(isShow: $isShow, id: $id, mapX: $mapX, mapY: $mapY, storageRefList: $storageRefList)';
+    return 'PinSheetState(isShow: $isShow, isPredict: $isPredict, id: $id, mapX: $mapX, mapY: $mapY, storageRefList: $storageRefList)';
   }
 
   @override
@@ -183,6 +199,8 @@ class _$_PinSheetState implements _PinSheetState {
         (other.runtimeType == runtimeType &&
             other is _$_PinSheetState &&
             (identical(other.isShow, isShow) || other.isShow == isShow) &&
+            (identical(other.isPredict, isPredict) ||
+                other.isPredict == isPredict) &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.mapX, mapX) || other.mapX == mapX) &&
             (identical(other.mapY, mapY) || other.mapY == mapY) &&
@@ -191,8 +209,8 @@ class _$_PinSheetState implements _PinSheetState {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, isShow, id, mapX, mapY,
-      const DeepCollectionEquality().hash(_storageRefList));
+  int get hashCode => Object.hash(runtimeType, isShow, isPredict, id, mapX,
+      mapY, const DeepCollectionEquality().hash(_storageRefList));
 
   @JsonKey(ignore: true)
   @override
@@ -204,6 +222,7 @@ class _$_PinSheetState implements _PinSheetState {
 abstract class _PinSheetState implements PinSheetState {
   const factory _PinSheetState(
       {required final bool isShow,
+      required final bool isPredict,
       required final String id,
       required final int mapX,
       required final int mapY,
@@ -211,6 +230,8 @@ abstract class _PinSheetState implements PinSheetState {
 
   @override
   bool get isShow;
+  @override
+  bool get isPredict;
   @override
   String get id;
   @override

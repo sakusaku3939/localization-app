@@ -35,6 +35,7 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
   PinSheetViewModel(this.ref)
       : super(const PinSheetState(
           isShow: false,
+          isPredict: false,
           id: "",
           mapX: 0,
           mapY: 0,
@@ -74,6 +75,7 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
   void showBottomSheet(
     bool isShow, {
     LocationPin? pin,
+    bool isPredict = false,
   }) {
     final floorMapNotifier = ref.read(floorMapProvider.notifier);
     final pinTop = pin?.pinTop;
@@ -104,6 +106,7 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
     floorMapNotifier.setEditMode(isShow);
     state = state.copyWith(
       isShow: isShow,
+      isPredict: isPredict,
       id: pin?.id ?? "",
       mapX: pinX != null ? I208MapSize().convertToMapX(pinX) : state.mapX,
       mapY: pinY != null ? I208MapSize().convertToMapY(pinY) : state.mapY,
@@ -142,6 +145,7 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
         pinY: textFieldMapY != null
             ? I208MapSize().convertToPinX(textFieldMapY!)
             : floorMapNotifier.state.editablePin.y,
+        isPredict: state.isPredict,
       );
       await controller.animateTo(
         snaps[2],

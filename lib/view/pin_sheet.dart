@@ -63,27 +63,7 @@ class PinSheet extends HookConsumerWidget {
                         _dragHandle(),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(height: 8),
-                              const Text(
-                                "データセット",
-                                style: TextStyle(fontSize: 16),
-                              ),
-                              _datasetCarousel(ref),
-                              const SizedBox(height: 16),
-                              const Text(
-                                "座標の調整",
-                                style: TextStyle(fontSize: 16),
-                              ),
-                              _coordinateInputFields(ref),
-                              const SizedBox(height: 16),
-                              ref.read(floorMapProvider).isAddMode
-                                  ? _addButton(ref)
-                                  : _updateButtons(ref),
-                            ],
-                          ),
+                          child: _body(ref),
                         ),
                       ],
                     ),
@@ -96,6 +76,45 @@ class PinSheet extends HookConsumerWidget {
       );
     } else {
       return const SizedBox.shrink();
+    }
+  }
+
+  Widget _body(WidgetRef ref) {
+    if (!ref.read(pinSheetProvider).isPredict) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 8),
+          const Text(
+            "データセット",
+            style: TextStyle(fontSize: 16),
+          ),
+          _datasetCarousel(ref, true),
+          const SizedBox(height: 16),
+          const Text(
+            "座標の調整",
+            style: TextStyle(fontSize: 16),
+          ),
+          _coordinateInputFields(ref, false),
+          const SizedBox(height: 16),
+          ref.read(floorMapProvider).isAddMode
+              ? _addButton(ref)
+              : _updateButtons(ref),
+        ],
+      );
+    } else {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 8),
+          const Text(
+            "推定された座標",
+            style: TextStyle(fontSize: 16),
+          ),
+          const SizedBox(height: 16),
+          _coordinateInputFields(ref, true),
+        ],
+      );
     }
   }
 
@@ -113,7 +132,7 @@ class PinSheet extends HookConsumerWidget {
     );
   }
 
-  Widget _datasetCarousel(WidgetRef ref) {
+  Widget _datasetCarousel(WidgetRef ref, bool isTappable) {
     final storageRefList = ref.watch(pinSheetProvider).storageRefList;
     const size = 180.0;
     const margin = EdgeInsets.only(
@@ -132,7 +151,9 @@ class PinSheet extends HookConsumerWidget {
           if (rawIndex == 0) {
             // 画像アップロード用のボタン
             return GestureDetector(
-              onTap: ref.read(pinSheetProvider.notifier).uploadImage,
+              onTap: isTappable
+                  ? ref.read(pinSheetProvider.notifier).uploadImage
+                  : null,
               child: Container(
                 width: size,
                 height: size,
@@ -209,7 +230,7 @@ class PinSheet extends HookConsumerWidget {
     );
   }
 
-  Widget _coordinateInputFields(WidgetRef ref) {
+  Widget _coordinateInputFields(WidgetRef ref, bool readonly) {
     final sheetNotifier = ref.read(pinSheetProvider.notifier);
     textField(String label, int coordinate) => TextFormField(
           controller: TextEditingController.fromValue(
@@ -236,6 +257,7 @@ class PinSheet extends HookConsumerWidget {
               ),
             ),
           ),
+          readOnly: readonly,
         );
     return Focus(
       onFocusChange: sheetNotifier.onKeyboardFocus,

@@ -157,7 +157,12 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
     return (pinX, pinY);
   }
 
-  void addEditablePin({String? id, required int pinX, required int pinY}) {
+  void addEditablePin({
+    String? id,
+    required int pinX,
+    required int pinY,
+    bool isPredict = false,
+  }) {
     state = state.copyWith(
       editablePin: state.editablePin.copyWith(
         id: id ?? state.editablePin.id,
@@ -169,6 +174,7 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
     ref.read(pinSheetProvider.notifier).showBottomSheet(
           true,
           pin: state.editablePin,
+          isPredict: isPredict,
         );
   }
 

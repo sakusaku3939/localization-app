@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:localization/constant/i208_map_size.dart';
 import 'package:localization/model/image_uploader.dart';
 import 'package:localization/view/floor_map_view.dart';
 import 'package:localization/view_model/floor_map/floor_map_viewmodel.dart';
@@ -22,7 +23,7 @@ class Home extends HookConsumerWidget {
           ),
         ),
         actions: [
-          _exportButton(),
+          _exportButton(ref),
           const SizedBox(width: 4),
         ],
       ),
@@ -65,7 +66,7 @@ class Home extends HookConsumerWidget {
   }
 }
 
-Widget _exportButton() {
+Widget _exportButton(WidgetRef ref) {
   return FilledButton.tonalIcon(
     icon: const Icon(
       Icons.camera_alt,
@@ -84,7 +85,17 @@ Widget _exportButton() {
     onPressed: () async {
       final image = await ImagePicker().pickImage(source: ImageSource.gallery);
       if (image != null) {
-        await ImageUploader().uploadImage(image);
+        final result = await ImageUploader().uploadImage(image);
+        if (result != null) {
+          // シートに推定結果を表示
+          final floorMapNotifier = ref.read(floorMapProvider.notifier);
+          floorMapNotifier.setEditMode(true);
+          floorMapNotifier.addEditablePin(
+            pinX: I208MapSize().convertToPinX(result.$1),
+            pinY: I208MapSize().convertToPinY(result.$2),
+            isPredict: true,
+          );
+        }
       }
     },
   );
