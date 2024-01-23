@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:localization/constant/global_context.dart';
@@ -17,7 +18,7 @@ final floorMapProvider =
 class FloorMapViewModel extends StateNotifier<FloorMapState> {
   final Ref ref;
   final image = Image.asset("assets/images/i208_map.png").image;
-  final defaultPinSize = 20.0;
+  final defaultPinSize = kIsWeb ? 28.0 : 20.0;
   final firebase = FirebaseApi();
 
   List<Pin> pins = [];

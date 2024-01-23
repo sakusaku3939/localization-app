@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -79,7 +80,7 @@ Widget _exportButton(WidgetRef ref) {
     ),
     style: ButtonStyle(
       padding: MaterialStateProperty.all(
-        const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        const EdgeInsets.symmetric(vertical: kIsWeb ? 20 : 10, horizontal: 20),
       ),
     ),
     onPressed: () async {
