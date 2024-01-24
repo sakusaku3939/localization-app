@@ -18,7 +18,7 @@ class ImageUploader {
     showLoader();
     final request = http.MultipartRequest(
       'POST',
-      Uri.parse("http://chasca-ex.jn.sfc.keio.ac.jp:5000/upload"),
+      Uri.parse("https://133.27.186.102:5000/upload"),
     );
     request.headers.addAll({
       "AccessToken": "62BA9128-BC63-4865-9F92-B332BB4D682C",
@@ -33,21 +33,28 @@ class ImageUploader {
       ),
     );
 
-    final streamedResponse = await request.send();
-    final response = await http.Response.fromStream(streamedResponse);
-    closeLoader();
+    try {
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+      closeLoader();
 
-    if (response.statusCode == 200) {
-      final json = jsonDecode(response.body)[0];
-      final double x = json["x"];
-      final double y = json["y"];
-      final time = json["time"].toStringAsFixed(2);
-      SnackBarHelper().show("推定が完了しました。X: $x、Y: $y、かかった時間: $time秒");
-      _log('Response from server: ${response.body}');
-      return (x.round(), y.round());
-    } else {
-      SnackBarHelper().show("画像のアップロードに失敗しました： ${response.body}");
-      _log('Failed to upload image: ${response.body}');
+      if (response.statusCode == 200) {
+        final json = jsonDecode(response.body)[0];
+        final double x = json["x"];
+        final double y = json["y"];
+        final time = json["time"].toStringAsFixed(2);
+        SnackBarHelper().show("推定が完了しました。X: $x、Y: $y、かかった時間: $time秒");
+        _log('Response from server: ${response.body}');
+        return (x.round(), y.round());
+      } else {
+        SnackBarHelper().show("画像のアップロードに失敗しました： ${response.body}");
+        _log('Failed to upload image: ${response.body}');
+        return null;
+      }
+    } catch (e) {
+      SnackBarHelper().show("画像のアップロードに失敗しました： $e");
+      _log('Failed to upload image: $e');
+      closeLoader();
       return null;
     }
   }
