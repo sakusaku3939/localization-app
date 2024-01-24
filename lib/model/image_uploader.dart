@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:localization/constant/global_context.dart';
@@ -19,9 +18,11 @@ class ImageUploader {
     showLoader();
     final request = http.MultipartRequest(
       'POST',
-      Uri.parse(dotenv.env['UPLOAD_URI']!),
+      Uri.parse("http://chasca-ex.jn.sfc.keio.ac.jp:5000/upload"),
     );
-    request.headers.addAll({"AccessToken": dotenv.env['ACCESS_TOKEN']!});
+    request.headers.addAll({
+      "AccessToken": "62BA9128-BC63-4865-9F92-B332BB4D682C",
+    });
     request.files.add(
       http.MultipartFile.fromBytes(
         'file',
