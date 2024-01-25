@@ -18,7 +18,7 @@ class ImageUploader {
     showLoader();
     final request = http.MultipartRequest(
       'POST',
-      Uri.parse("https://133.27.186.102:5000/upload"),
+      Uri.parse("http://133.27.186.102:5000/upload"),
     );
     request.headers.addAll({
       "AccessToken": "62BA9128-BC63-4865-9F92-B332BB4D682C",
