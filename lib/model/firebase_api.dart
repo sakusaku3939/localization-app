@@ -6,6 +6,7 @@ import 'package:localization/view/helper/snackbar_helper.dart';
 import 'package:localization/view_model/floor_map/pin/pin.dart';
 import 'package:uuid/uuid.dart';
 
+import '../constant/l10n.dart';
 import 'geolocation/geolocation_state/geolocation_state.dart';
 
 class FirebaseApi {
@@ -201,6 +202,6 @@ class FirebaseApi {
       print(e);
       print(stackTrace);
     }
-    SnackBarHelper().show("エラー: $e");
+    SnackBarHelper().show(L10n.t.error(e));
   }
 }

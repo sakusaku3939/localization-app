@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:localization/constant/global_context.dart';
+import 'package:localization/constant/l10n.dart';
 import 'package:localization/view/helper/dialog_helper.dart';
 import 'package:localization/view/helper/snackbar_helper.dart';
 import 'package:localization/view_model/pin_sheet/pin_sheet_viewmodel.dart';
@@ -29,21 +30,21 @@ class PreviewImageViewModel extends StateNotifier<int> {
       final file = File("$directory/${const Uuid().v4()}.jpg");
       await file.create();
       await file.writeAsBytes(res.bodyBytes);
-      SnackBarHelper().show("画像をダウンロードしました");
+      SnackBarHelper().show(L10n.t.downloadedImage);
     } catch (e, stackTrace) {
       if (kDebugMode) {
         print(e);
         print(stackTrace);
       }
-      SnackBarHelper().show("エラー: $e");
+      SnackBarHelper().show(L10n.t.error(e));
     }
   }
 
   Future<void> deleteImage(int index) async {
     await DialogHelper().show(
-      title: "削除の確認",
-      content: "画像を削除しますか？この操作は元に戻せません。",
-      okButton: "削除",
+      title: L10n.t.deleteConfirmTitle,
+      content: L10n.t.deleteConfirmContent,
+      okButton: L10n.t.delete,
       onOkClick: () {
         Navigator.of(globalContext)
           ..pop()

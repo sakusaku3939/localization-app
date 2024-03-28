@@ -35,9 +35,9 @@ class Home extends HookConsumerWidget {
           const FloorMapView(),
           if (!ref.watch(floorMapProvider).isAddMode &&
               !ref.watch(floorMapProvider).isEditMode)
-            const Positioned(
+            Positioned(
               top: 4,
-              child: Text("編集したいピンを選択"),
+              child: Text(L10n.t.editPinGuide),
             ),
         ],
       ),
@@ -51,8 +51,8 @@ class Home extends HookConsumerWidget {
               label: Consumer(
                 builder: (context, ref, _) {
                   return ref.watch(floorMapProvider).isAddMode
-                      ? const Text("ピンを選択")
-                      : const Text("閉じる");
+                      ? Text(L10n.t.fabInSelect)
+                      : Text(L10n.t.close);
                 },
               ),
               icon: Consumer(
@@ -75,9 +75,9 @@ Widget _exportButton(WidgetRef ref) {
       color: Colors.white,
       size: 20,
     ),
-    label: const Text(
-      "位置推定",
-      style: TextStyle(color: Colors.white),
+    label: Text(
+      L10n.t.localizationButton,
+      style: const TextStyle(color: Colors.white),
     ),
     style: ButtonStyle(
       padding: MaterialStateProperty.all(

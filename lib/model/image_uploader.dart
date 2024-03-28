@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:localization/constant/global_context.dart';
+import 'package:localization/constant/l10n.dart';
 import 'package:localization/view/helper/snackbar_helper.dart';
 
 class ImageUploader {
@@ -43,16 +44,16 @@ class ImageUploader {
         final double x = json["x"];
         final double y = json["y"];
         final time = json["time"].toStringAsFixed(2);
-        SnackBarHelper().show("推定が完了しました。X: $x、Y: $y、かかった時間: $time秒");
+        SnackBarHelper().show(L10n.t.estimationCompleted(time, x, y));
         _log('Response from server: ${response.body}');
         return (x.round(), y.round());
       } else {
-        SnackBarHelper().show("画像のアップロードに失敗しました： ${response.body}");
+        SnackBarHelper().show(L10n.t.failedUploadImage(response.body));
         _log('Failed to upload image: ${response.body}');
         return null;
       }
     } catch (e) {
-      SnackBarHelper().show("画像のアップロードに失敗しました： $e");
+      SnackBarHelper().show(L10n.t.failedUploadImage(e));
       _log('Failed to upload image: $e');
       closeLoader();
       return null;

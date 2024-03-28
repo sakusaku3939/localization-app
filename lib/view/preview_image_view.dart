@@ -2,6 +2,7 @@ import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:localization/constant/l10n.dart';
 import 'package:localization/view_model/preview_image/preview_image_viewmodel.dart';
 
 class PreviewImageView extends HookConsumerWidget {
@@ -72,12 +73,12 @@ class PreviewImageView extends HookConsumerWidget {
         children: [
           _bottomBarButton(
             Icons.download,
-            "保存",
+            L10n.t.save,
             () => previewImageNotifier.downloadImage(imageUrl),
           ),
           _bottomBarButton(
             Icons.delete_outline,
-            "削除",
+            L10n.t.delete,
             () => previewImageNotifier.deleteImage(index),
           ),
         ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:localization/constant/global_context.dart';
+import 'package:localization/constant/l10n.dart';
 
 class DialogHelper {
   static final DialogHelper instance = DialogHelper._internal();
@@ -26,7 +27,7 @@ class DialogHelper {
           actionsPadding: const EdgeInsets.fromLTRB(0, 0, 12, 8),
           actions: [
             TextButton(
-              child: const Text("キャンセル"),
+              child: Text(L10n.t.cancel),
               onPressed: () => Navigator.pop(context),
             ),
             TextButton(

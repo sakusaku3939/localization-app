@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:localization/constant/l10n.dart';
 import 'package:localization/model/geolocation/geolocation_state/geolocation_state.dart';
 import 'package:localization/view/helper/dialog_helper.dart';
 
@@ -35,9 +36,9 @@ class GeolocationHelper {
       case LocationPermission.denied:
         // 位置情報パーミッションをリクエストする
         await DialogHelper().showOkDialog(
-          title: "位置情報権限について",
-          content: "モデル評価のためにGPSデータを使う（可能性がある）ため、位置情報許可のご協力をお願いします",
-          okButton: "分かった！",
+          title: L10n.t.permissionTitle,
+          content: L10n.t.permissionContent,
+          okButton: L10n.t.permissionOk,
         );
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) {

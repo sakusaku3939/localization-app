@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:localization/constant/color_palette.dart';
+import 'package:localization/constant/l10n.dart';
 import 'package:localization/view/preview_image_view.dart';
 import 'package:localization/view_model/pin_sheet/pin_sheet_viewmodel.dart';
 import 'package:localization/view_model/floor_map/floor_map_viewmodel.dart';
@@ -85,15 +86,15 @@ class PinSheet extends HookConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 8),
-          const Text(
-            "データセット",
-            style: TextStyle(fontSize: 16),
+          Text(
+            L10n.t.dataset,
+            style: const TextStyle(fontSize: 16),
           ),
           _datasetCarousel(ref, true),
           const SizedBox(height: 16),
-          const Text(
-            "座標の調整",
-            style: TextStyle(fontSize: 16),
+          Text(
+            L10n.t.adjustCoordinates,
+            style: const TextStyle(fontSize: 16),
           ),
           _coordinateInputFields(ref, false),
           const SizedBox(height: 16),
@@ -107,9 +108,9 @@ class PinSheet extends HookConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 8),
-          const Text(
-            "推定された座標",
-            style: TextStyle(fontSize: 16),
+          Text(
+            L10n.t.estimatedCoordinates,
+            style: const TextStyle(fontSize: 16),
           ),
           const SizedBox(height: 16),
           _coordinateInputFields(ref, true),
@@ -283,9 +284,9 @@ class PinSheet extends HookConsumerWidget {
           color: Colors.white,
           size: 16,
         ),
-        label: const Text(
-          "データセットを追加",
-          style: TextStyle(color: Colors.white),
+        label: Text(
+          L10n.t.addDataset,
+          style: const TextStyle(color: Colors.white),
         ),
         style: ButtonStyle(
           padding: MaterialStateProperty.all(
@@ -322,9 +323,9 @@ class PinSheet extends HookConsumerWidget {
               color: Colors.white,
               size: 16,
             ),
-            label: const Text(
-              "データセットを更新",
-              style: TextStyle(color: Colors.white),
+            label: Text(
+              L10n.t.updateDataset,
+              style: const TextStyle(color: Colors.white),
             ),
             style: ButtonStyle(
               padding: MaterialStateProperty.all(

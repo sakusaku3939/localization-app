@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:localization/constant/global_context.dart';
 import 'package:localization/constant/i208_map_size.dart';
+import 'package:localization/constant/l10n.dart';
 import 'package:localization/constant/safe_area_size.dart';
 import 'package:localization/model/firebase_api.dart';
 import 'package:localization/model/geolocation/geolocation_helper.dart';
@@ -241,9 +242,9 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
 
   Future<void> showDeleteDialog() async {
     await DialogHelper().show(
-      title: "削除の確認",
-      content: "登録されたデータセットを削除しますか？この操作は元に戻せません。",
-      okButton: "削除",
+      title: L10n.t.deleteConfirmTitle,
+      content: L10n.t.deleteConfirmContentDataset,
+      okButton: L10n.t.delete,
       onOkClick: deleteDataset,
     );
   }

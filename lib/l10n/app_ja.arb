@@ -1,4 +1,26 @@
 {
   "@@locale": "ja",
-  "appBarTitle": "ι208研究室 フロアマップ"
+  "cancel": "キャンセル",
+  "save": "保存",
+  "delete": "削除",
+  "close": "閉じる",
+  "appBarTitle": "ι208研究室 フロアマップ",
+  "editPinGuide": "編集したいピンを選択",
+  "fabInSelect": "ピンを選択",
+  "dataset": "データセット",
+  "adjustCoordinates": "座標の調整",
+  "estimatedCoordinates": "推定された座標",
+  "addDataset": "データセットを追加",
+  "updateDataset": "データセットを更新",
+  "localizationButton": "位置推定",
+  "estimationCompleted": "推定が完了しました。X: {x}、Y: {y}、かかった時間: {time}秒",
+  "failedUploadImage": "画像のアップロードに失敗しました： {e}",
+  "downloadedImage": "画像をダウンロードしました",
+  "error": "エラー: {e}",
+  "deleteConfirmTitle": "削除の確認",
+  "deleteConfirmContent": "画像を削除しますか？この操作は元に戻せません。",
+  "deleteConfirmContentDataset": "登録されたデータセットを削除しますか？この操作は元に戻せません。",
+  "permissionTitle": "位置情報権限について",
+  "permissionContent": "モデル評価のためにGPSデータを使う（可能性がある）ため、位置情報許可のご協力をお願いします",
+  "permissionOk": "分かった！"
 }
