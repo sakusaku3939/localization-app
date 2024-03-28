@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:localization/constant/i208_map_size.dart';
+import 'package:localization/constant/l10n.dart';
 import 'package:localization/model/image_uploader.dart';
 import 'package:localization/view/floor_map_view.dart';
 import 'package:localization/view_model/floor_map/floor_map_viewmodel.dart';
@@ -16,11 +17,11 @@ class Home extends HookConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 64,
-        title: const Padding(
-          padding: EdgeInsets.only(left: 4),
+        title: Padding(
+          padding: const EdgeInsets.only(left: 4),
           child: Text(
-            "ι208研究室 フロアマップ",
-            style: TextStyle(fontSize: 18),
+            L10n.t.appBarTitle,
+            style: const TextStyle(fontSize: 18),
           ),
         ),
         actions: [

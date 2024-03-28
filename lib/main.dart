@@ -5,6 +5,7 @@ import 'package:localization/constant/color_palette.dart';
 import 'package:localization/constant/global_context.dart';
 import 'package:localization/view/home.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -31,14 +32,12 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       localizationsDelegates: const [
+        AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: const [
-        Locale("ja", "JP"),
-        Locale("en", "EN"),
-      ],
+      supportedLocales: AppLocalizations.supportedLocales,
       home: const Home(),
     );
   }

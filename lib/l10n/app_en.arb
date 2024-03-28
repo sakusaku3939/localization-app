@@ -1,3 +1,4 @@
 {
-  "helloWorld": "Hello World!"
+  "@@locale": "en",
+  "appBarTitle": "ι208 Laboratory Map"
 }
