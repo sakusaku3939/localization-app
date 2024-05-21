@@ -54,7 +54,7 @@ class FloorMapView extends HookConsumerWidget {
   }
 
   void onTapInEditMode(WidgetRef ref, TapUpDetails tapDetails) {
-    if (ref.read(floorMapProvider).isEditMode ||
+    if (ref.read(floorMapProvider).isEditState ||
         ref.read(floorMapProvider).isAddMode) {
       // マップ上にピンを配置
       final floorMapNotifier = ref.read(floorMapProvider.notifier);
@@ -74,7 +74,7 @@ class LocationPins extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final floorMap = ref.watch(floorMapProvider);
-    if (floorMap.isEditMode) {
+    if (floorMap.isEditState) {
       return Positioned(
         left: floorMap.editablePin.pinLeft,
         top: floorMap.editablePin.pinTop,
@@ -94,7 +94,7 @@ class LocationPins extends HookConsumerWidget {
               child: GestureDetector(
                 onTap: () {
                   final floorMapNotifier = ref.read(floorMapProvider.notifier);
-                  floorMapNotifier.setEditMode(true);
+                  floorMapNotifier.setEditState(true);
                   floorMapNotifier.addEditablePin(
                     id: pin.id,
                     pinX: pin.x,

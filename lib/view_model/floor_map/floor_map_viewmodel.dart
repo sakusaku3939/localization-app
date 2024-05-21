@@ -50,8 +50,8 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
             size: 0,
           ),
           photoController: PhotoViewController(),
-          isEditMode: false,
-          isAddMode: true,
+          isEditState: false,
+          isAddMode: false,
         )) {
     _init();
   }
@@ -81,7 +81,7 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
   }
 
   void update() {
-    if (state.isEditMode) {
+    if (state.isEditState) {
       _updateEditablePin();
     } else {
       _updatePins();
@@ -218,8 +218,8 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
     );
   }
 
-  void setEditMode(bool mode) {
-    state = state.copyWith(isEditMode: mode);
+  void setEditState(bool s) {
+    state = state.copyWith(isEditState: s);
     update();
   }
 

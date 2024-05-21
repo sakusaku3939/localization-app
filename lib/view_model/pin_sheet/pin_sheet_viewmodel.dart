@@ -104,7 +104,7 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
       hasUploaded = false;
     }
 
-    floorMapNotifier.setEditMode(isShow);
+    floorMapNotifier.setEditState(isShow);
     state = state.copyWith(
       isShow: isShow,
       isPredict: isPredict,
@@ -216,7 +216,7 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
       ));
     }
     floorMapNotifier.setAddMode(false);
-    floorMapNotifier.setEditMode(false);
+    floorMapNotifier.setEditState(false);
     closeSheet();
   }
 

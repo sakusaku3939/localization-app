@@ -33,11 +33,11 @@ class Home extends HookConsumerWidget {
         alignment: Alignment.center,
         children: [
           const FloorMapView(),
-          if (!ref.watch(floorMapProvider).isAddMode &&
-              !ref.watch(floorMapProvider).isEditMode)
+          if (ref.watch(floorMapProvider).isAddMode &&
+              !ref.watch(floorMapProvider).isEditState)
             Positioned(
               top: 4,
-              child: Text(L10n.t.editPinGuide),
+              child: Text(L10n.t.addPinGuide),
             ),
         ],
       ),
@@ -51,15 +51,15 @@ class Home extends HookConsumerWidget {
               label: Consumer(
                 builder: (context, ref, _) {
                   return ref.watch(floorMapProvider).isAddMode
-                      ? Text(L10n.t.fabInSelect)
-                      : Text(L10n.t.close);
+                      ? Text(L10n.t.close)
+                      : Text(L10n.t.fabInAdd);
                 },
               ),
               icon: Consumer(
                 builder: (context, ref, _) {
                   return ref.watch(floorMapProvider).isAddMode
-                      ? const Icon(Icons.edit_location_alt)
-                      : const Icon(Icons.close);
+                      ? const Icon(Icons.close)
+                      : const Icon(Icons.edit_location_alt);
                 },
               ),
             )
@@ -91,7 +91,7 @@ Widget _exportButton(WidgetRef ref) {
         if (result != null) {
           // シートに推定結果を表示
           final floorMapNotifier = ref.read(floorMapProvider.notifier);
-          floorMapNotifier.setEditMode(true);
+          floorMapNotifier.setEditState(true);
           floorMapNotifier.addEditablePin(
             pinX: I208MapSize().convertToPinX(result.$1),
             pinY: I208MapSize().convertToPinY(result.$2),
