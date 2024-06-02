@@ -59,13 +59,12 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
 
   Future<void> _init() async {
     _mapInitialized = false;
-    state.photoController.outputStateStream.listen(initMap);
     pins = await firebase.fetchPins(root: "i208");
+    state.photoController.outputStateStream.listen(initMap);
   }
 
   void initMap(PhotoViewControllerValue event) {
-    if (event.scale == null) return;
-    if (!_mapInitialized) {
+    if (!_mapInitialized && event.scale != null) {
       photoViewState = photoViewState.copyWith(defaultImageScale: event.scale!);
       _mapInitialized = true;
     }
@@ -74,7 +73,7 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
     photoViewState = photoViewState.copyWith(
       dx: event.position.dx,
       dy: event.position.dy,
-      scale: event.scale!,
+      scale: event.scale ?? photoViewState.scale,
     );
 
     // ピンの座標をマップ拡大に合わせて更新
@@ -110,6 +109,9 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
         ),
       );
     }
+
+    print("test pins $pins");
+    print("test locations $locations");
     state = state.copyWith(locationPins: locations);
   }
 
