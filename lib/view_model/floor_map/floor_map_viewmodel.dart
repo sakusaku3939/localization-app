@@ -110,8 +110,6 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
       );
     }
 
-    print("test pins $pins");
-    print("test locations $locations");
     state = state.copyWith(locationPins: locations);
   }
 
