@@ -95,6 +95,7 @@ Widget _exportButton(WidgetRef ref) {
           floorMapNotifier.addEditablePin(
             pinX: I208MapSize().convertToPinX(result.$1),
             pinY: I208MapSize().convertToPinY(result.$2),
+            resultImageUrl: result.$3,
             isPredict: true,
           );
         }

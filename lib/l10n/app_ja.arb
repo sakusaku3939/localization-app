@@ -10,6 +10,7 @@
   "dataset": "データセット",
   "adjustCoordinates": "座標の調整",
   "estimatedCoordinates": "推定された座標",
+  "detectionResult": "YOLO 検出結果",
   "addDataset": "データセットを追加",
   "updateDataset": "データセットを更新",
   "localizationButton": "位置推定",

@@ -15,11 +15,12 @@ class ImageUploader {
 
   factory ImageUploader() => instance;
 
-  Future<(int, int)?> uploadImage(XFile image) async {
+  Future<(int, int, String)?> uploadImage(XFile image) async {
+    const url = "http://133.27.171.97:5000";
     showLoader();
     final request = http.MultipartRequest(
       'POST',
-      Uri.parse("http://133.27.171.97:5000/upload"),
+      Uri.parse("$url/upload"),
     );
     request.headers.addAll({
       "AccessToken": "62BA9128-BC63-4865-9F92-B332BB4D682C",
@@ -43,10 +44,12 @@ class ImageUploader {
         final json = jsonDecode(response.body)[0];
         final double x = json["x"];
         final double y = json["y"];
+        final resultImageUrl = url + json["result_url"];
         final time = json["time"].toStringAsFixed(2);
+
         SnackBarHelper().show(L10n.t.estimationCompleted(time, x, y));
         _log('Response from server: ${response.body}');
-        return (x.round(), y.round());
+        return (x.round(), y.round(), resultImageUrl);
       } else {
         SnackBarHelper().show(L10n.t.failedUploadImage(response.body));
         _log('Failed to upload image: ${response.body}');

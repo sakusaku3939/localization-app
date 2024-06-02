@@ -22,6 +22,7 @@ mixin _$PinSheetState {
   int get mapX => throw _privateConstructorUsedError;
   int get mapY => throw _privateConstructorUsedError;
   List<Reference>? get storageRefList => throw _privateConstructorUsedError;
+  String? get resultImageUrl => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $PinSheetStateCopyWith<PinSheetState> get copyWith =>
@@ -40,7 +41,8 @@ abstract class $PinSheetStateCopyWith<$Res> {
       String id,
       int mapX,
       int mapY,
-      List<Reference>? storageRefList});
+      List<Reference>? storageRefList,
+      String? resultImageUrl});
 }
 
 /// @nodoc
@@ -62,6 +64,7 @@ class _$PinSheetStateCopyWithImpl<$Res, $Val extends PinSheetState>
     Object? mapX = null,
     Object? mapY = null,
     Object? storageRefList = freezed,
+    Object? resultImageUrl = freezed,
   }) {
     return _then(_value.copyWith(
       isShow: null == isShow
@@ -88,6 +91,10 @@ class _$PinSheetStateCopyWithImpl<$Res, $Val extends PinSheetState>
           ? _value.storageRefList
           : storageRefList // ignore: cast_nullable_to_non_nullable
               as List<Reference>?,
+      resultImageUrl: freezed == resultImageUrl
+          ? _value.resultImageUrl
+          : resultImageUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -106,7 +113,8 @@ abstract class _$$_PinSheetStateCopyWith<$Res>
       String id,
       int mapX,
       int mapY,
-      List<Reference>? storageRefList});
+      List<Reference>? storageRefList,
+      String? resultImageUrl});
 }
 
 /// @nodoc
@@ -126,6 +134,7 @@ class __$$_PinSheetStateCopyWithImpl<$Res>
     Object? mapX = null,
     Object? mapY = null,
     Object? storageRefList = freezed,
+    Object? resultImageUrl = freezed,
   }) {
     return _then(_$_PinSheetState(
       isShow: null == isShow
@@ -152,6 +161,10 @@ class __$$_PinSheetStateCopyWithImpl<$Res>
           ? _value._storageRefList
           : storageRefList // ignore: cast_nullable_to_non_nullable
               as List<Reference>?,
+      resultImageUrl: freezed == resultImageUrl
+          ? _value.resultImageUrl
+          : resultImageUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -165,7 +178,8 @@ class _$_PinSheetState implements _PinSheetState {
       required this.id,
       required this.mapX,
       required this.mapY,
-      required final List<Reference>? storageRefList})
+      required final List<Reference>? storageRefList,
+      this.resultImageUrl})
       : _storageRefList = storageRefList;
 
   @override
@@ -189,8 +203,11 @@ class _$_PinSheetState implements _PinSheetState {
   }
 
   @override
+  final String? resultImageUrl;
+
+  @override
   String toString() {
-    return 'PinSheetState(isShow: $isShow, isPredict: $isPredict, id: $id, mapX: $mapX, mapY: $mapY, storageRefList: $storageRefList)';
+    return 'PinSheetState(isShow: $isShow, isPredict: $isPredict, id: $id, mapX: $mapX, mapY: $mapY, storageRefList: $storageRefList, resultImageUrl: $resultImageUrl)';
   }
 
   @override
@@ -205,12 +222,21 @@ class _$_PinSheetState implements _PinSheetState {
             (identical(other.mapX, mapX) || other.mapX == mapX) &&
             (identical(other.mapY, mapY) || other.mapY == mapY) &&
             const DeepCollectionEquality()
-                .equals(other._storageRefList, _storageRefList));
+                .equals(other._storageRefList, _storageRefList) &&
+            (identical(other.resultImageUrl, resultImageUrl) ||
+                other.resultImageUrl == resultImageUrl));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, isShow, isPredict, id, mapX,
-      mapY, const DeepCollectionEquality().hash(_storageRefList));
+  int get hashCode => Object.hash(
+      runtimeType,
+      isShow,
+      isPredict,
+      id,
+      mapX,
+      mapY,
+      const DeepCollectionEquality().hash(_storageRefList),
+      resultImageUrl);
 
   @JsonKey(ignore: true)
   @override
@@ -226,7 +252,8 @@ abstract class _PinSheetState implements PinSheetState {
       required final String id,
       required final int mapX,
       required final int mapY,
-      required final List<Reference>? storageRefList}) = _$_PinSheetState;
+      required final List<Reference>? storageRefList,
+      final String? resultImageUrl}) = _$_PinSheetState;
 
   @override
   bool get isShow;
@@ -240,6 +267,8 @@ abstract class _PinSheetState implements PinSheetState {
   int get mapY;
   @override
   List<Reference>? get storageRefList;
+  @override
+  String? get resultImageUrl;
   @override
   @JsonKey(ignore: true)
   _$$_PinSheetStateCopyWith<_$_PinSheetState> get copyWith =>

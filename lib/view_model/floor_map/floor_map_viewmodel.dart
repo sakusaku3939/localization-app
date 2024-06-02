@@ -168,6 +168,7 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
     String? id,
     required int pinX,
     required int pinY,
+    String? resultImageUrl,
     bool isPredict = false,
   }) {
     state = state.copyWith(
@@ -181,6 +182,7 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
     ref.read(pinSheetProvider.notifier).showBottomSheet(
           true,
           pin: state.editablePin,
+          resultImageUrl: resultImageUrl,
           isPredict: isPredict,
         );
   }

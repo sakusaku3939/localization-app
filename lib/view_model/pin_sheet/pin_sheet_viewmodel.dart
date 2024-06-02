@@ -76,6 +76,7 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
   void showBottomSheet(
     bool isShow, {
     LocationPin? pin,
+    String? resultImageUrl,
     bool isPredict = false,
   }) {
     final floorMapNotifier = ref.read(floorMapProvider.notifier);
@@ -111,6 +112,7 @@ class PinSheetViewModel extends StateNotifier<PinSheetState> {
       id: pin?.id ?? "",
       mapX: pinX != null ? I208MapSize().convertToMapX(pinX) : state.mapX,
       mapY: pinY != null ? I208MapSize().convertToMapY(pinY) : state.mapY,
+      resultImageUrl: resultImageUrl,
     );
   }
 

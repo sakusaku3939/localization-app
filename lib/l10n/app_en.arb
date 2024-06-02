@@ -10,6 +10,7 @@
   "dataset": "Dataset",
   "adjustCoordinates": "Coordinates",
   "estimatedCoordinates": "Estimated Coordinates",
+  "detectionResult": "YOLO detection result",
   "addDataset": "Add Dataset",
   "updateDataset": "Update Dataset",
   "localizationButton": "Localization",

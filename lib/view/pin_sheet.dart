@@ -114,6 +114,13 @@ class PinSheet extends HookConsumerWidget {
           ),
           const SizedBox(height: 16),
           _coordinateInputFields(ref, true),
+          const SizedBox(height: 16),
+          Text(
+            L10n.t.detectionResult,
+            style: const TextStyle(fontSize: 16),
+          ),
+          const SizedBox(height: 8),
+          Image.network(ref.watch(pinSheetProvider).resultImageUrl.toString()),
         ],
       );
     }

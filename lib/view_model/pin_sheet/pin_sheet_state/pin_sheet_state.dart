@@ -12,5 +12,6 @@ class PinSheetState with _$PinSheetState {
     required int mapX,
     required int mapY,
     required List<Reference>? storageRefList,
+    String? resultImageUrl,
   }) = _PinSheetState;
 }
