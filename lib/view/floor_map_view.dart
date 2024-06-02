@@ -16,6 +16,11 @@ class FloorMapView extends HookConsumerWidget {
     final floorMapNotifier = ref.read(floorMapProvider.notifier);
     floorMapNotifier.resolveImageProvider();
 
+    // Widget描画後にマップ上のピンを更新
+    WidgetsBinding.instance.addPostFrameCallback((_) => ref
+        .read(floorMapProvider.notifier)
+        .initMap(ref.read(floorMapProvider).photoController.value));
+
     return WillPopScope(
       onWillPop: () async {
         ref.read(pinSheetProvider.notifier).popSheet();

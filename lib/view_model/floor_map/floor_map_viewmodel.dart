@@ -37,6 +37,7 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
   );
   double screenWidth = 0;
   double screenHeight = 0;
+  bool _mapInitialized = false;
 
   FloorMapViewModel(this.ref)
       : super(FloorMapState(
@@ -57,27 +58,27 @@ class FloorMapViewModel extends StateNotifier<FloorMapState> {
   }
 
   Future<void> _init() async {
-    bool initialized = false;
-    state.photoController.outputStateStream.listen(
-      (event) {
-        if (!initialized) {
-          photoViewState =
-              photoViewState.copyWith(defaultImageScale: event.scale!);
-          initialized = true;
-        }
-
-        // マップの移動方向、拡大率をStateに保存
-        photoViewState = photoViewState.copyWith(
-          dx: event.position.dx,
-          dy: event.position.dy,
-          scale: event.scale!,
-        );
-
-        // ピンの座標をマップ拡大に合わせて更新
-        update();
-      },
-    );
+    _mapInitialized = false;
+    state.photoController.outputStateStream.listen(initMap);
     pins = await firebase.fetchPins(root: "i208");
+  }
+
+  void initMap(PhotoViewControllerValue event) {
+    if (event.scale == null) return;
+    if (!_mapInitialized) {
+      photoViewState = photoViewState.copyWith(defaultImageScale: event.scale!);
+      _mapInitialized = true;
+    }
+
+    // マップの移動方向、拡大率をStateに保存
+    photoViewState = photoViewState.copyWith(
+      dx: event.position.dx,
+      dy: event.position.dy,
+      scale: event.scale!,
+    );
+
+    // ピンの座標をマップ拡大に合わせて更新
+    update();
   }
 
   void update() {
