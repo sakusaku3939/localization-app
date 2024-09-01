@@ -1,10 +1,11 @@
-# localization-app
-ACM MobiSys 2024のPoster/Demoセッションで発表した自己位置推定アプリです。Flaskサーバーとの通信を行い、PyTorchで作成した位置推定モデルを動かしました。  
+# localization-app (YoloLSTM)
+ACM MobiSys 2024のPoster/Demoセッションで発表した自己位置推定アプリです。Flaskサーバーと通信し、自作の深層学習モデルを動作させました。  
 
-- 論文URL
-  - [Demo: Image-based Indoor Localization using Object Detection and LSTM](https://doi.org/10.1145/3643832.3661836)
 - 論文ソースコード
   - https://github.com/sakusaku3939/YoloLSTM
+- 論文URL
+  - [Demo: Image-based Indoor Localization using Object Detection and LSTM](https://doi.org/10.1145/3643832.3661836)
+
 
 | ホーム画面 | データセット収集画面 | 位置推定画面 |
 | ---- | ---- | ---- |
