@@ -1,5 +1,5 @@
 # localization-app (YoloLSTM)
-ACM MobiSys 2024のPoster/Demoセッションで発表した自己位置推定アプリです。Flaskサーバーと通信し、自作の深層学習モデルを動作させました。  
+ACM MobiSys 2024のPoster/Demoセッションで発表した自己位置推定アプリです。  
 
 - 論文ソースコード
   - https://github.com/sakusaku3939/YoloLSTM
